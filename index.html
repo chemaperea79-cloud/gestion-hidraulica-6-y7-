@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión Hidráulica 6ª y 7ª Elevación</title>
+  <style>
+    :root {
+      --bg: #060b14;
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --card-border: rgba(148, 163, 184, 0.2);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --trasvase: #0284c7;
+      --trasvase-light: #38bdf8;
+      --rio: #0d9488;
+      --rio-light: #2dd4bf;
+      --purple: #8b5cf6;
+      --purple-light: #c084fc;
+      --accent: #38bdf8;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 25px;
+    }
+
+    /* Cabecera */
+    .header {
+      text-align: center;
+      padding: 6px 0 2px 0;
+    }
+
+    .header h1 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Selector de Tipo de Agua */
+    .mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(15, 23, 42, 0.95);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn.active.trasvase {
+      background: var(--trasvase);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(2, 132, 199, 0.6);
+    }
+
+    .mode-btn.active.rio {
+      background: var(--rio);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(13, 148, 136, 0.6);
+    }
+
+    /* Pestañas */
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 2px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: rgba(30, 41, 59, 0.95);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .tab-btn.active.tab-purple {
+      color: var(--purple-light);
+      border-color: rgba(192, 132, 252, 0.4);
+    }
+
+    /* Tarjetas */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .card-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title.purple {
+      color: var(--purple-light);
+    }
+
+    /* --- BALSAS 3D INDUSTRIALES --- */
+    .tanks-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 4px 6px;
+    }
+
+    .tank-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .tank-cap-top {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #38bdf8;
+      margin-bottom: 4px;
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+
+    .tank-cap-top.purple {
+      color: var(--purple-light);
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.4);
+    }
+
+    .tank-name {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+
+    .tank-3d-frame {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(90deg, #0b1324 0%, #1a263d 25%, #243452 50%, #1a263d 75%, #0b1324 100%);
+      border: 2px solid rgba(148, 163, 184, 0.3);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .tank-glass-glare {
+      position: absolute;
+      top: 0;
+      left: 12%;
+      width: 22%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), transparent);
+      pointer-events: none;
+      z-index: 8;
+    }
+
+    .tank-rim {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      background: rgba(15, 23, 42, 0.6);
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.8);
+      z-index: 9;
+    }
+
+    .zone-yellow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.28), rgba(245, 158, 11, 0.28) 6px, transparent 6px, transparent 12px);
+      border-bottom: 2px dashed var(--warning);
+      z-index: 2;
+    }
+
+    .zone-red {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(239, 68, 68, 0.32);
+      border-top: 2px dashed var(--danger);
+      z-index: 2;
+    }
+
+    .badge-marker {
+      position: absolute;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 3px;
+      z-index: 5;
+    }
+
+    .badge-marker.yellow {
+      color: #fef08a;
+      background: rgba(180, 83, 9, 0.7);
+      right: 4px;
+    }
+
+    .badge-marker.red {
+      color: #fca5a5;
+      background: rgba(185, 28, 28, 0.7);
+      left: 4px;
+    }
+
+    .tank-water {
+      width: 100%;
+      background: linear-gradient(180deg, var(--trasvase-light) 0%, var(--trasvase) 100%);
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 3;
+      border-top: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+    }
+
+    .tank-water.rio {
+      background: linear-gradient(180deg, var(--rio-light) 0%, var(--rio) 100%);
+      box-shadow: 0 0 12px rgba(45, 212, 191, 0.5);
+    }
+
+    .tank-water.purple {
+      background: linear-gradient(180deg, var(--purple-light) 0%, var(--purple) 100%);
+      box-shadow: 0 0 14px rgba(192, 132, 252, 0.5);
+    }
+
+    .tank-info {
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    .tank-value {
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+
+    .tank-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Formularios */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group.full {
+      grid-column: span 2;
+    }
+
+    label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    input {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+    }
+
+    input.input-table {
+      padding: 4px 6px;
+      font-size: 0.8rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Tablas */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+    }
+
+    .data-table th {
+      background: rgba(30, 41, 59, 0.85);
+      color: var(--accent);
+      padding: 6px 4px;
+      text-align: center;
+      font-weight: 800;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .data-table td {
+      padding: 6px 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.65rem;
+    }
+
+    .badge-blue {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .badge-yellow {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-purple {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--purple-light);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .alert-banner {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--success);
+      color: #6ee7b7;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .alert-banner.warning {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--warning);
+      color: #fcd34d;
+    }
+
+    .alert-banner.danger {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: var(--danger);
+      color: #fca5a5;
+    }
+
+    .day-selector {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    .day-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 6px 2px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .day-btn.active {
+      background: var(--purple);
+      color: #fff;
+      border-color: var(--purple-light);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Cabecera -->
+  <div class="header">
+    <h1>Gestión Hidráulica 6ª y 7ª Elevación</h1>
+  </div>
+
+  <!-- Selector de Modo de Agua -->
+  <div class="mode-switch">
+    <button id="btnTrasvase" class="mode-btn active trasvase" onclick="setMode('trasvase')">AGUA TRASVASE</button>
+    <button id="btnRio" class="mode-btn" onclick="setMode('rio')">AGUA RÍO</button>
+  </div>
+
+  <!-- Pestañas -->
+  <div class="nav-tabs">
+    <button id="tabBtn1" class="tab-btn active" onclick="switchTab(1)">📊 CONTROL</button>
+    <button id="tabBtn2" class="tab-btn" onclick="switchTab(2)">⚡ CAUDALES</button>
+    <button id="tabBtn3" class="tab-btn tab-purple" onclick="switchTab(3)">🔮 PROYECCIÓN</button>
+  </div>
+
+  <!-- ==================== PESTAÑA 1: CONTROL Y ENTRADA ==================== -->
+  <div id="tabContent1" style="display: flex; flex-direction: column; gap: 12px;">
+    
+    <div class="card">
+      <div class="card-title">Nivel Actual de Balsas</div>
+      <div class="tanks-wrapper">
+        <!-- Balsa 6ª -->
+        <div class="tank-card">
+          <div class="tank-cap-top">106 h</div>
+          <div class="tank-name">Balsa 6ª</div>
+          <div class="tank-3d-frame">
+            <div class="tank-rim"></div>
+            <div class="tank-glass-glare"></div>
+            <div class="zone-yellow" style="height: 24.5%;"><span class="badge-marker yellow" style="bottom: 2px;">80h</span></div>
+            <div class="zone-red" style="height: 18.9%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
+            <div id="water6" class="tank-water" style="height: 43%;"></div>
+          </div>
+          <div class="tank-info">
+            <div id="txtLevel6" class="tank-value">46 h</div>
+            <div id="txtPct6" class="tank-sub">43% ocupación</div>
+          </div>
+        </div>
+
+        <!-- Balsa 7ª -->
+        <div class="tank-card">
+          <div class="tank-cap-top">500 h</div>
+          <div class="tank-name">Balsa 7ª</div>
+          <div class="tank-3d-frame">
+            <div class="tank-rim"></div>
+            <div class="tank-glass-glare"></div>
+            <div class="zone-yellow" style="height: 16%;"><span class="badge-marker yellow" style="bottom: 2px;">420h</span></div>
+            <div class="zone-red" style="height: 4%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
+            <div id="water7" class="tank-water" style="height: 85%;"></div>
+          </div>
+          <div class="tank-info">
+            <div id="txtLevel7" class="tank-value">425 h</div>
+            <div id="txtPct7" class="tank-sub">85% ocupación</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parámetros Iniciales -->
+    <div class="card">
+      <div class="card-title">Datos Semanales</div>
+      <div class="input-grid">
+        <div class="input-group full">
+          <label>Venta Total Semanal (Horas vendidas)</label>
+          <input type="number" id="inputVenta" value="180" oninput="autoDistribuirVenta()">
+        </div>
+        <div class="input-group">
+          <label>Nivel Actual 6ª (h)</label>
+          <input type="number" id="inputBalsa6" value="15" oninput="calcularTodo()">
+        </div>
+        <div class="input-group">
+          <label>Nivel Actual 7ª (h)</label>
+          <input type="number" id="inputBalsa7" value="250" oninput="calcularTodo()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Reparto Diario Manual -->
+    <div class="card">
+      <div class="card-title">
+        <span>Reparto Diario por Canal (Editable)</span>
+        <span id="txtSumaRepartos" class="badge badge-blue">Total: 180 h</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Día</th>
+            <th>Canal 6ª (h)</th>
+            <th>Canal 7ª (h)</th>
+            <th>Total Día</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Lunes</b></td>
+            <td><input type="number" id="rep6_0" class="input-table" value="16" oninput="calcularTodo()"></td>
+            <td><input type="number" id="rep7_0" class="input-table" value="20" oninput="calcularTodo()"></td>
+            <td id="totRep_0" style="font-weight:700;">36 h</td>
+          </tr>
+          <tr>
+            <td><b>Martes</b></td>
+            <td><input type="number" id="rep6_1" class="input-table" value="16" oninput="calcularTodo()"></td>
+            <td><input type="number" id="rep7_1" class="input-table" value="20" oninput="calcularTodo()"></td>
+            <td id="totRep_1" style="font-weight:700;">36 h</td>
+          </tr>
+          <tr>
+            <td><b>Miércoles</b></td>
+            <td><input type="number" id="rep6_2" class="input-table" value="16" oninput="calcularTodo()"></td>
+            <td><input type="number" id="rep7_2" class="input-table" value="20" oninput="calcularTodo()"></td>
+            <td id="totRep_2" style="font-weight:700;">36 h</td>
+          </tr>
+          <tr>
+            <td><b>Jueves</b></td>
+            <td><input type="number" id="rep6_3" class="input-table" value="16" oninput="calcularTodo()"></td>
+            <td><input type="number" id="rep7_3" class="input-table" value="20" oninput="calcularTodo()"></td>
+            <td id="totRep_3" style="font-weight:700;">36 h</td>
+          </tr>
+          <tr>
+            <td><b>Viernes</b></td>
+            <td><input type="number" id="rep6_4" class="input-table" value="16" oninput="calcularTodo()"></td>
+            <td><input type="number" id="rep7_4" class="input-table" value="20" oninput="calcularTodo()"></td>
+            <td id="totRep_4" style="font-weight:700;">36 h</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="alertBox" class="alert-banner">
+      Operación configurada correctamente.
+    </div>
+  </div>
+
+  <!-- ==================== PESTAÑA 2: CAUDALES EDITABLES ==================== -->
+  <div id="tabContent2" style="display: none; flex-direction: column; gap: 12px;">
+    
+    <!-- Barranco (5ª) -->
+    <div class="card">
+      <div class="card-title">
+        <span>5ª Elevación: Barranco</span>
+        <span id="txtTotalBarrancoCalc" class="badge badge-blue">0 h agua</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Día Entrada</th>
+            <th>G2 (9h/h)</th>
+            <th>G3 (13h/h)</th>
+            <th>Horas Agua</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Dom Noche</b></td>
+            <td><input type="number" id="g2_0" class="input-table" value="9" oninput="calcularTodo()"></td>
+            <td><input type="number" id="g3_0" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td id="aguaBarranco_0" style="color:var(--success); font-weight:800;">+81 h</td>
+          </tr>
+          <tr>
+            <td><b>Lun Noche</b></td>
+            <td><input type="number" id="g2_1" class="input-table" value="8" oninput="calcularTodo()"></td>
+            <td><input type="number" id="g3_1" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td id="aguaBarranco_1" style="color:var(--success); font-weight:800;">+72 h</td>
+          </tr>
+          <tr>
+            <td><b>Mar Noche</b></td>
+            <td><input type="number" id="g2_2" class="input-table" value="8" oninput="calcularTodo()"></td>
+            <td><input type="number" id="g3_2" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td id="aguaBarranco_2" style="color:var(--success); font-weight:800;">+72 h</td>
+          </tr>
+          <tr>
+            <td><b>Mié Noche</b></td>
+            <td><input type="number" id="g2_3" class="input-table" value="8" oninput="calcularTodo()"></td>
+            <td><input type="number" id="g3_3" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td id="aguaBarranco_3" style="color:var(--success); font-weight:800;">+72 h</td>
+          </tr>
+          <tr>
+            <td><b>Jue Noche</b></td>
+            <td><input type="number" id="g2_4" class="input-table" value="8" oninput="calcularTodo()"></td>
+            <td><input type="number" id="g3_4" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td id="aguaBarranco_4" style="color:var(--success); font-weight:800;">+72 h</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:0.7rem; color:var(--text-muted); margin-top:8px;">
+        <span class="badge badge-yellow">Regla -2h</span> Solicitar apertura al canal 2 horas antes del encendido.
+      </div>
+    </div>
+
+    <!-- Bombas 7ª Elevación -->
+    <div class="card">
+      <div class="card-title">
+        <span>7ª Elevación: Subida a Balsa 7ª</span>
+        <span id="txtTotalSubidaCalc" class="badge badge-purple">0 h subidas</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Día Bombeo</th>
+            <th>Arranc. (5h/h)</th>
+            <th>Arr+Var (10h/h)</th>
+            <th>Subida 7ª</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Dom Noche</b></td>
+            <td><input type="number" id="arr_0" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td><input type="number" id="arrvar_0" class="input-table" value="5" oninput="calcularTodo()"></td>
+            <td id="aguaSubida_0" style="color:var(--purple-light); font-weight:800;">+50 h</td>
+          </tr>
+          <tr>
+            <td><b>Lun Noche</b></td>
+            <td><input type="number" id="arr_1" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td><input type="number" id="arrvar_1" class="input-table" value="5.5" step="0.5" oninput="calcularTodo()"></td>
+            <td id="aguaSubida_1" style="color:var(--purple-light); font-weight:800;">+55 h</td>
+          </tr>
+          <tr>
+            <td><b>Mar Noche</b></td>
+            <td><input type="number" id="arr_2" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td><input type="number" id="arrvar_2" class="input-table" value="5.5" step="0.5" oninput="calcularTodo()"></td>
+            <td id="aguaSubida_2" style="color:var(--purple-light); font-weight:800;">+55 h</td>
+          </tr>
+          <tr>
+            <td><b>Mié Noche</b></td>
+            <td><input type="number" id="arr_3" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td><input type="number" id="arrvar_3" class="input-table" value="5.5" step="0.5" oninput="calcularTodo()"></td>
+            <td id="aguaSubida_3" style="color:var(--purple-light); font-weight:800;">+55 h</td>
+          </tr>
+          <tr>
+            <td><b>Jue Noche</b></td>
+            <td><input type="number" id="arr_4" class="input-table" value="0" oninput="calcularTodo()"></td>
+            <td><input type="number" id="arrvar_4" class="input-table" value="6" oninput="calcularTodo()"></td>
+            <td id="aguaSubida_4" style="color:var(--purple-light); font-weight:800;">+60 h</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:0.7rem; color:var(--danger); margin-top:8px;">
+        ⚠️ Arr+Var juntos exclusivamente de 00:00 a 08:00 (Sanción tras las 08:00).
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== PESTAÑA 3: PROYECCIÓN (BALSAS MORADAS) ==================== -->
+  <div id="tabContent3" style="display: none; flex-direction: column; gap: 12px;">
+    
+    <div class="card">
+      <div class="card-title purple">
+        <span>Proyección Diaria de Balsas</span>
+        <span id="txtDiaProyLabel" style="font-size:0.75rem; color:var(--purple-light);">Lunes</span>
+      </div>
+
+      <!-- Selector Día Proyección -->
+      <div class="day-selector">
+        <button class="day-btn active" onclick="setProyDay(0, this)">LUN</button>
+        <button class="day-btn" onclick="setProyDay(1, this)">MAR</button>
+        <button class="day-btn" onclick="setProyDay(2, this)">MIÉ</button>
+        <button class="day-btn" onclick="setProyDay(3, this)">JUE</button>
+        <button class="day-btn" onclick="setProyDay(4, this)">VIE</button>
+      </div>
+
+      <!-- Balsas Moradas -->
+      <div class="tanks-wrapper">
+        <!-- Balsa 6ª Morada -->
+        <div class="tank-card">
+          <div class="tank-cap-top purple">106 h</div>
+          <div class="tank-name">Balsa 6ª Proyectada</div>
+          <div class="tank-3d-frame">
+            <div class="tank-rim"></div>
+            <div class="tank-glass-glare"></div>
+            <div class="zone-yellow" style="height: 24.5%;"><span class="badge-marker yellow" style="bottom: 2px;">80h</span></div>
+            <div class="zone-red" style="height: 18.9%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
+            <div id="water6Proy" class="tank-water purple" style="height: 30%;"></div>
+          </div>
+          <div class="tank-info">
+            <div id="txtLevel6Proy" class="tank-value" style="color:var(--purple-light);">30 h</div>
+            <div id="txtPct6Proy" class="tank-sub">28% ocupación</div>
+          </div>
+        </div>
+
+        <!-- Balsa 7ª Morada -->
+        <div class="tank-card">
+          <div class="tank-cap-top purple">500 h</div>
+          <div class="tank-name">Balsa 7ª Proyectada</div>
+          <div class="tank-3d-frame">
+            <div class="tank-rim"></div>
+            <div class="tank-glass-glare"></div>
+            <div class="zone-yellow" style="height: 16%;"><span class="badge-marker yellow" style="bottom: 2px;">420h</span></div>
+            <div class="zone-red" style="height: 4%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
+            <div id="water7Proy" class="tank-water purple" style="height: 56%;"></div>
+          </div>
+          <div class="tank-info">
+            <div id="txtLevel7Proy" class="tank-value" style="color:var(--purple-light);">280 h</div>
+            <div id="txtPct7Proy" class="tank-sub">56% ocupación</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Balance Detallado del Día -->
+    <div class="card">
+      <div class="card-title purple">Balance Hidráulico del Día</div>
+      <table class="data-table">
+        <tbody>
+          <tr><td>Entrada Barranco (5ª):</td><td id="proyEntradaVal" style="font-weight:700; color:var(--success);">+0 h</td></tr>
+          <tr><td>Subida a Balsa 7ª:</td><td id="proySubidaVal" style="font-weight:700; color:var(--purple-light);">0 h</td></tr>
+          <tr><td>Salida Riego Canal 6ª:</td><td id="proyRiego6Val" style="font-weight:700; color:var(--danger);">-0 h</td></tr>
+          <tr><td>Salida Riego Canal 7ª:</td><td id="proyRiego7Val" style="font-weight:700; color:var(--danger);">-0 h</td></tr>
+          <tr><td><b>Saldo Final Balsa 6ª:</b></td><td id="proySaldo6Val" style="font-weight:900; color:var(--accent);">0 h</td></tr>
+          <tr><td><b>Saldo Final Balsa 7ª:</b></td><td id="proySaldo7Val" style="font-weight:900; color:var(--purple-light);">0 h</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let currentMode = 'trasvase';
+  let activeProyDayIdx = 0;
+  const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+
+  function switchTab(num) {
+    document.getElementById('tabContent1').style.display = num === 1 ? 'flex' : 'none';
+    document.getElementById('tabContent2').style.display = num === 2 ? 'flex' : 'none';
+    document.getElementById('tabContent3').style.display = num === 3 ? 'flex' : 'none';
+
+    document.getElementById('tabBtn1').className = 'tab-btn' + (num === 1 ? ' active' : '');
+    document.getElementById('tabBtn2').className = 'tab-btn' + (num === 2 ? ' active' : '');
+    document.getElementById('tabBtn3').className = 'tab-btn tab-purple' + (num === 3 ? ' active tab-purple' : '');
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('btnTrasvase').className = 'mode-btn' + (mode === 'trasvase' ? ' active trasvase' : '');
+    document.getElementById('btnRio').className = 'mode-btn' + (mode === 'rio' ? ' active rio' : '');
+    
+    const water6 = document.getElementById('water6');
+    if (mode === 'rio') {
+      water6.classList.add('rio');
+    } else {
+      water6.classList.remove('rio');
+    }
+    autoDistribuirVenta();
+  }
+
+  function setProyDay(idx, btn) {
+    activeProyDayIdx = idx;
+    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('txtDiaProyLabel').innerText = dayNames[idx];
+    calcularTodo();
+  }
+
+  function autoDistribuirVenta() {
+    const venta = parseFloat(document.getElementById('inputVenta').value) || 0;
+    const repDiario = Math.round(venta / 5);
+    const rep6 = Math.round(repDiario * (currentMode === 'rio' ? 0.55 : 0.45));
+    const rep7 = repDiario - rep6;
+
+    for (let i = 0; i < 5; i++) {
+      document.getElementById(`rep6_${i}`).value = rep6;
+      document.getElementById(`rep7_${i}`).value = rep7;
+    }
+
+    // Proponer valores por defecto en Caudales
+    if (currentMode === 'rio') {
+      const g2Horas = [7, 4, 4, 4, 2];
+      for (let i = 0; i < 5; i++) {
+        document.getElementById(`g2_${i}`).value = g2Horas[i];
+        document.getElementById(`g3_${i}`).value = 0;
+        document.getElementById(`arr_${i}`).value = 0;
+        document.getElementById(`arrvar_${i}`).value = 0; // En río el variador va directo a canal, no sube a balsa
+      }
+    } else {
+      const g2Horas = [9, 8, 8, 8, 8];
+      const arrvarHoras = [5, 5.5, 5.5, 5.5, 6];
+      for (let i = 0; i < 5; i++) {
+        document.getElementById(`g2_${i}`).value = g2Horas[i];
+        document.getElementById(`g3_${i}`).value = 0;
+        document.getElementById(`arr_${i}`).value = 0;
+        document.getElementById(`arrvar_${i}`).value = arrvarHoras[i];
+      }
+    }
+
+    calcularTodo();
+  }
+
+  function calcularTodo() {
+    const b6Init = parseFloat(document.getElementById('inputBalsa6').value) || 0;
+    const b7Init = parseFloat(document.getElementById('inputBalsa7').value) || 0;
+
+    // 1. Tanques Actuales en Pestaña 1
+    const pct6 = Math.min(Math.max((b6Init / 106) * 100, 0), 100);
+    const pct7 = Math.min(Math.max((b7Init / 500) * 100, 0), 100);
+
+    document.getElementById('water6').style.height = pct6 + '%';
+    document.getElementById('water7').style.height = pct7 + '%';
+    document.getElementById('txtLevel6').innerText = b6Init + ' h';
+    document.getElementById('txtPct6').innerText = Math.round(pct6) + '% ocupación';
+    document.getElementById('txtLevel7').innerText = b7Init + ' h';
+    document.getElementById('txtPct7').innerText = Math.round(pct7) + '% ocupación';
+
+    // 2. Suma de Repartos
+    let totalRep = 0;
+    const repartos6 = [];
+    const repartos7 = [];
+    for (let i = 0; i < 5; i++) {
+      const r6 = parseFloat(document.getElementById(`rep6_${i}`).value) || 0;
+      const r7 = parseFloat(document.getElementById(`rep7_${i}`).value) || 0;
+      repartos6.push(r6);
+      repartos7.push(r7);
+      const subTot = r6 + r7;
+      totalRep += subTot;
+      document.getElementById(`totRep_${i}`).innerText = subTot + ' h';
+    }
+    document.getElementById('txtSumaRepartos').innerText = `Total: ${totalRep} h`;
+
+    // 3. Caudales Entrantes y Subidas (Pestaña 2)
+    let totalAguaBarranco = 0;
+    let totalAguaSubida = 0;
+    const entradasBarranco = [];
+    const subidas7 = [];
+
+    for (let i = 0; i < 5; i++) {
+      const g2 = parseFloat(document.getElementById(`g2_${i}`).value) || 0;
+      const g3 = parseFloat(document.getElementById(`g3_${i}`).value) || 0;
+      const aguaBarr = (g2 * 9) + (g3 * 13);
+      entradasBarranco.push(aguaBarr);
+      totalAguaBarranco += aguaBarr;
+      document.getElementById(`aguaBarranco_${i}`).innerText = `+${aguaBarr} h`;
+
+      const arr = parseFloat(document.getElementById(`arr_${i}`).value) || 0;
+      const arrvar = parseFloat(document.getElementById(`arrvar_${i}`).value) || 0;
+      const aguaSub = (arr * 5) + (arrvar * 10);
+      subidas7.push(aguaSub);
+      totalAguaSubida += aguaSub;
+      document.getElementById(`aguaSubida_${i}`).innerText = `+${aguaSub} h`;
+    }
+
+    document.getElementById('txtTotalBarrancoCalc').innerText = `${totalAguaBarranco} h agua`;
+    document.getElementById('txtTotalSubidaCalc').innerText = `${totalAguaSubida} h subidas`;
+
+    // 4. Cálculo de Proyección Día a Día (Pestaña 3)
+    let currentB6 = b6Init;
+    let currentB7 = b7Init;
+    const proyecciones = [];
+
+    for (let i = 0; i < 5; i++) {
+      const ent = entradasBarranco[i];
+      const sub = subidas7[i];
+      const r6 = repartos6[i];
+      const r7 = repartos7[i];
+
+      // Balance
+      if (currentMode === 'rio') {
+        // En río: todo entra en 6ª y se sirve de 6ª (Canal 6 directo, Canal 7 por Variador)
+        currentB6 = currentB6 + ent - r6 - r7;
+        // Balsa 7ª permanece intacta
+      } else {
+        // En trasvase: Entra a 6ª, se eleva a 7ª, riego 6ª sale de 6ª, riego 7ª sale por gravedad de 7ª
+        currentB6 = currentB6 + ent - sub - r6;
+        currentB7 = currentB7 + sub - r7;
+      }
+
+      proyecciones.push({
+        dia: dayNames[i],
+        ent: ent,
+        sub: sub,
+        r6: r6,
+        r7: r7,
+        b6: Math.round(currentB6 * 10) / 10,
+        b7: Math.round(currentB7 * 10) / 10
+      });
+    }
+
+    // Actualizar Balsa Morada del día activo
+    const pActiva = proyecciones[activeProyDayIdx];
+    const pct6P = Math.min(Math.max((pActiva.b6 / 106) * 100, 0), 100);
+    const pct7P = Math.min(Math.max((pActiva.b7 / 500) * 100, 0), 100);
+
+    document.getElementById('water6Proy').style.height = pct6P + '%';
+    document.getElementById('water7Proy').style.height = pct7P + '%';
+    document.getElementById('txtLevel6Proy').innerText = pActiva.b6 + ' h';
+    document.getElementById('txtPct6Proy').innerText = Math.round(pct6P) + '% ocupación';
+    document.getElementById('txtLevel7Proy').innerText = pActiva.b7 + ' h';
+    document.getElementById('txtPct7Proy').innerText = Math.round(pct7P) + '% ocupación';
+
+    document.getElementById('proyEntradaVal').innerText = `+${pActiva.ent} h`;
+    document.getElementById('proySubidaVal').innerText = currentMode === 'rio' ? '0 h (Río directo)' : `-${pActiva.sub}h (6ª) / +${pActiva.sub}h (7ª)`;
+    document.getElementById('proyRiego6Val').innerText = `-${pActiva.r6} h`;
+    document.getElementById('proyRiego7Val').innerText = `-${pActiva.r7} h`;
+    document.getElementById('proySaldo6Val').innerText = `${pActiva.b6} h`;
+    document.getElementById('proySaldo7Val').innerText = `${pActiva.b7} h`;
+
+    // Alertas Dinámicas
+    const alertBox = document.getElementById('alertBox');
+    if (b6Init < 20 || pActiva.b6 < 20) {
+      alertBox.className = 'alert-banner danger';
+      alertBox.innerText = 'Peligro: Balsa 6ª desciende por debajo de 20h (zona roja). Aumenta horas en Barranco.';
+    } else if (pActiva.b7 > 430) {
+      alertBox.className = 'alert-banner warning';
+      alertBox.innerText = 'Atención: Balsa 7ª supera las 430h en proyección. Margen de emergencia reducido.';
+    } else {
+      alertBox.className = 'alert-banner';
+      alertBox.innerText = 'Operación segura. Todos los balances cuadran dentro de los límites operativos.';
+    }
+  }
+
+  // Inicialización
+  autoDistribuirVenta();
+</script>
+
+</body>
+</html>
