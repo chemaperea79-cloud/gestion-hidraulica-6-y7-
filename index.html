@@ -42,16 +42,20 @@
 
     .container {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       padding-bottom: 25px;
     }
 
+    /* Cabecera y Fecha */
     .header {
       text-align: center;
-      padding: 4px 0 2px 0;
+      padding: 4px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .header h1 {
@@ -61,38 +65,11 @@
       text-transform: uppercase;
     }
 
-    /* Selector de Modo */
-    .mode-switch {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: rgba(15, 23, 42, 0.95);
-      padding: 3px;
-      border-radius: 10px;
-      border: 1px solid var(--card-border);
-    }
-
-    .mode-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 9px;
-      font-size: 0.8rem;
-      font-weight: 800;
-      border-radius: 7px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .mode-btn.active.trasvase {
-      background: var(--trasvase);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(2, 132, 199, 0.6);
-    }
-
-    .mode-btn.active.rio {
-      background: var(--rio);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(13, 148, 136, 0.6);
+    .header-date {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: capitalize;
     }
 
     /* Pestañas */
@@ -196,7 +173,7 @@
     .tank-3d-frame {
       position: relative;
       width: 100%;
-      height: 200px;
+      height: 190px;
       background: linear-gradient(90deg, #0b1324 0%, #1a263d 25%, #243452 50%, #1a263d 75%, #0b1324 100%);
       border: 2px solid rgba(148, 163, 184, 0.3);
       border-radius: 18px;
@@ -281,11 +258,6 @@
       box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
     }
 
-    .tank-water.rio {
-      background: linear-gradient(180deg, var(--rio-light) 0%, var(--rio) 100%);
-      box-shadow: 0 0 12px rgba(45, 212, 191, 0.5);
-    }
-
     .tank-water.purple {
       background: linear-gradient(180deg, var(--purple-light) 0%, var(--purple) 100%);
       box-shadow: 0 0 14px rgba(192, 132, 252, 0.5);
@@ -306,7 +278,7 @@
       color: var(--text-muted);
     }
 
-    /* Formularios e Inputs Ajustados (Sin desborde horizontal) */
+    /* Formularios */
     .input-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -335,13 +307,13 @@
       text-overflow: ellipsis;
     }
 
-    input {
+    input, select {
       background: rgba(15, 23, 42, 0.95);
       border: 1px solid var(--card-border);
       color: var(--text);
-      padding: 7px 8px;
+      padding: 6px 8px;
       border-radius: 8px;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 700;
       outline: none;
       width: 100%;
@@ -349,13 +321,13 @@
       box-sizing: border-box;
     }
 
-    input:focus {
+    input:focus, select:focus {
       border-color: var(--accent);
     }
 
     input.input-table {
-      padding: 4px 2px;
-      font-size: 0.76rem;
+      padding: 3px 2px;
+      font-size: 0.75rem;
       width: 100%;
       min-width: 0;
       text-align: center;
@@ -364,14 +336,30 @@
     input.input-time {
       padding: 2px 1px;
       font-size: 0.68rem;
-      width: 40px;
+      width: 44px;
       min-width: 0;
       text-align: center;
       background: rgba(30, 41, 59, 0.9);
       border-radius: 4px;
     }
 
-    /* Tablas adaptadas */
+    select.select-water {
+      padding: 2px 2px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      border-radius: 5px;
+      width: 100%;
+      text-align: center;
+    }
+
+    select.select-water.opt-trasvase {
+      color: var(--trasvase-light);
+    }
+
+    select.select-water.opt-rio {
+      color: var(--rio-light);
+    }
+
     .table-container {
       width: 100%;
       overflow-x: auto;
@@ -422,10 +410,10 @@
       border: 1px solid rgba(56, 189, 248, 0.3);
     }
 
-    .badge-yellow {
-      background: rgba(245, 158, 11, 0.15);
-      color: #fcd34d;
-      border: 1px solid rgba(245, 158, 11, 0.3);
+    .badge-teal {
+      background: rgba(13, 148, 136, 0.15);
+      color: var(--rio-light);
+      border: 1px solid rgba(13, 148, 136, 0.3);
     }
 
     .badge-purple {
@@ -456,19 +444,19 @@
       color: #fca5a5;
     }
 
-    .day-selector {
+    .day-selector-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
-      margin-bottom: 10px;
+      gap: 3px;
+      margin-bottom: 8px;
     }
 
     .day-btn {
       background: rgba(15, 23, 42, 0.8);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 6px 1px;
-      font-size: 0.66rem;
+      padding: 5px 1px;
+      font-size: 0.65rem;
       font-weight: 800;
       border-radius: 5px;
       cursor: pointer;
@@ -479,29 +467,37 @@
       color: #fff;
       border-color: var(--purple-light);
     }
+
+    .week-divider {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      font-weight: 800;
+      text-align: left;
+      padding: 4px 6px;
+      font-size: 0.68rem;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
+  <!-- Cabecera con Fecha Actual -->
   <div class="header">
     <h1>Gestión Hidráulica 6ª y 7ª Elevación</h1>
+    <div id="currentDateHeader" class="header-date">Cargando fecha...</div>
   </div>
 
-  <div class="mode-switch">
-    <button id="btnTrasvase" class="mode-btn active trasvase" onclick="setMode('trasvase')">AGUA TRASVASE</button>
-    <button id="btnRio" class="mode-btn" onclick="setMode('rio')">AGUA RÍO</button>
-  </div>
-
+  <!-- Pestañas -->
   <div class="nav-tabs">
     <button id="tabBtn1" class="tab-btn active" onclick="switchTab(1)">📊 CONTROL</button>
     <button id="tabBtn2" class="tab-btn" onclick="switchTab(2)">⚡ CAUDALES</button>
     <button id="tabBtn3" class="tab-btn tab-purple" onclick="switchTab(3)">🔮 PROYECCIÓN</button>
   </div>
 
-  <!-- PESTAÑA 1 -->
+  <!-- ==================== PESTAÑA 1: CONTROL ==================== -->
   <div id="tabContent1" style="display: flex; flex-direction: column; gap: 10px;">
     
+    <!-- Balsas 3D Actuales -->
     <div class="card">
       <div class="card-title">Nivel Actual de Balsas</div>
       <div class="tanks-wrapper">
@@ -539,12 +535,17 @@
       </div>
     </div>
 
+    <!-- Parámetros Iniciales y Ventas Totales por Tipo -->
     <div class="card">
-      <div class="card-title">Datos Semanales</div>
+      <div class="card-title">Ventas Totales y Niveles Iniciales</div>
       <div class="input-grid">
-        <div class="input-group full">
-          <label>Venta Total Semanal (Horas)</label>
-          <input type="number" id="inputVenta" value="180" oninput="autoDistribuirVenta()">
+        <div class="input-group">
+          <label>Venta Total TRASVASE</label>
+          <input type="text" id="totalVentaTrasvase" value="0 h" readonly style="color:var(--trasvase-light); background:rgba(2,132,199,0.15);">
+        </div>
+        <div class="input-group">
+          <label>Venta Total RÍO</label>
+          <input type="text" id="totalVentaRio" value="0 h" readonly style="color:var(--rio-light); background:rgba(13,148,136,0.15);">
         </div>
         <div class="input-group">
           <label>Nivel Inicial 6ª (h)</label>
@@ -557,29 +558,25 @@
       </div>
     </div>
 
+    <!-- Reparto Diario (14 Días) con Selector de Agua -->
     <div class="card">
       <div class="card-title">
-        <span>Reparto Diario (Lunes a Domingo)</span>
-        <span id="txtSumaRepartos" class="badge badge-blue">Total: 180 h</span>
+        <span>Reparto Diario (14 Días)</span>
+        <span id="txtSumaRepartos" class="badge badge-blue">Total: 0 h</span>
       </div>
       <div class="table-container">
         <table class="data-table">
           <thead>
             <tr>
               <th>Día</th>
-              <th>Canal 6ª (h)</th>
-              <th>Canal 7ª (h)</th>
-              <th>Total Día</th>
+              <th>Tipo Agua</th>
+              <th>Canal 6ª</th>
+              <th>Canal 7ª</th>
+              <th>Total</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td><b>Lunes</b></td><td><input type="number" id="rep6_0" class="input-table" value="16" oninput="calcularTodo()"></td><td><input type="number" id="rep7_0" class="input-table" value="20" oninput="calcularTodo()"></td><td id="totRep_0" style="font-weight:700;">36 h</td></tr>
-            <tr><td><b>Martes</b></td><td><input type="number" id="rep6_1" class="input-table" value="16" oninput="calcularTodo()"></td><td><input type="number" id="rep7_1" class="input-table" value="20" oninput="calcularTodo()"></td><td id="totRep_1" style="font-weight:700;">36 h</td></tr>
-            <tr><td><b>Miércoles</b></td><td><input type="number" id="rep6_2" class="input-table" value="16" oninput="calcularTodo()"></td><td><input type="number" id="rep7_2" class="input-table" value="20" oninput="calcularTodo()"></td><td id="totRep_2" style="font-weight:700;">36 h</td></tr>
-            <tr><td><b>Jueves</b></td><td><input type="number" id="rep6_3" class="input-table" value="16" oninput="calcularTodo()"></td><td><input type="number" id="rep7_3" class="input-table" value="20" oninput="calcularTodo()"></td><td id="totRep_3" style="font-weight:700;">36 h</td></tr>
-            <tr><td><b>Viernes</b></td><td><input type="number" id="rep6_4" class="input-table" value="16" oninput="calcularTodo()"></td><td><input type="number" id="rep7_4" class="input-table" value="20" oninput="calcularTodo()"></td><td id="totRep_4" style="font-weight:700;">36 h</td></tr>
-            <tr><td><b>Sábado</b></td><td><input type="number" id="rep6_5" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="rep7_5" class="input-table" value="0" oninput="calcularTodo()"></td><td id="totRep_5" style="font-weight:700;">0 h</td></tr>
-            <tr><td><b>Domingo</b></td><td><input type="number" id="rep6_6" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="rep7_6" class="input-table" value="0" oninput="calcularTodo()"></td><td id="totRep_6" style="font-weight:700;">0 h</td></tr>
+          <tbody id="repartoTableBody">
+            <!-- 14 Filas Dinámicas -->
           </tbody>
         </table>
       </div>
@@ -590,96 +587,81 @@
     </div>
   </div>
 
-  <!-- PESTAÑA 2: CAUDALES Y HORARIOS (LUNES A DOMINGO) -->
+  <!-- ==================== PESTAÑA 2: CAUDALES (14 DÍAS) ==================== -->
   <div id="tabContent2" style="display: none; flex-direction: column; gap: 10px;">
     
-    <!-- Barranco (5ª) -->
+    <!-- 5ª Elevación (Barranco) -->
     <div class="card">
       <div class="card-title">
-        <span>5ª Elevación: Barranco</span>
+        <span>5ª Elevación: Barranco (14 Días)</span>
         <span id="txtTotalBarrancoCalc" class="badge badge-blue">0 h agua</span>
       </div>
       <div class="table-container">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Día Entrada</th>
-              <th>Horario</th>
-              <th>G2 (9h/h)</th>
-              <th>G3 (13h/h)</th>
-              <th>Agua</th>
+              <th>Día</th>
+              <th>Horario (Enc - Apag)</th>
+              <th>Horas G2</th>
+              <th>Horas G3</th>
+              <th>Aporte 6ª</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td><b>Lunes Noche</b></td><td><div class="time-box"><input type="text" id="g_on_0" class="input-time" value="23:00" oninput="calcularTodo()">-<input type="text" id="g_off_0" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="g2_0" class="input-table" value="8" oninput="calcularTodo()"></td><td><input type="number" id="g3_0" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaBarranco_0" style="color:var(--success); font-weight:800;">+72 h</td></tr>
-            <tr><td><b>Martes Noche</b></td><td><div class="time-box"><input type="text" id="g_on_1" class="input-time" value="23:00" oninput="calcularTodo()">-<input type="text" id="g_off_1" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="g2_1" class="input-table" value="8" oninput="calcularTodo()"></td><td><input type="number" id="g3_1" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaBarranco_1" style="color:var(--success); font-weight:800;">+72 h</td></tr>
-            <tr><td><b>Miérc Noche</b></td><td><div class="time-box"><input type="text" id="g_on_2" class="input-time" value="23:00" oninput="calcularTodo()">-<input type="text" id="g_off_2" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="g2_2" class="input-table" value="8" oninput="calcularTodo()"></td><td><input type="number" id="g3_2" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaBarranco_2" style="color:var(--success); font-weight:800;">+72 h</td></tr>
-            <tr><td><b>Jueves Noche</b></td><td><div class="time-box"><input type="text" id="g_on_3" class="input-time" value="23:00" oninput="calcularTodo()">-<input type="text" id="g_off_3" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="g2_3" class="input-table" value="8" oninput="calcularTodo()"></td><td><input type="number" id="g3_3" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaBarranco_3" style="color:var(--success); font-weight:800;">+72 h</td></tr>
-            <tr><td><b>Viernes Noche</b></td><td><div class="time-box"><input type="text" id="g_on_4" class="input-time" value="—" oninput="calcularTodo()">-<input type="text" id="g_off_4" class="input-time" value="—" oninput="calcularTodo()"></div></td><td><input type="number" id="g2_4" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="g3_4" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaBarranco_4" style="color:var(--success); font-weight:800;">0 h</td></tr>
-            <tr><td><b>Sábado Noche</b></td><td><div class="time-box"><input type="text" id="g_on_5" class="input-time" value="—" oninput="calcularTodo()">-<input type="text" id="g_off_5" class="input-time" value="—" oninput="calcularTodo()"></div></td><td><input type="number" id="g2_5" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="g3_5" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaBarranco_5" style="color:var(--success); font-weight:800;">0 h</td></tr>
-            <tr><td><b>Dom Noche</b></td><td><div class="time-box"><input type="text" id="g_on_6" class="input-time" value="22:00" oninput="calcularTodo()">-<input type="text" id="g_off_6" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="g2_6" class="input-table" value="9" oninput="calcularTodo()"></td><td><input type="number" id="g3_6" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaBarranco_6" style="color:var(--success); font-weight:800;">+81 h</td></tr>
+          <tbody id="barrancoTableBody">
+            <!-- 14 Filas Dinámicas -->
           </tbody>
         </table>
       </div>
       <div style="font-size:0.68rem; color:var(--text-muted); margin-top:6px;">
-        <span class="badge badge-yellow">Regla -2h</span> Solicitar apertura al canal 2 horas antes de arrancar.
+        <span class="badge badge-blue">Auto</span> Al cambiar encendido/apagado se calculan las horas automáticamente.
       </div>
     </div>
 
-    <!-- Bombas 7ª -->
+    <!-- 7ª Elevación (Bombas) -->
     <div class="card">
       <div class="card-title">
-        <span>7ª Elevación: Bombas</span>
+        <span>7ª Elevación: Bombas (14 Días)</span>
         <span id="txtTotalSubidaCalc" class="badge badge-purple">0 h subidas</span>
       </div>
       <div class="table-container">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Día Bombeo</th>
-              <th>Horario</th>
+              <th>Día</th>
+              <th>Horario (Enc - Apag)</th>
               <th>Arr. (5h/h)</th>
               <th>Arr+Var (10h/h)</th>
-              <th>Subida</th>
+              <th>Subida 7ª</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td><b>Lunes Noche</b></td><td><div class="time-box"><input type="text" id="b_on_0" class="input-time" value="01:30" oninput="calcularTodo()">-<input type="text" id="b_off_0" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="arr_0" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="arrvar_0" class="input-table" value="5.5" step="0.5" oninput="calcularTodo()"></td><td id="aguaSubida_0" style="color:var(--purple-light); font-weight:800;">+55 h</td></tr>
-            <tr><td><b>Martes Noche</b></td><td><div class="time-box"><input type="text" id="b_on_1" class="input-time" value="01:30" oninput="calcularTodo()">-<input type="text" id="b_off_1" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="arr_1" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="arrvar_1" class="input-table" value="5.5" step="0.5" oninput="calcularTodo()"></td><td id="aguaSubida_1" style="color:var(--purple-light); font-weight:800;">+55 h</td></tr>
-            <tr><td><b>Miérc Noche</b></td><td><div class="time-box"><input type="text" id="b_on_2" class="input-time" value="01:30" oninput="calcularTodo()">-<input type="text" id="b_off_2" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="arr_2" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="arrvar_2" class="input-table" value="5.5" step="0.5" oninput="calcularTodo()"></td><td id="aguaSubida_2" style="color:var(--purple-light); font-weight:800;">+55 h</td></tr>
-            <tr><td><b>Jueves Noche</b></td><td><div class="time-box"><input type="text" id="b_on_3" class="input-time" value="01:00" oninput="calcularTodo()">-<input type="text" id="b_off_3" class="input-time" value="07:00" oninput="calcularTodo()"></div></td><td><input type="number" id="arr_3" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="arrvar_3" class="input-table" value="6" oninput="calcularTodo()"></td><td id="aguaSubida_3" style="color:var(--purple-light); font-weight:800;">+60 h</td></tr>
-            <tr><td><b>Viernes Noche</b></td><td><div class="time-box"><input type="text" id="b_on_4" class="input-time" value="—" oninput="calcularTodo()">-<input type="text" id="b_off_4" class="input-time" value="—" oninput="calcularTodo()"></div></td><td><input type="number" id="arr_4" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="arrvar_4" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaSubida_4" style="color:var(--purple-light); font-weight:800;">0 h</td></tr>
-            <tr><td><b>Sábado Noche</b></td><td><div class="time-box"><input type="text" id="b_on_5" class="input-time" value="—" oninput="calcularTodo()">-<input type="text" id="b_off_5" class="input-time" value="—" oninput="calcularTodo()"></div></td><td><input type="number" id="arr_5" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="arrvar_5" class="input-table" value="0" oninput="calcularTodo()"></td><td id="aguaSubida_5" style="color:var(--purple-light); font-weight:800;">0 h</td></tr>
-            <tr><td><b>Dom Noche</b></td><td><div class="time-box"><input type="text" id="b_on_6" class="input-time" value="01:00" oninput="calcularTodo()">-<input type="text" id="b_off_6" class="input-time" value="06:00" oninput="calcularTodo()"></div></td><td><input type="number" id="arr_6" class="input-table" value="0" oninput="calcularTodo()"></td><td><input type="number" id="arrvar_6" class="input-table" value="5" oninput="calcularTodo()"></td><td id="aguaSubida_6" style="color:var(--purple-light); font-weight:800;">+50 h</td></tr>
+          <tbody id="bombasTableBody">
+            <!-- 14 Filas Dinámicas -->
           </tbody>
         </table>
       </div>
       <div style="font-size:0.68rem; color:var(--danger); margin-top:6px;">
-        ⚠️ Arr+Var juntos exclusivamente de 00:00 a 08:00 (Sanción tras las 08:00).
+        ⚠️ Arr+Var juntos únicamente de 00:00 a 08:00 (Sanción de potencia tras las 08:00).
       </div>
     </div>
 
   </div>
 
-  <!-- PESTAÑA 3: PROYECCIÓN (LUNES A DOMINGO) -->
+  <!-- ==================== PESTAÑA 3: PROYECCIÓN (14 DÍAS) ==================== -->
   <div id="tabContent3" style="display: none; flex-direction: column; gap: 10px;">
     
     <div class="card">
       <div class="card-title purple">
-        <span>Proyección Diaria de Balsas</span>
-        <span id="txtDiaProyLabel" style="font-size:0.75rem; color:var(--purple-light);">Lunes</span>
+        <span>Proyección Diaria (14 Días)</span>
+        <span id="txtDiaProyLabel" style="font-size:0.75rem; color:var(--purple-light);">Día 1</span>
       </div>
 
-      <div class="day-selector">
-        <button class="day-btn active" onclick="setProyDay(0, this)">LUN</button>
-        <button class="day-btn" onclick="setProyDay(1, this)">MAR</button>
-        <button class="day-btn" onclick="setProyDay(2, this)">MIÉ</button>
-        <button class="day-btn" onclick="setProyDay(3, this)">JUE</button>
-        <button class="day-btn" onclick="setProyDay(4, this)">VIE</button>
-        <button class="day-btn" onclick="setProyDay(5, this)">SÁB</button>
-        <button class="day-btn" onclick="setProyDay(6, this)">DOM</button>
-      </div>
+      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">SEMANA 1:</div>
+      <div class="day-selector-grid" id="dayButtonsS1"></div>
 
+      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">SEMANA 2:</div>
+      <div class="day-selector-grid" id="dayButtonsS2"></div>
+
+      <!-- Balsas Moradas -->
       <div class="tanks-wrapper">
         <div class="tank-card">
           <div class="tank-cap-top purple">106 h</div>
@@ -692,8 +674,8 @@
             <div id="water6Proy" class="tank-water purple" style="height: 30%;"></div>
           </div>
           <div class="tank-info">
-            <div id="txtLevel6Proy" class="tank-value" style="color:var(--purple-light);">30 h</div>
-            <div id="txtPct6Proy" class="tank-sub">28% ocupación</div>
+            <div id="txtLevel6Proy" class="tank-value" style="color:var(--purple-light);">0 h</div>
+            <div id="txtPct6Proy" class="tank-sub">0% ocupación</div>
           </div>
         </div>
 
@@ -705,20 +687,22 @@
             <div class="tank-glass-glare"></div>
             <div class="zone-yellow" style="height: 16%;"><span class="badge-marker yellow" style="bottom: 2px;">420h</span></div>
             <div class="zone-red" style="height: 4%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
-            <div id="water7Proy" class="tank-water purple" style="height: 56%;"></div>
+            <div id="water7Proy" class="tank-water purple" style="height: 50%;"></div>
           </div>
           <div class="tank-info">
-            <div id="txtLevel7Proy" class="tank-value" style="color:var(--purple-light);">280 h</div>
-            <div id="txtPct7Proy" class="tank-sub">56% ocupación</div>
+            <div id="txtLevel7Proy" class="tank-value" style="color:var(--purple-light);">0 h</div>
+            <div id="txtPct7Proy" class="tank-sub">0% ocupación</div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Balance del Día Seleccionado -->
     <div class="card">
       <div class="card-title purple">Balance Hidráulico del Día</div>
       <table class="data-table">
         <tbody>
+          <tr><td>Tipo de Agua en Reparto:</td><td id="proyTipoAguaVal" style="font-weight:800;">—</td></tr>
           <tr><td>Entrada Barranco (5ª):</td><td id="proyEntradaVal" style="font-weight:700; color:var(--success);">+0 h</td></tr>
           <tr><td>Subida a Balsa 7ª:</td><td id="proySubidaVal" style="font-weight:700; color:var(--purple-light);">0 h</td></tr>
           <tr><td>Salida Riego Canal 6ª:</td><td id="proyRiego6Val" style="font-weight:700; color:var(--danger);">-0 h</td></tr>
@@ -733,9 +717,11 @@
 </div>
 
 <script>
-  let currentMode = 'trasvase';
   let activeProyDayIdx = 0;
-  const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  const diasNombres = [
+    "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo",
+    "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
+  ];
 
   function switchTab(num) {
     document.getElementById('tabContent1').style.display = num === 1 ? 'flex' : 'none';
@@ -747,109 +733,143 @@
     document.getElementById('tabBtn3').className = 'tab-btn tab-purple' + (num === 3 ? ' active tab-purple' : '');
   }
 
-  function setMode(mode) {
-    currentMode = mode;
-    document.getElementById('btnTrasvase').className = 'mode-btn' + (mode === 'trasvase' ? ' active trasvase' : '');
-    document.getElementById('btnRio').className = 'mode-btn' + (mode === 'rio' ? ' active rio' : '');
-    
-    const water6 = document.getElementById('water6');
-    if (mode === 'rio') {
-      water6.classList.add('rio');
-    } else {
-      water6.classList.remove('rio');
-    }
-    autoDistribuirVenta();
+  // Muestra la fecha de hoy
+  function updateHeaderDate() {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const todayStr = new Date().toLocaleDateString('es-ES', options);
+    document.getElementById('currentDateHeader').innerText = todayStr;
   }
 
-  function setProyDay(idx, btn) {
-    activeProyDayIdx = idx;
-    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('txtDiaProyLabel').innerText = dayNames[idx];
+  // Calcula horas transcurridas entre HH:MM y HH:MM (gestionando cambio de medianoche)
+  function calcHoursDiff(tOn, tOff) {
+    if (!tOn || !tOff || tOn === "—" || tOff === "—") return 0;
+    const [h1, m1] = tOn.split(':').map(Number);
+    const [h2, m2] = tOff.split(':').map(Number);
+    if (isNaN(h1) || isNaN(m1) || isNaN(h2) || isNaN(m2)) return 0;
+
+    let totalMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
+    if (totalMinutes <= 0) totalMinutes += 24 * 60; // Pasa la medianoche
+    return Math.round((totalMinutes / 60) * 10) / 10;
+  }
+
+  // Genera estructura visual de las tablas de 14 días
+  function buildTables() {
+    const rBody = document.getElementById('repartoTableBody');
+    const bBody = document.getElementById('barrancoTableBody');
+    const bomBody = document.getElementById('bombasTableBody');
+    const btnS1 = document.getElementById('dayButtonsS1');
+    const btnS2 = document.getElementById('dayButtonsS2');
+
+    rBody.innerHTML = '';
+    bBody.innerHTML = '';
+    bomBody.innerHTML = '';
+    btnS1.innerHTML = '';
+    btnS2.innerHTML = '';
+
+    for (let i = 0; i < 14; i++) {
+      const numDia = i + 1;
+      const semLabel = i < 7 ? "S1" : "S2";
+      const diaTexto = `${diasNombres[i]} (${semLabel})`;
+
+      // 1. Reparto Diario
+      rBody.innerHTML += `
+        <tr>
+          <td><b>${diaTexto}</b></td>
+          <td>
+            <select id="tipoAgua_${i}" class="select-water opt-trasvase" onchange="calcularTodo()">
+              <option value="trasvase">Trasvase</option>
+              <option value="rio">Río</option>
+            </select>
+          </td>
+          <td><input type="number" id="rep6_${i}" class="input-table" value="${i < 5 || (i >= 7 && i < 12) ? 16 : 0}" oninput="calcularTodo()"></td>
+          <td><input type="number" id="rep7_${i}" class="input-table" value="${i < 5 || (i >= 7 && i < 12) ? 20 : 0}" oninput="calcularTodo()"></td>
+          <td id="totRep_${i}" style="font-weight:700;">0 h</td>
+        </tr>
+      `;
+
+      // 2. Barranco (5ª)
+      bBody.innerHTML += `
+        <tr>
+          <td><b>${diaTexto}</b></td>
+          <td>
+            <div class="time-box">
+              <input type="text" id="g_on_${i}" class="input-time" value="${i === 6 || i === 13 ? '22:00' : '23:00'}" onchange="autoCalcBarrancoHours(${i})"> - 
+              <input type="text" id="g_off_${i}" class="input-time" value="07:00" onchange="autoCalcBarrancoHours(${i})">
+            </div>
+          </td>
+          <td><input type="number" id="g2_${i}" class="input-table" value="${i === 6 || i === 13 ? 9 : (i < 5 || (i >= 7 && i < 12) ? 8 : 0)}" oninput="calcularTodo()"></td>
+          <td><input type="number" id="g3_${i}" class="input-table" value="0" oninput="calcularTodo()"></td>
+          <td id="aguaBarranco_${i}" style="color:var(--success); font-weight:800;">0 h</td>
+        </tr>
+      `;
+
+      // 3. Bombas 7ª
+      bomBody.innerHTML += `
+        <tr>
+          <td><b>${diaTexto}</b></td>
+          <td>
+            <div class="time-box">
+              <input type="text" id="b_on_${i}" class="input-time" value="01:30" onchange="autoCalcBombasHours(${i})"> - 
+              <input type="text" id="b_off_${i}" class="input-time" value="07:00" onchange="autoCalcBombasHours(${i})">
+            </div>
+          </td>
+          <td><input type="number" id="arr_${i}" class="input-table" value="0" oninput="calcularTodo()"></td>
+          <td><input type="number" id="arrvar_${i}" class="input-table" value="${i < 5 || (i >= 7 && i < 12) ? 5.5 : 0}" step="0.5" oninput="calcularTodo()"></td>
+          <td id="aguaSubida_${i}" style="color:var(--purple-light); font-weight:800;">0 h</td>
+        </tr>
+      `;
+
+      // Botones Proyección
+      const btnHtml = `<button class="day-btn ${i === 0 ? 'active' : ''}" id="btnProy_${i}" onclick="setProyDay(${i})">${diasNombres[i].substring(0, 3)} ${i+1}</button>`;
+      if (i < 7) btnS1.innerHTML += btnHtml;
+      else btnS2.innerHTML += btnHtml;
+    }
+  }
+
+  function autoCalcBarrancoHours(idx) {
+    const tOn = document.getElementById(`g_on_${idx}`).value;
+    const tOff = document.getElementById(`g_off_${idx}`).value;
+    const hReloj = calcHoursDiff(tOn, tOff);
+    document.getElementById(`g2_${idx}`).value = hReloj;
     calcularTodo();
   }
 
-  function autoDistribuirVenta() {
-    const venta = parseFloat(document.getElementById('inputVenta').value) || 0;
-    const repDiario = Math.round(venta / 5);
-    const rep6 = Math.round(repDiario * (currentMode === 'rio' ? 0.55 : 0.45));
-    const rep7 = repDiario - rep6;
+  function autoCalcBombasHours(idx) {
+    const tOn = document.getElementById(`b_on_${idx}`).value;
+    const tOff = document.getElementById(`b_off_${idx}`).value;
+    const hReloj = calcHoursDiff(tOn, tOff);
+    document.getElementById(`arrvar_${idx}`).value = hReloj;
+    calcularTodo();
+  }
 
-    for (let i = 0; i < 5; i++) {
-      document.getElementById(`rep6_${i}`).value = rep6;
-      document.getElementById(`rep7_${i}`).value = rep7;
-    }
-    document.getElementById(`rep6_5`).value = 0;
-    document.getElementById(`rep7_5`).value = 0;
-    document.getElementById(`rep6_6`).value = 0;
-    document.getElementById(`rep7_6`).value = 0;
-
-    if (currentMode === 'rio') {
-      const g2Horas = [4, 4, 4, 2, 0, 0, 7];
-      const gOns = ["00:00", "00:00", "00:00", "00:00", "—", "—", "22:00"];
-      const gOffs = ["04:00", "04:00", "04:00", "02:00", "—", "—", "05:00"];
-      for (let i = 0; i < 7; i++) {
-        document.getElementById(`g2_${i}`).value = g2Horas[i];
-        document.getElementById(`g3_${i}`).value = 0;
-        document.getElementById(`g_on_${i}`).value = gOns[i];
-        document.getElementById(`g_off_${i}`).value = gOffs[i];
-        document.getElementById(`arr_${i}`).value = 0;
-        document.getElementById(`arrvar_${i}`).value = 0;
-        document.getElementById(`b_on_${i}`).value = "—";
-        document.getElementById(`b_off_${i}`).value = "—";
-      }
-    } else {
-      const g2Horas = [8, 8, 8, 8, 0, 0, 9];
-      const arrvarHoras = [5.5, 5.5, 5.5, 6, 0, 0, 5];
-      const gOns = ["23:00", "23:00", "23:00", "23:00", "—", "—", "22:00"];
-      const gOffs = ["07:00", "07:00", "07:00", "07:00", "—", "—", "07:00"];
-      const bOns = ["01:30", "01:30", "01:30", "01:00", "—", "—", "01:00"];
-      const bOffs = ["07:00", "07:00", "07:00", "07:00", "—", "—", "06:00"];
-      for (let i = 0; i < 7; i++) {
-        document.getElementById(`g2_${i}`).value = g2Horas[i];
-        document.getElementById(`g3_${i}`).value = 0;
-        document.getElementById(`g_on_${i}`).value = gOns[i];
-        document.getElementById(`g_off_${i}`).value = gOffs[i];
-        document.getElementById(`arr_${i}`).value = 0;
-        document.getElementById(`arrvar_${i}`).value = arrvarHoras[i];
-        document.getElementById(`b_on_${i}`).value = bOns[i];
-        document.getElementById(`b_off_${i}`).value = bOffs[i];
-      }
-    }
-
+  function setProyDay(idx) {
+    activeProyDayIdx = idx;
+    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+    const b = document.getElementById(`btnProy_${idx}`);
+    if (b) b.classList.add('active');
+    document.getElementById('txtDiaProyLabel').innerText = `${diasNombres[idx]} - Día ${idx + 1}`;
     calcularTodo();
   }
 
   function saveData() {
-    const inputs = document.querySelectorAll('input');
-    const state = { mode: currentMode };
-    inputs.forEach(input => {
-      state[input.id] = input.value;
+    const state = {};
+    document.querySelectorAll('input, select').forEach(el => {
+      if (el.id) state[el.id] = el.value;
     });
-    localStorage.setItem('gestion_hidraulica_cache_v5', JSON.stringify(state));
+    localStorage.setItem('gestion_hidraulica_14dias_cache_v1', JSON.stringify(state));
   }
 
   function loadData() {
-    const saved = localStorage.getItem('gestion_hidraulica_cache_v5');
+    const saved = localStorage.getItem('gestion_hidraulica_14dias_cache_v1');
     if (saved) {
       try {
         const state = JSON.parse(saved);
-        if (state.mode) {
-          currentMode = state.mode;
-          document.getElementById('btnTrasvase').className = 'mode-btn' + (currentMode === 'trasvase' ? ' active trasvase' : '');
-          document.getElementById('btnRio').className = 'mode-btn' + (currentMode === 'rio' ? ' active rio' : '');
-          const water6 = document.getElementById('water6');
-          if (currentMode === 'rio') water6.classList.add('rio');
-          else water6.classList.remove('rio');
-        }
         Object.keys(state).forEach(id => {
           const el = document.getElementById(id);
-          if (el && el.tagName === 'INPUT') {
-            el.value = state[id];
-          }
+          if (el) el.value = state[id];
         });
       } catch (e) {
-        console.error("Error al cargar datos:", e);
+        console.error("Error al cargar caché:", e);
       }
     }
   }
@@ -858,7 +878,7 @@
     const b6Init = parseFloat(document.getElementById('inputBalsa6').value) || 0;
     const b7Init = parseFloat(document.getElementById('inputBalsa7').value) || 0;
 
-    // 1. Tanques Actuales Pestaña 1
+    // Actualizar Tanques Pestaña 1
     const pct6 = Math.min(Math.max((b6Init / 106) * 100, 0), 100);
     const pct7 = Math.min(Math.max((b7Init / 500) * 100, 0), 100);
 
@@ -869,111 +889,140 @@
     document.getElementById('txtLevel7').innerText = b7Init + ' h';
     document.getElementById('txtPct7').innerText = Math.round(pct7) + '% ocupación';
 
-    // 2. Repartos (7 Días)
-    let totalRep = 0;
+    // 1. Repartos y Separación Trasvase / Río
+    let sumaTrasvase = 0;
+    let sumaRio = 0;
     const repartos6 = [];
     const repartos7 = [];
-    for (let i = 0; i < 7; i++) {
+    const tiposAgua = [];
+
+    for (let i = 0; i < 14; i++) {
       const r6 = parseFloat(document.getElementById(`rep6_${i}`).value) || 0;
       const r7 = parseFloat(document.getElementById(`rep7_${i}`).value) || 0;
+      const tipo = document.getElementById(`tipoAgua_${i}`).value;
+      const sel = document.getElementById(`tipoAgua_${i}`);
+      
+      if (tipo === 'trasvase') {
+        sel.className = 'select-water opt-trasvase';
+        sumaTrasvase += (r6 + r7);
+      } else {
+        sel.className = 'select-water opt-rio';
+        sumaRio += (r6 + r7);
+      }
+
       repartos6.push(r6);
       repartos7.push(r7);
-      const subTot = r6 + r7;
-      totalRep += subTot;
-      document.getElementById(`totRep_${i}`).innerText = subTot + ' h';
-    }
-    document.getElementById('txtSumaRepartos').innerText = `Total: ${totalRep} h`;
+      tiposAgua.push(tipo);
 
-    // 3. Caudales Entrantes y Subidas (7 Días)
+      const totD = r6 + r7;
+      document.getElementById(`totRep_${i}`).innerText = totD + ' h';
+    }
+
+    document.getElementById('totalVentaTrasvase').value = sumaTrasvase + ' h';
+    document.getElementById('totalVentaRio').value = sumaRio + ' h';
+    document.getElementById('txtSumaRepartos').innerText = `Total: ${sumaTrasvase + sumaRio} h`;
+
+    // 2. Caudales Barranco y Bombas 7ª
     let totalAguaBarranco = 0;
     let totalAguaSubida = 0;
     const entradasBarranco = [];
     const subidas7 = [];
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 14; i++) {
       const g2 = parseFloat(document.getElementById(`g2_${i}`).value) || 0;
       const g3 = parseFloat(document.getElementById(`g3_${i}`).value) || 0;
       const aguaBarr = (g2 * 9) + (g3 * 13);
       entradasBarranco.push(aguaBarr);
       totalAguaBarranco += aguaBarr;
-      document.getElementById(`aguaBarranco_${i}`).innerText = (aguaBarr > 0 ? `+${aguaBarr} h` : `0 h`);
+      document.getElementById(`aguaBarranco_${i}`).innerText = aguaBarr > 0 ? `+${aguaBarr} h` : '0 h';
 
       const arr = parseFloat(document.getElementById(`arr_${i}`).value) || 0;
       const arrvar = parseFloat(document.getElementById(`arrvar_${i}`).value) || 0;
       const aguaSub = (arr * 5) + (arrvar * 10);
       subidas7.push(aguaSub);
       totalAguaSubida += aguaSub;
-      document.getElementById(`aguaSubida_${i}`).innerText = (aguaSub > 0 ? `+${aguaSub} h` : `0 h`);
+      document.getElementById(`aguaSubida_${i}`).innerText = aguaSub > 0 ? `+${aguaSub} h` : '0 h';
     }
 
     document.getElementById('txtTotalBarrancoCalc').innerText = `${totalAguaBarranco} h agua`;
     document.getElementById('txtTotalSubidaCalc').innerText = `${totalAguaSubida} h subidas`;
 
-    // 4. Proyección Dinámica Día a Día (7 Días)
-    let currentB6 = b6Init;
-    let currentB7 = b7Init;
+    // 3. Balance Proyectado Acumulado día a día (14 días)
+    let curB6 = b6Init;
+    let curB7 = b7Init;
     const proyecciones = [];
 
-    for (let i = 0; i < 7; i++) {
-      const prevIdx = (i === 0) ? 6 : (i - 1);
-      const ent = entradasBarranco[prevIdx];
-      const sub = subidas7[prevIdx];
+    for (let i = 0; i < 14; i++) {
+      const ent = entradasBarranco[i];
+      const sub = subidas7[i];
       const r6 = repartos6[i];
       const r7 = repartos7[i];
+      const tipo = tiposAgua[i];
 
-      if (currentMode === 'rio') {
-        currentB6 = currentB6 + ent - r6 - r7;
+      if (tipo === 'rio') {
+        // En río: todo entra en 6ª y sale de 6ª directo a canales
+        curB6 = curB6 + ent - r6 - r7;
       } else {
-        currentB6 = currentB6 + ent - sub - r6;
-        currentB7 = currentB7 + sub - r7;
+        // En trasvase: entra a 6ª, se eleva a 7ª, riego 6 sale de 6ª y riego 7 sale de 7ª
+        curB6 = curB6 + ent - sub - r6;
+        curB7 = curB7 + sub - r7;
       }
 
       proyecciones.push({
-        dia: dayNames[i],
+        tipo: tipo,
         ent: ent,
         sub: sub,
         r6: r6,
         r7: r7,
-        b6: Math.round(currentB6 * 10) / 10,
-        b7: Math.round(currentB7 * 10) / 10
+        b6: Math.round(curB6 * 10) / 10,
+        b7: Math.round(curB7 * 10) / 10
       });
     }
 
-    // Actualizar Balsa Morada
-    const pActiva = proyecciones[activeProyDayIdx];
-    const pct6P = Math.min(Math.max((pActiva.b6 / 106) * 100, 0), 100);
-    const pct7P = Math.min(Math.max((pActiva.b7 / 500) * 100, 0), 100);
+    // Actualizar Balsa Morada del día activo
+    const pAct = proyecciones[activeProyDayIdx];
+    const pct6P = Math.min(Math.max((pAct.b6 / 106) * 100, 0), 100);
+    const pct7P = Math.min(Math.max((pAct.b7 / 500) * 100, 0), 100);
 
     document.getElementById('water6Proy').style.height = pct6P + '%';
     document.getElementById('water7Proy').style.height = pct7P + '%';
-    document.getElementById('txtLevel6Proy').innerText = pActiva.b6 + ' h';
+    document.getElementById('txtLevel6Proy').innerText = pAct.b6 + ' h';
     document.getElementById('txtPct6Proy').innerText = Math.round(pct6P) + '% ocupación';
-    document.getElementById('txtLevel7Proy').innerText = pActiva.b7 + ' h';
+    document.getElementById('txtLevel7Proy').innerText = pAct.b7 + ' h';
     document.getElementById('txtPct7Proy').innerText = Math.round(pct7P) + '% ocupación';
 
-    document.getElementById('proyEntradaVal').innerText = (pActiva.ent > 0 ? `+${pActiva.ent} h` : `0 h`);
-    document.getElementById('proySubidaVal').innerText = currentMode === 'rio' ? '0 h (Río directo)' : (pActiva.sub > 0 ? `-${pActiva.sub}h (6ª) / +${pActiva.sub}h (7ª)` : '0 h');
-    document.getElementById('proyRiego6Val').innerText = `-${pActiva.r6} h`;
-    document.getElementById('proyRiego7Val').innerText = `-${pActiva.r7} h`;
-    document.getElementById('proySaldo6Val').innerText = `${pActiva.b6} h`;
-    document.getElementById('proySaldo7Val').innerText = `${pActiva.b7} h`;
+    document.getElementById('proyTipoAguaVal').innerHTML = pAct.tipo === 'trasvase' 
+      ? '<span class="badge badge-blue">Agua Trasvase</span>' 
+      : '<span class="badge badge-teal">Agua Río</span>';
+
+    document.getElementById('proyEntradaVal').innerText = pAct.ent > 0 ? `+${pAct.ent} h` : '0 h';
+    document.getElementById('proySubidaVal').innerText = pAct.tipo === 'rio' 
+      ? '0 h (Río directo)' 
+      : (pAct.sub > 0 ? `-${pAct.sub}h (6ª) / +${pAct.sub}h (7ª)` : '0 h');
+    document.getElementById('proyRiego6Val').innerText = `-${pAct.r6} h`;
+    document.getElementById('proyRiego7Val').innerText = `-${pAct.r7} h`;
+    document.getElementById('proySaldo6Val').innerText = `${pAct.b6} h`;
+    document.getElementById('proySaldo7Val').innerText = `${pAct.b7} h`;
 
     // Alertas
     const alertBox = document.getElementById('alertBox');
-    if (b6Init < 20 || pActiva.b6 < 20) {
+    if (b6Init < 20 || pAct.b6 < 20) {
       alertBox.className = 'alert-banner danger';
-      alertBox.innerText = 'Peligro: Balsa 6ª desciende por debajo de 20h (zona roja). Aumenta horas en Barranco.';
-    } else if (pActiva.b7 > 430) {
+      alertBox.innerText = 'Peligro: Balsa 6ª desciende por debajo de 20h (zona roja). Ajusta horas de encendido.';
+    } else if (pAct.b7 > 430) {
       alertBox.className = 'alert-banner warning';
-      alertBox.innerText = 'Atención: Balsa 7ª supera las 430h en proyección. Margen de emergencia reducido.';
+      alertBox.innerText = 'Atención: Balsa 7ª sobrepasa 430h en proyección. Margen de emergencia reducido.';
     } else {
       alertBox.className = 'alert-banner';
-      alertBox.innerText = 'Operación segura. Ciclo de 7 días adaptado y guardado en el dispositivo.';
+      alertBox.innerText = 'Operación segura. Calendario de 14 días y horarios sincronizados en el dispositivo.';
     }
 
     saveData();
   }
 
+  // Inicialización
+  updateHeaderDate();
+  buildTables();
   loadData();
   calcularTodo();
 </script>
