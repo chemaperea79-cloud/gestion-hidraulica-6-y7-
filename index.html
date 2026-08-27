@@ -294,10 +294,6 @@
       width: 100%;
     }
 
-    .input-group.full {
-      grid-column: span 2;
-    }
-
     label {
       font-size: 0.7rem;
       font-weight: 700;
@@ -333,6 +329,18 @@
       text-align: center;
     }
 
+    input.input-day-num {
+      padding: 2px 2px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      width: 36px;
+      text-align: center;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
     input.input-time {
       padding: 2px 1px;
       font-size: 0.68rem;
@@ -344,8 +352,8 @@
     }
 
     select.select-water {
-      padding: 2px 2px;
-      font-size: 0.68rem;
+      padding: 3px 2px;
+      font-size: 0.7rem;
       font-weight: 800;
       border-radius: 5px;
       width: 100%;
@@ -354,10 +362,12 @@
 
     select.select-water.opt-trasvase {
       color: var(--trasvase-light);
+      background: rgba(2, 132, 199, 0.15);
     }
 
     select.select-water.opt-rio {
       color: var(--rio-light);
+      background: rgba(13, 148, 136, 0.15);
     }
 
     .table-container {
@@ -456,25 +466,18 @@
       border: 1px solid var(--card-border);
       color: var(--text-muted);
       padding: 5px 1px;
-      font-size: 0.65rem;
+      font-size: 0.63rem;
       font-weight: 800;
       border-radius: 5px;
       cursor: pointer;
+      text-align: center;
+      line-height: 1.1;
     }
 
     .day-btn.active {
       background: var(--purple);
       color: #fff;
       border-color: var(--purple-light);
-    }
-
-    .week-divider {
-      background: rgba(56, 189, 248, 0.1);
-      color: var(--accent);
-      font-weight: 800;
-      text-align: left;
-      padding: 4px 6px;
-      font-size: 0.68rem;
     }
   </style>
 </head>
@@ -558,21 +561,20 @@
       </div>
     </div>
 
-    <!-- Reparto Diario (14 Días) con Selector de Agua -->
+    <!-- Reparto Diario (14 Días) con Selector de Día 1-31 -->
     <div class="card">
       <div class="card-title">
         <span>Reparto Diario (14 Días)</span>
-        <span id="txtSumaRepartos" class="badge badge-blue">Total: 0 h</span>
+        <span style="font-size:0.68rem; color:var(--text-muted);">Sin mezclar totales</span>
       </div>
       <div class="table-container">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Día</th>
+              <th>Día / Fecha</th>
               <th>Tipo Agua</th>
-              <th>Canal 6ª</th>
-              <th>Canal 7ª</th>
-              <th>Total</th>
+              <th>Canal 6ª (h)</th>
+              <th>Canal 7ª (h)</th>
             </tr>
           </thead>
           <tbody id="repartoTableBody">
@@ -600,7 +602,7 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Día</th>
+              <th>Día / Fecha</th>
               <th>Horario (Enc - Apag)</th>
               <th>Horas G2</th>
               <th>Horas G3</th>
@@ -627,7 +629,7 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Día</th>
+              <th>Día / Fecha</th>
               <th>Horario (Enc - Apag)</th>
               <th>Arr. (5h/h)</th>
               <th>Arr+Var (10h/h)</th>
@@ -655,10 +657,10 @@
         <span id="txtDiaProyLabel" style="font-size:0.75rem; color:var(--purple-light);">Día 1</span>
       </div>
 
-      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">SEMANA 1:</div>
+      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">PRIMERA SEMANA:</div>
       <div class="day-selector-grid" id="dayButtonsS1"></div>
 
-      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">SEMANA 2:</div>
+      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">SEGUNDA SEMANA:</div>
       <div class="day-selector-grid" id="dayButtonsS2"></div>
 
       <!-- Balsas Moradas -->
@@ -718,7 +720,8 @@
 
 <script>
   let activeProyDayIdx = 0;
-  const diasNombres = [
+  const diasSemana = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  const diasCompletos = [
     "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo",
     "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
   ];
@@ -733,14 +736,12 @@
     document.getElementById('tabBtn3').className = 'tab-btn tab-purple' + (num === 3 ? ' active tab-purple' : '');
   }
 
-  // Muestra la fecha de hoy
   function updateHeaderDate() {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const todayStr = new Date().toLocaleDateString('es-ES', options);
     document.getElementById('currentDateHeader').innerText = todayStr;
   }
 
-  // Calcula horas transcurridas entre HH:MM y HH:MM (gestionando cambio de medianoche)
   function calcHoursDiff(tOn, tOff) {
     if (!tOn || !tOff || tOn === "—" || tOff === "—") return 0;
     const [h1, m1] = tOn.split(':').map(Number);
@@ -748,11 +749,11 @@
     if (isNaN(h1) || isNaN(m1) || isNaN(h2) || isNaN(m2)) return 0;
 
     let totalMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
-    if (totalMinutes <= 0) totalMinutes += 24 * 60; // Pasa la medianoche
+    if (totalMinutes <= 0) totalMinutes += 24 * 60;
     return Math.round((totalMinutes / 60) * 10) / 10;
   }
 
-  // Genera estructura visual de las tablas de 14 días
+  // Genera tablas iniciales con inputs del 1 al 31
   function buildTables() {
     const rBody = document.getElementById('repartoTableBody');
     const bBody = document.getElementById('barrancoTableBody');
@@ -766,38 +767,43 @@
     btnS1.innerHTML = '';
     btnS2.innerHTML = '';
 
-    for (let i = 0; i < 14; i++) {
-      const numDia = i + 1;
-      const semLabel = i < 7 ? "S1" : "S2";
-      const diaTexto = `${diasNombres[i]} (${semLabel})`;
+    const todayDate = new Date().getDate();
 
-      // 1. Reparto Diario
+    for (let i = 0; i < 14; i++) {
+      const defaultDayNum = ((todayDate + i - 1) % 31) + 1;
+      const diaSem = diasSemana[i % 7];
+
+      // 1. Reparto Diario (Sin columna total diario)
       rBody.innerHTML += `
         <tr>
-          <td><b>${diaTexto}</b></td>
+          <td>
+            <div style="display:flex; align-items:center; justify-content:center; gap:4px;">
+              <b>${diaSem}</b>
+              <input type="number" id="diaNum_${i}" min="1" max="31" class="input-day-num" value="${defaultDayNum}" oninput="onDayNumChange(${i})">
+            </div>
+          </td>
           <td>
             <select id="tipoAgua_${i}" class="select-water opt-trasvase" onchange="calcularTodo()">
               <option value="trasvase">Trasvase</option>
               <option value="rio">Río</option>
             </select>
           </td>
-          <td><input type="number" id="rep6_${i}" class="input-table" value="${i < 5 || (i >= 7 && i < 12) ? 16 : 0}" oninput="calcularTodo()"></td>
-          <td><input type="number" id="rep7_${i}" class="input-table" value="${i < 5 || (i >= 7 && i < 12) ? 20 : 0}" oninput="calcularTodo()"></td>
-          <td id="totRep_${i}" style="font-weight:700;">0 h</td>
+          <td><input type="number" id="rep6_${i}" class="input-table" value="${(i % 7 < 5) ? 16 : 0}" oninput="calcularTodo()"></td>
+          <td><input type="number" id="rep7_${i}" class="input-table" value="${(i % 7 < 5) ? 20 : 0}" oninput="calcularTodo()"></td>
         </tr>
       `;
 
       // 2. Barranco (5ª)
       bBody.innerHTML += `
         <tr>
-          <td><b>${diaTexto}</b></td>
+          <td><b id="lblDia_B_${i}">${diaSem} ${defaultDayNum}</b></td>
           <td>
             <div class="time-box">
-              <input type="text" id="g_on_${i}" class="input-time" value="${i === 6 || i === 13 ? '22:00' : '23:00'}" onchange="autoCalcBarrancoHours(${i})"> - 
+              <input type="text" id="g_on_${i}" class="input-time" value="${(i % 7 === 6) ? '22:00' : '23:00'}" onchange="autoCalcBarrancoHours(${i})"> - 
               <input type="text" id="g_off_${i}" class="input-time" value="07:00" onchange="autoCalcBarrancoHours(${i})">
             </div>
           </td>
-          <td><input type="number" id="g2_${i}" class="input-table" value="${i === 6 || i === 13 ? 9 : (i < 5 || (i >= 7 && i < 12) ? 8 : 0)}" oninput="calcularTodo()"></td>
+          <td><input type="number" id="g2_${i}" class="input-table" value="${(i % 7 === 6) ? 9 : ((i % 7 < 5) ? 8 : 0)}" oninput="calcularTodo()"></td>
           <td><input type="number" id="g3_${i}" class="input-table" value="0" oninput="calcularTodo()"></td>
           <td id="aguaBarranco_${i}" style="color:var(--success); font-weight:800;">0 h</td>
         </tr>
@@ -806,7 +812,7 @@
       // 3. Bombas 7ª
       bomBody.innerHTML += `
         <tr>
-          <td><b>${diaTexto}</b></td>
+          <td><b id="lblDia_Bom_${i}">${diaSem} ${defaultDayNum}</b></td>
           <td>
             <div class="time-box">
               <input type="text" id="b_on_${i}" class="input-time" value="01:30" onchange="autoCalcBombasHours(${i})"> - 
@@ -814,16 +820,48 @@
             </div>
           </td>
           <td><input type="number" id="arr_${i}" class="input-table" value="0" oninput="calcularTodo()"></td>
-          <td><input type="number" id="arrvar_${i}" class="input-table" value="${i < 5 || (i >= 7 && i < 12) ? 5.5 : 0}" step="0.5" oninput="calcularTodo()"></td>
+          <td><input type="number" id="arrvar_${i}" class="input-table" value="${(i % 7 < 5) ? 5.5 : 0}" step="0.5" oninput="calcularTodo()"></td>
           <td id="aguaSubida_${i}" style="color:var(--purple-light); font-weight:800;">0 h</td>
         </tr>
       `;
 
       // Botones Proyección
-      const btnHtml = `<button class="day-btn ${i === 0 ? 'active' : ''}" id="btnProy_${i}" onclick="setProyDay(${i})">${diasNombres[i].substring(0, 3)} ${i+1}</button>`;
+      const btnHtml = `<button class="day-btn ${i === 0 ? 'active' : ''}" id="btnProy_${i}" onclick="setProyDay(${i})">
+        <div>${diaSem}</div>
+        <div id="lblProyBtnNum_${i}" style="color:var(--accent); font-size:0.75rem;">${defaultDayNum}</div>
+      </button>`;
+      
       if (i < 7) btnS1.innerHTML += btnHtml;
       else btnS2.innerHTML += btnHtml;
     }
+  }
+
+  // Cuando cambias un día del mes, sincroniza las demás pestañas y autocompleta los siguientes
+  function onDayNumChange(idx) {
+    let startVal = parseInt(document.getElementById(`diaNum_${idx}`).value) || 1;
+    
+    // Si editas la primera fila, autocompletar correlativos
+    if (idx === 0) {
+      for (let i = 0; i < 14; i++) {
+        const val = ((startVal + i - 1) % 31) + 1;
+        document.getElementById(`diaNum_${i}`).value = val;
+        syncDayLabels(i, val);
+      }
+    } else {
+      syncDayLabels(idx, startVal);
+    }
+    calcularTodo();
+  }
+
+  function syncDayLabels(i, val) {
+    const diaSem = diasSemana[i % 7];
+    const lblB = document.getElementById(`lblDia_B_${i}`);
+    const lblBom = document.getElementById(`lblDia_Bom_${i}`);
+    const lblBtnNum = document.getElementById(`lblProyBtnNum_${i}`);
+
+    if (lblB) lblB.innerText = `${diaSem} ${val}`;
+    if (lblBom) lblBom.innerText = `${diaSem} ${val}`;
+    if (lblBtnNum) lblBtnNum.innerText = `${val}`;
   }
 
   function autoCalcBarrancoHours(idx) {
@@ -847,7 +885,9 @@
     document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
     const b = document.getElementById(`btnProy_${idx}`);
     if (b) b.classList.add('active');
-    document.getElementById('txtDiaProyLabel').innerText = `${diasNombres[idx]} - Día ${idx + 1}`;
+    
+    const diaMes = document.getElementById(`diaNum_${idx}`).value;
+    document.getElementById('txtDiaProyLabel').innerText = `${diasCompletos[idx]}, día ${diaMes}`;
     calcularTodo();
   }
 
@@ -856,11 +896,11 @@
     document.querySelectorAll('input, select').forEach(el => {
       if (el.id) state[el.id] = el.value;
     });
-    localStorage.setItem('gestion_hidraulica_14dias_cache_v1', JSON.stringify(state));
+    localStorage.setItem('gestion_hidraulica_14d_v2', JSON.stringify(state));
   }
 
   function loadData() {
-    const saved = localStorage.getItem('gestion_hidraulica_14dias_cache_v1');
+    const saved = localStorage.getItem('gestion_hidraulica_14d_v2');
     if (saved) {
       try {
         const state = JSON.parse(saved);
@@ -868,6 +908,11 @@
           const el = document.getElementById(id);
           if (el) el.value = state[id];
         });
+        // Sincronizar etiquetas de días cargados
+        for (let i = 0; i < 14; i++) {
+          const dNum = document.getElementById(`diaNum_${i}`);
+          if (dNum) syncDayLabels(i, dNum.value);
+        }
       } catch (e) {
         console.error("Error al cargar caché:", e);
       }
@@ -889,7 +934,7 @@
     document.getElementById('txtLevel7').innerText = b7Init + ' h';
     document.getElementById('txtPct7').innerText = Math.round(pct7) + '% ocupación';
 
-    // 1. Repartos y Separación Trasvase / Río
+    // 1. Repartos y Totales Separados (Trasvase / Río)
     let sumaTrasvase = 0;
     let sumaRio = 0;
     const repartos6 = [];
@@ -913,14 +958,10 @@
       repartos6.push(r6);
       repartos7.push(r7);
       tiposAgua.push(tipo);
-
-      const totD = r6 + r7;
-      document.getElementById(`totRep_${i}`).innerText = totD + ' h';
     }
 
     document.getElementById('totalVentaTrasvase').value = sumaTrasvase + ' h';
     document.getElementById('totalVentaRio').value = sumaRio + ' h';
-    document.getElementById('txtSumaRepartos').innerText = `Total: ${sumaTrasvase + sumaRio} h`;
 
     // 2. Caudales Barranco y Bombas 7ª
     let totalAguaBarranco = 0;
@@ -947,7 +988,7 @@
     document.getElementById('txtTotalBarrancoCalc').innerText = `${totalAguaBarranco} h agua`;
     document.getElementById('txtTotalSubidaCalc').innerText = `${totalAguaSubida} h subidas`;
 
-    // 3. Balance Proyectado Acumulado día a día (14 días)
+    // 3. Balance Proyectado Día a Día (14 Días)
     let curB6 = b6Init;
     let curB7 = b7Init;
     const proyecciones = [];
@@ -960,10 +1001,8 @@
       const tipo = tiposAgua[i];
 
       if (tipo === 'rio') {
-        // En río: todo entra en 6ª y sale de 6ª directo a canales
         curB6 = curB6 + ent - r6 - r7;
       } else {
-        // En trasvase: entra a 6ª, se eleva a 7ª, riego 6 sale de 6ª y riego 7 sale de 7ª
         curB6 = curB6 + ent - sub - r6;
         curB7 = curB7 + sub - r7;
       }
@@ -1014,7 +1053,7 @@
       alertBox.innerText = 'Atención: Balsa 7ª sobrepasa 430h en proyección. Margen de emergencia reducido.';
     } else {
       alertBox.className = 'alert-banner';
-      alertBox.innerText = 'Operación segura. Calendario de 14 días y horarios sincronizados en el dispositivo.';
+      alertBox.innerText = 'Operación segura. Fechas sincronizadas y guardadas localmente.';
     }
 
     saveData();
@@ -1025,6 +1064,7 @@
   buildTables();
   loadData();
   calcularTodo();
+  setProyDay(0);
 </script>
 
 </body>
