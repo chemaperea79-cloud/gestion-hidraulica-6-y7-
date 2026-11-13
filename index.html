@@ -2,1070 +2,230 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gestión Hidráulica 6ª y 7ª Elevación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riegos 6ª y 7ª Elevación</title>
   <style>
-    :root {
-      --bg: #060b14;
-      --card-bg: rgba(15, 23, 42, 0.94);
-      --card-border: rgba(148, 163, 184, 0.2);
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --trasvase: #0284c7;
-      --trasvase-light: #38bdf8;
-      --rio: #0d9488;
-      --rio-light: #2dd4bf;
-      --purple: #8b5cf6;
-      --purple-light: #c084fc;
-      --accent: #38bdf8;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --success: #10b981;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      padding: 6px;
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+      color: #1e293b;
     }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding-bottom: 25px;
-    }
-
-    /* Cabecera y Fecha */
-    .header {
-      text-align: center;
-      padding: 4px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .header h1 {
-      font-size: 0.98rem;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-    }
-
-    .header-date {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-transform: capitalize;
-    }
-
-    /* Pestañas */
-    .nav-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 4px;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 3px;
-      border-radius: 10px;
-      border: 1px solid var(--card-border);
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 8px 2px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      border-radius: 7px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-
-    .tab-btn.active {
-      background: rgba(30, 41, 59, 0.95);
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    .tab-btn.active.tab-purple {
-      color: var(--purple-light);
-      border-color: rgba(192, 132, 252, 0.4);
-    }
-
-    /* Tarjetas */
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 12px;
-      backdrop-filter: blur(12px);
-      overflow: hidden;
-      width: 100%;
+      background: white;
+      max-width: 450px;
+      margin: 20px auto;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-
-    .card-title {
-      font-size: 0.76rem;
-      font-weight: 800;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .card-title.purple {
-      color: var(--purple-light);
-    }
-
-    /* Tanques 3D */
-    .tanks-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 2px;
-    }
-
-    .tank-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-    }
-
-    .tank-cap-top {
-      font-size: 0.9rem;
-      font-weight: 900;
-      color: #38bdf8;
-      margin-bottom: 3px;
-      text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-    }
-
-    .tank-cap-top.purple {
-      color: var(--purple-light);
-      text-shadow: 0 0 10px rgba(192, 132, 252, 0.4);
-    }
-
-    .tank-name {
-      font-size: 0.74rem;
-      font-weight: 700;
-      color: #e2e8f0;
-      margin-bottom: 5px;
-    }
-
-    .tank-3d-frame {
-      position: relative;
-      width: 100%;
-      height: 190px;
-      background: linear-gradient(90deg, #0b1324 0%, #1a263d 25%, #243452 50%, #1a263d 75%, #0b1324 100%);
-      border: 2px solid rgba(148, 163, 184, 0.3);
-      border-radius: 18px;
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8), 0 10px 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .tank-glass-glare {
-      position: absolute;
-      top: 0;
-      left: 12%;
-      width: 22%;
-      height: 100%;
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), transparent);
-      pointer-events: none;
-      z-index: 8;
-    }
-
-    .tank-rim {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 16px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      background: rgba(15, 23, 42, 0.6);
-      box-shadow: inset 0 0 6px rgba(0,0,0,0.8);
-      z-index: 9;
-    }
-
-    .zone-yellow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.28), rgba(245, 158, 11, 0.28) 6px, transparent 6px, transparent 12px);
-      border-bottom: 2px dashed var(--warning);
-      z-index: 2;
-    }
-
-    .zone-red {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(239, 68, 68, 0.32);
-      border-top: 2px dashed var(--danger);
-      z-index: 2;
-    }
-
-    .badge-marker {
-      position: absolute;
-      font-size: 0.6rem;
-      font-weight: 800;
-      padding: 1px 3px;
-      border-radius: 3px;
-      z-index: 5;
-    }
-
-    .badge-marker.yellow {
-      color: #fef08a;
-      background: rgba(180, 83, 9, 0.75);
-      right: 3px;
-    }
-
-    .badge-marker.red {
-      color: #fca5a5;
-      background: rgba(185, 28, 28, 0.75);
-      left: 3px;
-    }
-
-    .tank-water {
-      width: 100%;
-      background: linear-gradient(180deg, var(--trasvase-light) 0%, var(--trasvase) 100%);
-      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      z-index: 3;
-      border-top: 2px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-    }
-
-    .tank-water.purple {
-      background: linear-gradient(180deg, var(--purple-light) 0%, var(--purple) 100%);
-      box-shadow: 0 0 14px rgba(192, 132, 252, 0.5);
-    }
-
-    .tank-info {
+    h2 {
+      margin-top: 0;
+      color: #0f4c81;
       text-align: center;
-      margin-top: 5px;
+      font-size: 1.4rem;
     }
-
-    .tank-value {
-      font-size: 1.15rem;
-      font-weight: 900;
+    .form-group {
+      margin-bottom: 16px;
     }
-
-    .tank-sub {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    /* Formularios */
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      min-width: 0;
-      width: 100%;
-    }
-
     label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
     }
-
-    input, select {
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 6px 8px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      outline: none;
+    input[type="text"], input[type="tel"], input[type="number"] {
       width: 100%;
-      min-width: 0;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
       box-sizing: border-box;
     }
-
-    input:focus, select:focus {
-      border-color: var(--accent);
-    }
-
-    input.input-table {
-      padding: 3px 2px;
-      font-size: 0.75rem;
-      width: 100%;
-      min-width: 0;
-      text-align: center;
-    }
-
-    input.input-day-num {
-      padding: 2px 2px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      width: 36px;
-      text-align: center;
-      background: rgba(30, 41, 59, 0.9);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 4px;
-      color: var(--accent);
-    }
-
-    input.input-time {
-      padding: 2px 1px;
-      font-size: 0.68rem;
-      width: 44px;
-      min-width: 0;
-      text-align: center;
-      background: rgba(30, 41, 59, 0.9);
-      border-radius: 4px;
-    }
-
-    select.select-water {
-      padding: 3px 2px;
-      font-size: 0.7rem;
-      font-weight: 800;
-      border-radius: 5px;
-      width: 100%;
-      text-align: center;
-    }
-
-    select.select-water.opt-trasvase {
-      color: var(--trasvase-light);
-      background: rgba(2, 132, 199, 0.15);
-    }
-
-    select.select-water.opt-rio {
-      color: var(--rio-light);
-      background: rgba(13, 148, 136, 0.15);
-    }
-
-    .table-container {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.71rem;
-    }
-
-    .data-table th {
-      background: rgba(30, 41, 59, 0.85);
-      color: var(--accent);
-      padding: 5px 2px;
-      text-align: center;
-      font-weight: 800;
-      border-bottom: 1px solid var(--card-border);
-      white-space: nowrap;
-    }
-
-    .data-table td {
-      padding: 4px 2px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      color: #e2e8f0;
-      text-align: center;
-    }
-
-    .time-box {
+    .checkbox-group {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1px;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 18px 0;
+      font-size: 0.9rem;
+      color: #475569;
     }
-
-    .badge {
-      display: inline-block;
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-weight: 800;
-      font-size: 0.63rem;
+    .checkbox-group input {
+      margin-top: 3px;
+      transform: scale(1.2);
     }
-
-    .badge-blue {
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-    }
-
-    .badge-teal {
-      background: rgba(13, 148, 136, 0.15);
-      color: var(--rio-light);
-      border: 1px solid rgba(13, 148, 136, 0.3);
-    }
-
-    .badge-purple {
-      background: rgba(168, 85, 247, 0.15);
-      color: var(--purple-light);
-      border: 1px solid rgba(168, 85, 247, 0.3);
-    }
-
-    .alert-banner {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid var(--success);
-      color: #6ee7b7;
-      padding: 9px 11px;
-      border-radius: 9px;
-      font-size: 0.75rem;
-      line-height: 1.3;
-    }
-
-    .alert-banner.warning {
-      background: rgba(245, 158, 11, 0.15);
-      border-color: var(--warning);
-      color: #fcd34d;
-    }
-
-    .alert-banner.danger {
-      background: rgba(239, 68, 68, 0.15);
-      border-color: var(--danger);
-      color: #fca5a5;
-    }
-
-    .day-selector-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 3px;
-      margin-bottom: 8px;
-    }
-
-    .day-btn {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 5px 1px;
-      font-size: 0.63rem;
-      font-weight: 800;
-      border-radius: 5px;
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #0f4c81;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: bold;
       cursor: pointer;
-      text-align: center;
-      line-height: 1.1;
     }
-
-    .day-btn.active {
-      background: var(--purple);
-      color: #fff;
-      border-color: var(--purple-light);
+    button:disabled {
+      background-color: #94a3b8;
+    }
+    .btn-secundario {
+      background-color: #e2e8f0;
+      color: #334155;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      padding: 10px;
+    }
+    .oculto {
+      display: none;
+    }
+    .info-box {
+      background: #e0f2fe;
+      border-left: 4px solid #0284c7;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <!-- Cabecera con Fecha Actual -->
-  <div class="header">
-    <h1>Gestión Hidráulica 6ª y 7ª Elevación</h1>
-    <div id="currentDateHeader" class="header-date">Cargando fecha...</div>
-  </div>
-
-  <!-- Pestañas -->
-  <div class="nav-tabs">
-    <button id="tabBtn1" class="tab-btn active" onclick="switchTab(1)">📊 CONTROL</button>
-    <button id="tabBtn2" class="tab-btn" onclick="switchTab(2)">⚡ CAUDALES</button>
-    <button id="tabBtn3" class="tab-btn tab-purple" onclick="switchTab(3)">🔮 PROYECCIÓN</button>
-  </div>
-
-  <!-- ==================== PESTAÑA 1: CONTROL ==================== -->
-  <div id="tabContent1" style="display: flex; flex-direction: column; gap: 10px;">
+  <!-- PANTALLA 1: REGISTRO DE REGANTE -->
+  <div id="pantalla-registro" class="card">
+    <h2>Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
+    <p style="text-align: center; color: #64748b; font-size: 0.9rem;">
+      Regístrate una única vez para consultar los turnos de riego en tiempo real.
+    </p>
     
-    <!-- Balsas 3D Actuales -->
-    <div class="card">
-      <div class="card-title">Nivel Actual de Balsas</div>
-      <div class="tanks-wrapper">
-        <div class="tank-card">
-          <div class="tank-cap-top">106 h</div>
-          <div class="tank-name">Balsa 6ª</div>
-          <div class="tank-3d-frame">
-            <div class="tank-rim"></div>
-            <div class="tank-glass-glare"></div>
-            <div class="zone-yellow" style="height: 24.5%;"><span class="badge-marker yellow" style="bottom: 2px;">80h</span></div>
-            <div class="zone-red" style="height: 18.9%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
-            <div id="water6" class="tank-water" style="height: 14%;"></div>
-          </div>
-          <div class="tank-info">
-            <div id="txtLevel6" class="tank-value">15 h</div>
-            <div id="txtPct6" class="tank-sub">14% ocupación</div>
-          </div>
-        </div>
-
-        <div class="tank-card">
-          <div class="tank-cap-top">500 h</div>
-          <div class="tank-name">Balsa 7ª</div>
-          <div class="tank-3d-frame">
-            <div class="tank-rim"></div>
-            <div class="tank-glass-glare"></div>
-            <div class="zone-yellow" style="height: 16%;"><span class="badge-marker yellow" style="bottom: 2px;">420h</span></div>
-            <div class="zone-red" style="height: 4%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
-            <div id="water7" class="tank-water" style="height: 50%;"></div>
-          </div>
-          <div class="tank-info">
-            <div id="txtLevel7" class="tank-value">250 h</div>
-            <div id="txtPct7" class="tank-sub">50% ocupación</div>
-          </div>
-        </div>
+    <form id="form-registro">
+      <div class="form-group">
+        <label for="socio">Número de Socio / Comunero</label>
+        <input type="text" id="socio" placeholder="Ej: 1045" required>
       </div>
-    </div>
 
-    <!-- Parámetros Iniciales y Ventas Totales por Tipo -->
-    <div class="card">
-      <div class="card-title">Ventas Totales y Niveles Iniciales</div>
-      <div class="input-grid">
-        <div class="input-group">
-          <label>Venta Total TRASVASE</label>
-          <input type="text" id="totalVentaTrasvase" value="0 h" readonly style="color:var(--trasvase-light); background:rgba(2,132,199,0.15);">
-        </div>
-        <div class="input-group">
-          <label>Venta Total RÍO</label>
-          <input type="text" id="totalVentaRio" value="0 h" readonly style="color:var(--rio-light); background:rgba(13,148,136,0.15);">
-        </div>
-        <div class="input-group">
-          <label>Nivel Inicial 6ª (h)</label>
-          <input type="number" id="inputBalsa6" value="15" oninput="calcularTodo()">
-        </div>
-        <div class="input-group">
-          <label>Nivel Inicial 7ª (h)</label>
-          <input type="number" id="inputBalsa7" value="250" oninput="calcularTodo()">
-        </div>
+      <div class="form-group">
+        <label for="nombre">Nombre y Apellidos</label>
+        <input type="text" id="nombre" placeholder="Ej: Juan Pérez García" required>
       </div>
-    </div>
 
-    <!-- Reparto Diario (14 Días) con Selector de Día 1-31 -->
-    <div class="card">
-      <div class="card-title">
-        <span>Reparto Diario (14 Días)</span>
-        <span style="font-size:0.68rem; color:var(--text-muted);">Sin mezclar totales</span>
+      <div class="form-group">
+        <label for="telefono">Teléfono móvil</label>
+        <input type="tel" id="telefono" placeholder="Ej: 600123456" required>
       </div>
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Día / Fecha</th>
-              <th>Tipo Agua</th>
-              <th>Canal 6ª (h)</th>
-              <th>Canal 7ª (h)</th>
-            </tr>
-          </thead>
-          <tbody id="repartoTableBody">
-            <!-- 14 Filas Dinámicas -->
-          </tbody>
-        </table>
-      </div>
-    </div>
 
-    <div id="alertBox" class="alert-banner">
-      Operación configurada correctamente.
-    </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="consentimiento" required>
+        <label for="consentimiento" style="font-weight: normal; margin: 0;">
+          Acepto el registro de mis datos para la gestión y consulta de turnos de riego de la Comunidad.
+        </label>
+      </div>
+
+      <button type="submit" id="btn-registrar">Acceder a los riegos</button>
+    </form>
   </div>
 
-  <!-- ==================== PESTAÑA 2: CAUDALES (14 DÍAS) ==================== -->
-  <div id="tabContent2" style="display: none; flex-direction: column; gap: 10px;">
-    
-    <!-- 5ª Elevación (Barranco) -->
-    <div class="card">
-      <div class="card-title">
-        <span>5ª Elevación: Barranco (14 Días)</span>
-        <span id="txtTotalBarrancoCalc" class="badge badge-blue">0 h agua</span>
-      </div>
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Día / Fecha</th>
-              <th>Horario (Enc - Apag)</th>
-              <th>Horas G2</th>
-              <th>Horas G3</th>
-              <th>Aporte 6ª</th>
-            </tr>
-          </thead>
-          <tbody id="barrancoTableBody">
-            <!-- 14 Filas Dinámicas -->
-          </tbody>
-        </table>
-      </div>
-      <div style="font-size:0.68rem; color:var(--text-muted); margin-top:6px;">
-        <span class="badge badge-blue">Auto</span> Al cambiar encendido/apagado se calculan las horas automáticamente.
-      </div>
+  <!-- PANTALLA 2: PANEL PRINCIPAL (PROVISIONAL) -->
+  <div id="pantalla-principal" class="card oculto">
+    <h2>Panel de Riegos</h2>
+    <div class="info-box">
+      Bienvenido, <strong id="saludo-nombre"></strong> (Socio nº <span id="saludo-socio"></span>)
     </div>
-
-    <!-- 7ª Elevación (Bombas) -->
-    <div class="card">
-      <div class="card-title">
-        <span>7ª Elevación: Bombas (14 Días)</span>
-        <span id="txtTotalSubidaCalc" class="badge badge-purple">0 h subidas</span>
-      </div>
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Día / Fecha</th>
-              <th>Horario (Enc - Apag)</th>
-              <th>Arr. (5h/h)</th>
-              <th>Arr+Var (10h/h)</th>
-              <th>Subida 7ª</th>
-            </tr>
-          </thead>
-          <tbody id="bombasTableBody">
-            <!-- 14 Filas Dinámicas -->
-          </tbody>
-        </table>
-      </div>
-      <div style="font-size:0.68rem; color:var(--danger); margin-top:6px;">
-        ⚠️ Arr+Var juntos únicamente de 00:00 a 08:00 (Sanción de potencia tras las 08:00).
-      </div>
-    </div>
-
+    <p style="text-align: center; color: #475569;">
+      Aquí cargaremos el selector de fecha y los botones de los partidores de 6ª y 7ª.
+    </p>
+    <button type="button" id="btn-salir" class="btn-secundario">Cerrar sesión (Prueba)</button>
   </div>
 
-  <!-- ==================== PESTAÑA 3: PROYECCIÓN (14 DÍAS) ==================== -->
-  <div id="tabContent3" style="display: none; flex-direction: column; gap: 10px;">
-    
-    <div class="card">
-      <div class="card-title purple">
-        <span>Proyección Diaria (14 Días)</span>
-        <span id="txtDiaProyLabel" style="font-size:0.75rem; color:var(--purple-light);">Día 1</span>
-      </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
 
-      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">PRIMERA SEMANA:</div>
-      <div class="day-selector-grid" id="dayButtonsS1"></div>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
+    authDomain: "sexta-y-septima-riego.firebaseapp.com",
+    projectId: "sexta-y-septima-riego",
+    storageBucket: "sexta-y-septima-riego.firebasestorage.app",
+    messagingSenderId: "1031850424918",
+    appId: "1:1031850424918:web:89508ea107686feaf4d9f7"
+  };
 
-      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">SEGUNDA SEMANA:</div>
-      <div class="day-selector-grid" id="dayButtonsS2"></div>
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-      <!-- Balsas Moradas -->
-      <div class="tanks-wrapper">
-        <div class="tank-card">
-          <div class="tank-cap-top purple">106 h</div>
-          <div class="tank-name">Balsa 6ª Proyectada</div>
-          <div class="tank-3d-frame">
-            <div class="tank-rim"></div>
-            <div class="tank-glass-glare"></div>
-            <div class="zone-yellow" style="height: 24.5%;"><span class="badge-marker yellow" style="bottom: 2px;">80h</span></div>
-            <div class="zone-red" style="height: 18.9%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
-            <div id="water6Proy" class="tank-water purple" style="height: 30%;"></div>
-          </div>
-          <div class="tank-info">
-            <div id="txtLevel6Proy" class="tank-value" style="color:var(--purple-light);">0 h</div>
-            <div id="txtPct6Proy" class="tank-sub">0% ocupación</div>
-          </div>
-        </div>
+  // Referencias a elementos de la pantalla
+  const pantallaRegistro = document.getElementById("pantalla-registro");
+  const pantallaPrincipal = document.getElementById("pantalla-principal");
+  const formRegistro = document.getElementById("form-registro");
+  const btnRegistrar = document.getElementById("btn-registrar");
 
-        <div class="tank-card">
-          <div class="tank-cap-top purple">500 h</div>
-          <div class="tank-name">Balsa 7ª Proyectada</div>
-          <div class="tank-3d-frame">
-            <div class="tank-rim"></div>
-            <div class="tank-glass-glare"></div>
-            <div class="zone-yellow" style="height: 16%;"><span class="badge-marker yellow" style="bottom: 2px;">420h</span></div>
-            <div class="zone-red" style="height: 4%;"><span class="badge-marker red" style="top: -16px;">20h</span></div>
-            <div id="water7Proy" class="tank-water purple" style="height: 50%;"></div>
-          </div>
-          <div class="tank-info">
-            <div id="txtLevel7Proy" class="tank-value" style="color:var(--purple-light);">0 h</div>
-            <div id="txtPct7Proy" class="tank-sub">0% ocupación</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Balance del Día Seleccionado -->
-    <div class="card">
-      <div class="card-title purple">Balance Hidráulico del Día</div>
-      <table class="data-table">
-        <tbody>
-          <tr><td>Tipo de Agua en Reparto:</td><td id="proyTipoAguaVal" style="font-weight:800;">—</td></tr>
-          <tr><td>Entrada Barranco (5ª):</td><td id="proyEntradaVal" style="font-weight:700; color:var(--success);">+0 h</td></tr>
-          <tr><td>Subida a Balsa 7ª:</td><td id="proySubidaVal" style="font-weight:700; color:var(--purple-light);">0 h</td></tr>
-          <tr><td>Salida Riego Canal 6ª:</td><td id="proyRiego6Val" style="font-weight:700; color:var(--danger);">-0 h</td></tr>
-          <tr><td>Salida Riego Canal 7ª:</td><td id="proyRiego7Val" style="font-weight:700; color:var(--danger);">-0 h</td></tr>
-          <tr><td><b>Saldo Final Balsa 6ª:</b></td><td id="proySaldo6Val" style="font-weight:900; color:var(--accent);">0 h</td></tr>
-          <tr><td><b>Saldo Final Balsa 7ª:</b></td><td id="proySaldo7Val" style="font-weight:900; color:var(--purple-light);">0 h</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-</div>
-
-<script>
-  let activeProyDayIdx = 0;
-  const diasSemana = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
-  const diasCompletos = [
-    "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo",
-    "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
-  ];
-
-  function switchTab(num) {
-    document.getElementById('tabContent1').style.display = num === 1 ? 'flex' : 'none';
-    document.getElementById('tabContent2').style.display = num === 2 ? 'flex' : 'none';
-    document.getElementById('tabContent3').style.display = num === 3 ? 'flex' : 'none';
-
-    document.getElementById('tabBtn1').className = 'tab-btn' + (num === 1 ? ' active' : '');
-    document.getElementById('tabBtn2').className = 'tab-btn' + (num === 2 ? ' active' : '');
-    document.getElementById('tabBtn3').className = 'tab-btn tab-purple' + (num === 3 ? ' active tab-purple' : '');
-  }
-
-  function updateHeaderDate() {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const todayStr = new Date().toLocaleDateString('es-ES', options);
-    document.getElementById('currentDateHeader').innerText = todayStr;
-  }
-
-  function calcHoursDiff(tOn, tOff) {
-    if (!tOn || !tOff || tOn === "—" || tOff === "—") return 0;
-    const [h1, m1] = tOn.split(':').map(Number);
-    const [h2, m2] = tOff.split(':').map(Number);
-    if (isNaN(h1) || isNaN(m1) || isNaN(h2) || isNaN(m2)) return 0;
-
-    let totalMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
-    if (totalMinutes <= 0) totalMinutes += 24 * 60;
-    return Math.round((totalMinutes / 60) * 10) / 10;
-  }
-
-  // Genera tablas iniciales con inputs del 1 al 31
-  function buildTables() {
-    const rBody = document.getElementById('repartoTableBody');
-    const bBody = document.getElementById('barrancoTableBody');
-    const bomBody = document.getElementById('bombasTableBody');
-    const btnS1 = document.getElementById('dayButtonsS1');
-    const btnS2 = document.getElementById('dayButtonsS2');
-
-    rBody.innerHTML = '';
-    bBody.innerHTML = '';
-    bomBody.innerHTML = '';
-    btnS1.innerHTML = '';
-    btnS2.innerHTML = '';
-
-    const todayDate = new Date().getDate();
-
-    for (let i = 0; i < 14; i++) {
-      const defaultDayNum = ((todayDate + i - 1) % 31) + 1;
-      const diaSem = diasSemana[i % 7];
-
-      // 1. Reparto Diario (Sin columna total diario)
-      rBody.innerHTML += `
-        <tr>
-          <td>
-            <div style="display:flex; align-items:center; justify-content:center; gap:4px;">
-              <b>${diaSem}</b>
-              <input type="number" id="diaNum_${i}" min="1" max="31" class="input-day-num" value="${defaultDayNum}" oninput="onDayNumChange(${i})">
-            </div>
-          </td>
-          <td>
-            <select id="tipoAgua_${i}" class="select-water opt-trasvase" onchange="calcularTodo()">
-              <option value="trasvase">Trasvase</option>
-              <option value="rio">Río</option>
-            </select>
-          </td>
-          <td><input type="number" id="rep6_${i}" class="input-table" value="${(i % 7 < 5) ? 16 : 0}" oninput="calcularTodo()"></td>
-          <td><input type="number" id="rep7_${i}" class="input-table" value="${(i % 7 < 5) ? 20 : 0}" oninput="calcularTodo()"></td>
-        </tr>
-      `;
-
-      // 2. Barranco (5ª)
-      bBody.innerHTML += `
-        <tr>
-          <td><b id="lblDia_B_${i}">${diaSem} ${defaultDayNum}</b></td>
-          <td>
-            <div class="time-box">
-              <input type="text" id="g_on_${i}" class="input-time" value="${(i % 7 === 6) ? '22:00' : '23:00'}" onchange="autoCalcBarrancoHours(${i})"> - 
-              <input type="text" id="g_off_${i}" class="input-time" value="07:00" onchange="autoCalcBarrancoHours(${i})">
-            </div>
-          </td>
-          <td><input type="number" id="g2_${i}" class="input-table" value="${(i % 7 === 6) ? 9 : ((i % 7 < 5) ? 8 : 0)}" oninput="calcularTodo()"></td>
-          <td><input type="number" id="g3_${i}" class="input-table" value="0" oninput="calcularTodo()"></td>
-          <td id="aguaBarranco_${i}" style="color:var(--success); font-weight:800;">0 h</td>
-        </tr>
-      `;
-
-      // 3. Bombas 7ª
-      bomBody.innerHTML += `
-        <tr>
-          <td><b id="lblDia_Bom_${i}">${diaSem} ${defaultDayNum}</b></td>
-          <td>
-            <div class="time-box">
-              <input type="text" id="b_on_${i}" class="input-time" value="01:30" onchange="autoCalcBombasHours(${i})"> - 
-              <input type="text" id="b_off_${i}" class="input-time" value="07:00" onchange="autoCalcBombasHours(${i})">
-            </div>
-          </td>
-          <td><input type="number" id="arr_${i}" class="input-table" value="0" oninput="calcularTodo()"></td>
-          <td><input type="number" id="arrvar_${i}" class="input-table" value="${(i % 7 < 5) ? 5.5 : 0}" step="0.5" oninput="calcularTodo()"></td>
-          <td id="aguaSubida_${i}" style="color:var(--purple-light); font-weight:800;">0 h</td>
-        </tr>
-      `;
-
-      // Botones Proyección
-      const btnHtml = `<button class="day-btn ${i === 0 ? 'active' : ''}" id="btnProy_${i}" onclick="setProyDay(${i})">
-        <div>${diaSem}</div>
-        <div id="lblProyBtnNum_${i}" style="color:var(--accent); font-size:0.75rem;">${defaultDayNum}</div>
-      </button>`;
-      
-      if (i < 7) btnS1.innerHTML += btnHtml;
-      else btnS2.innerHTML += btnHtml;
-    }
-  }
-
-  // Cuando cambias un día del mes, sincroniza las demás pestañas y autocompleta los siguientes
-  function onDayNumChange(idx) {
-    let startVal = parseInt(document.getElementById(`diaNum_${idx}`).value) || 1;
-    
-    // Si editas la primera fila, autocompletar correlativos
-    if (idx === 0) {
-      for (let i = 0; i < 14; i++) {
-        const val = ((startVal + i - 1) % 31) + 1;
-        document.getElementById(`diaNum_${i}`).value = val;
-        syncDayLabels(i, val);
-      }
+  // Comprobar si el regante ya está guardado en este dispositivo
+  function verificarSesion() {
+    const reganteGuardado = localStorage.getItem("regante_6y7");
+    if (reganteGuardado) {
+      const datos = JSON.parse(reganteGuardado);
+      mostrarPanelPrincipal(datos);
     } else {
-      syncDayLabels(idx, startVal);
+      pantallaRegistro.classList.remove("oculto");
+      pantallaPrincipal.classList.add("oculto");
     }
-    calcularTodo();
   }
 
-  function syncDayLabels(i, val) {
-    const diaSem = diasSemana[i % 7];
-    const lblB = document.getElementById(`lblDia_B_${i}`);
-    const lblBom = document.getElementById(`lblDia_Bom_${i}`);
-    const lblBtnNum = document.getElementById(`lblProyBtnNum_${i}`);
-
-    if (lblB) lblB.innerText = `${diaSem} ${val}`;
-    if (lblBom) lblBom.innerText = `${diaSem} ${val}`;
-    if (lblBtnNum) lblBtnNum.innerText = `${val}`;
+  function mostrarPanelPrincipal(datos) {
+    document.getElementById("saludo-nombre").textContent = datos.nombre;
+    document.getElementById("saludo-socio").textContent = datos.socio;
+    pantallaRegistro.classList.add("oculto");
+    pantallaPrincipal.classList.remove("oculto");
   }
 
-  function autoCalcBarrancoHours(idx) {
-    const tOn = document.getElementById(`g_on_${idx}`).value;
-    const tOff = document.getElementById(`g_off_${idx}`).value;
-    const hReloj = calcHoursDiff(tOn, tOff);
-    document.getElementById(`g2_${idx}`).value = hReloj;
-    calcularTodo();
-  }
-
-  function autoCalcBombasHours(idx) {
-    const tOn = document.getElementById(`b_on_${idx}`).value;
-    const tOff = document.getElementById(`b_off_${idx}`).value;
-    const hReloj = calcHoursDiff(tOn, tOff);
-    document.getElementById(`arrvar_${idx}`).value = hReloj;
-    calcularTodo();
-  }
-
-  function setProyDay(idx) {
-    activeProyDayIdx = idx;
-    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-    const b = document.getElementById(`btnProy_${idx}`);
-    if (b) b.classList.add('active');
+  // Envío del formulario de registro
+  formRegistro.addEventListener("submit", async (e) => {
+    e.preventDefault();
     
-    const diaMes = document.getElementById(`diaNum_${idx}`).value;
-    document.getElementById('txtDiaProyLabel').innerText = `${diasCompletos[idx]}, día ${diaMes}`;
-    calcularTodo();
-  }
+    const socio = document.getElementById("socio").value.trim();
+    const nombre = document.getElementById("nombre").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+    const consentimiento = document.getElementById("consentimiento").checked;
 
-  function saveData() {
-    const state = {};
-    document.querySelectorAll('input, select').forEach(el => {
-      if (el.id) state[el.id] = el.value;
-    });
-    localStorage.setItem('gestion_hidraulica_14d_v2', JSON.stringify(state));
-  }
+    if (!consentimiento) return;
 
-  function loadData() {
-    const saved = localStorage.getItem('gestion_hidraulica_14d_v2');
-    if (saved) {
-      try {
-        const state = JSON.parse(saved);
-        Object.keys(state).forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.value = state[id];
-        });
-        // Sincronizar etiquetas de días cargados
-        for (let i = 0; i < 14; i++) {
-          const dNum = document.getElementById(`diaNum_${i}`);
-          if (dNum) syncDayLabels(i, dNum.value);
-        }
-      } catch (e) {
-        console.error("Error al cargar caché:", e);
-      }
+    btnRegistrar.disabled = true;
+    btnRegistrar.textContent = "Guardando datos...";
+
+    try {
+      const nuevoRegante = {
+        socio: socio,
+        nombre: nombre,
+        telefono: telefono,
+        consentimiento: true,
+        fechaRegistro: serverTimestamp()
+      };
+
+      // Guardar en la colección "regantes" de Firestore
+      await addDoc(collection(db, "regantes"), nuevoRegante);
+
+      // Guardar en el móvil para no volver a pedirlo
+      localStorage.setItem("regante_6y7", JSON.stringify({ socio, nombre, telefono }));
+
+      mostrarPanelPrincipal({ socio, nombre });
+    } catch (error) {
+      console.error("Error al registrar:", error);
+      alert("Hubo un error al guardar el registro. Revisa los permisos de Firestore o tu conexión.");
+    } finally {
+      btnRegistrar.disabled = false;
+      btnRegistrar.textContent = "Acceder a los riegos";
     }
-  }
+  });
 
-  function calcularTodo() {
-    const b6Init = parseFloat(document.getElementById('inputBalsa6').value) || 0;
-    const b7Init = parseFloat(document.getElementById('inputBalsa7').value) || 0;
+  // Botón para cerrar sesión y poder probar de nuevo el registro
+  document.getElementById("btn-salir").addEventListener("click", () => {
+    localStorage.removeItem("regante_6y7");
+    formRegistro.reset();
+    verificarSesion();
+  });
 
-    // Actualizar Tanques Pestaña 1
-    const pct6 = Math.min(Math.max((b6Init / 106) * 100, 0), 100);
-    const pct7 = Math.min(Math.max((b7Init / 500) * 100, 0), 100);
-
-    document.getElementById('water6').style.height = pct6 + '%';
-    document.getElementById('water7').style.height = pct7 + '%';
-    document.getElementById('txtLevel6').innerText = b6Init + ' h';
-    document.getElementById('txtPct6').innerText = Math.round(pct6) + '% ocupación';
-    document.getElementById('txtLevel7').innerText = b7Init + ' h';
-    document.getElementById('txtPct7').innerText = Math.round(pct7) + '% ocupación';
-
-    // 1. Repartos y Totales Separados (Trasvase / Río)
-    let sumaTrasvase = 0;
-    let sumaRio = 0;
-    const repartos6 = [];
-    const repartos7 = [];
-    const tiposAgua = [];
-
-    for (let i = 0; i < 14; i++) {
-      const r6 = parseFloat(document.getElementById(`rep6_${i}`).value) || 0;
-      const r7 = parseFloat(document.getElementById(`rep7_${i}`).value) || 0;
-      const tipo = document.getElementById(`tipoAgua_${i}`).value;
-      const sel = document.getElementById(`tipoAgua_${i}`);
-      
-      if (tipo === 'trasvase') {
-        sel.className = 'select-water opt-trasvase';
-        sumaTrasvase += (r6 + r7);
-      } else {
-        sel.className = 'select-water opt-rio';
-        sumaRio += (r6 + r7);
-      }
-
-      repartos6.push(r6);
-      repartos7.push(r7);
-      tiposAgua.push(tipo);
-    }
-
-    document.getElementById('totalVentaTrasvase').value = sumaTrasvase + ' h';
-    document.getElementById('totalVentaRio').value = sumaRio + ' h';
-
-    // 2. Caudales Barranco y Bombas 7ª
-    let totalAguaBarranco = 0;
-    let totalAguaSubida = 0;
-    const entradasBarranco = [];
-    const subidas7 = [];
-
-    for (let i = 0; i < 14; i++) {
-      const g2 = parseFloat(document.getElementById(`g2_${i}`).value) || 0;
-      const g3 = parseFloat(document.getElementById(`g3_${i}`).value) || 0;
-      const aguaBarr = (g2 * 9) + (g3 * 13);
-      entradasBarranco.push(aguaBarr);
-      totalAguaBarranco += aguaBarr;
-      document.getElementById(`aguaBarranco_${i}`).innerText = aguaBarr > 0 ? `+${aguaBarr} h` : '0 h';
-
-      const arr = parseFloat(document.getElementById(`arr_${i}`).value) || 0;
-      const arrvar = parseFloat(document.getElementById(`arrvar_${i}`).value) || 0;
-      const aguaSub = (arr * 5) + (arrvar * 10);
-      subidas7.push(aguaSub);
-      totalAguaSubida += aguaSub;
-      document.getElementById(`aguaSubida_${i}`).innerText = aguaSub > 0 ? `+${aguaSub} h` : '0 h';
-    }
-
-    document.getElementById('txtTotalBarrancoCalc').innerText = `${totalAguaBarranco} h agua`;
-    document.getElementById('txtTotalSubidaCalc').innerText = `${totalAguaSubida} h subidas`;
-
-    // 3. Balance Proyectado Día a Día (14 Días)
-    let curB6 = b6Init;
-    let curB7 = b7Init;
-    const proyecciones = [];
-
-    for (let i = 0; i < 14; i++) {
-      const ent = entradasBarranco[i];
-      const sub = subidas7[i];
-      const r6 = repartos6[i];
-      const r7 = repartos7[i];
-      const tipo = tiposAgua[i];
-
-      if (tipo === 'rio') {
-        curB6 = curB6 + ent - r6 - r7;
-      } else {
-        curB6 = curB6 + ent - sub - r6;
-        curB7 = curB7 + sub - r7;
-      }
-
-      proyecciones.push({
-        tipo: tipo,
-        ent: ent,
-        sub: sub,
-        r6: r6,
-        r7: r7,
-        b6: Math.round(curB6 * 10) / 10,
-        b7: Math.round(curB7 * 10) / 10
-      });
-    }
-
-    // Actualizar Balsa Morada del día activo
-    const pAct = proyecciones[activeProyDayIdx];
-    const pct6P = Math.min(Math.max((pAct.b6 / 106) * 100, 0), 100);
-    const pct7P = Math.min(Math.max((pAct.b7 / 500) * 100, 0), 100);
-
-    document.getElementById('water6Proy').style.height = pct6P + '%';
-    document.getElementById('water7Proy').style.height = pct7P + '%';
-    document.getElementById('txtLevel6Proy').innerText = pAct.b6 + ' h';
-    document.getElementById('txtPct6Proy').innerText = Math.round(pct6P) + '% ocupación';
-    document.getElementById('txtLevel7Proy').innerText = pAct.b7 + ' h';
-    document.getElementById('txtPct7Proy').innerText = Math.round(pct7P) + '% ocupación';
-
-    document.getElementById('proyTipoAguaVal').innerHTML = pAct.tipo === 'trasvase' 
-      ? '<span class="badge badge-blue">Agua Trasvase</span>' 
-      : '<span class="badge badge-teal">Agua Río</span>';
-
-    document.getElementById('proyEntradaVal').innerText = pAct.ent > 0 ? `+${pAct.ent} h` : '0 h';
-    document.getElementById('proySubidaVal').innerText = pAct.tipo === 'rio' 
-      ? '0 h (Río directo)' 
-      : (pAct.sub > 0 ? `-${pAct.sub}h (6ª) / +${pAct.sub}h (7ª)` : '0 h');
-    document.getElementById('proyRiego6Val').innerText = `-${pAct.r6} h`;
-    document.getElementById('proyRiego7Val').innerText = `-${pAct.r7} h`;
-    document.getElementById('proySaldo6Val').innerText = `${pAct.b6} h`;
-    document.getElementById('proySaldo7Val').innerText = `${pAct.b7} h`;
-
-    // Alertas
-    const alertBox = document.getElementById('alertBox');
-    if (b6Init < 20 || pAct.b6 < 20) {
-      alertBox.className = 'alert-banner danger';
-      alertBox.innerText = 'Peligro: Balsa 6ª desciende por debajo de 20h (zona roja). Ajusta horas de encendido.';
-    } else if (pAct.b7 > 430) {
-      alertBox.className = 'alert-banner warning';
-      alertBox.innerText = 'Atención: Balsa 7ª sobrepasa 430h en proyección. Margen de emergencia reducido.';
-    } else {
-      alertBox.className = 'alert-banner';
-      alertBox.innerText = 'Operación segura. Fechas sincronizadas y guardadas localmente.';
-    }
-
-    saveData();
-  }
-
-  // Inicialización
-  updateHeaderDate();
-  buildTables();
-  loadData();
-  calcularTodo();
-  setProyDay(0);
+  // Arrancar comprobando si ya estaba registrado
+  verificarSesion();
 </script>
-
 </body>
 </html>
