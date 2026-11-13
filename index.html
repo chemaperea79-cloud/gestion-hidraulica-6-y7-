@@ -308,7 +308,7 @@
     const divSeptima = document.getElementById("lista-septima");
 
     try {
-      const snapshot = await getDocs(collection(db, "partidores"));
+      const snapshot = await getDocs(collection(db, "PARTIDORES"));
       const partidores = [];
       
       snapshot.forEach((doc) => {
