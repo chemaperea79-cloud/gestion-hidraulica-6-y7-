@@ -41,9 +41,9 @@
       display: block;
       font-weight: 600;
       margin-bottom: 6px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
-    input[type="text"], input[type="tel"], input[type="date"], select {
+    input[type="text"], input[type="tel"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
       width: 100%;
       padding: 12px;
       border: 1px solid #cbd5e1;
@@ -51,6 +51,7 @@
       font-size: 1rem;
       box-sizing: border-box;
       background: #fff;
+      font-family: inherit;
     }
     .checkbox-group {
       display: flex;
@@ -90,33 +91,45 @@
       cursor: pointer;
       margin-top: 12px;
     }
-    .btn-anadir:hover {
-      background-color: #eff6ff;
-    }
     .btn-secundario {
       width: 100%;
       background-color: #e2e8f0;
       color: #334155;
       border: none;
       border-radius: 8px;
-      margin-top: 24px;
+      margin-top: 20px;
       font-size: 0.9rem;
       padding: 10px;
       cursor: pointer;
     }
     .oculto {
-      display: none;
+      display: none !important;
     }
     .cabecera-usuario {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: #e0f2fe;
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 8px;
       margin-bottom: 16px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #0369a1;
+      gap: 8px;
+    }
+    .btn-admin-toggle {
+      background: #0f4c81;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-admin-activo {
+      background: #15803d;
     }
     .leyenda {
       display: flex;
@@ -140,7 +153,6 @@
       border-radius: 50%;
       display: inline-block;
     }
-    /* Lista de partidores del usuario */
     .lista-mis-partidores {
       display: flex;
       flex-direction: column;
@@ -154,10 +166,10 @@
     }
     .btn-partidor {
       flex: 1;
-      padding: 16px;
+      padding: 14px 15px;
       border: none;
       border-radius: 10px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: bold;
       text-align: left;
       cursor: pointer;
@@ -172,10 +184,19 @@
     }
     .btn-partidor small {
       font-weight: normal;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       display: block;
       margin-top: 3px;
-      opacity: 0.9;
+      opacity: 0.95;
+    }
+    .btn-partidor .hora-destacada {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: inline-block;
+      background: rgba(0,0,0,0.15);
+      padding: 3px 8px;
+      border-radius: 5px;
     }
     .btn-quitar {
       background: #fee2e2;
@@ -187,7 +208,6 @@
       font-size: 1.1rem;
       cursor: pointer;
     }
-    /* Caja desplegable para añadir partidor */
     .caja-selector {
       background: #f8fafc;
       border: 1px solid #cbd5e1;
@@ -237,6 +257,77 @@
       background-color: #dc2626;
       color: white;
     }
+    /* Ficha interior del partidor */
+    .btn-volver {
+      background: #e2e8f0;
+      color: #1e293b;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 14px;
+      font-size: 0.9rem;
+    }
+    .banner-estado {
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-bottom: 16px;
+    }
+    .dato-ficha {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .dato-ficha.destacado-toma {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+    }
+    .dato-ficha span.etiqueta {
+      display: block;
+      font-size: 0.78rem;
+      color: #64748b;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .dato-ficha strong.valor {
+      font-size: 1.25rem;
+      color: #0f172a;
+    }
+    .dato-ficha.destacado-toma strong.valor {
+      font-size: 1.45rem;
+      color: #0f4c81;
+    }
+    .panel-edicion-admin {
+      background: #fffbeb;
+      border: 2px solid #f59e0b;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .panel-edicion-admin h4 {
+      margin-top: 0;
+      color: #b45309;
+      margin-bottom: 12px;
+    }
+    .banner-modo-admin {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      color: #92400e;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .aviso-orientativo {
       font-size: 0.8rem;
       color: #64748b;
@@ -280,13 +371,27 @@
 
       <button type="submit" id="btn-registrar" class="btn-primario">Acceder a los riegos</button>
     </form>
+
+    <button type="button" id="btn-acceso-directo-admin" class="btn-secundario" style="margin-top:16px;">
+      🔐 Acceso Capataz / Guardas
+    </button>
   </div>
 
-  <!-- PANTALLA 2: PANEL PRINCIPAL PERSONALIZADO -->
+  <!-- PANTALLA 2: PANEL PRINCIPAL -->
   <div id="pantalla-principal" class="card oculto">
     <div class="cabecera-usuario">
-      <span>👤 <strong id="saludo-nombre"></strong></span>
-      <span>Socio: <strong id="saludo-socio"></strong></span>
+      <div>
+        👤 <strong id="saludo-nombre"></strong><br>
+        <span style="font-size:0.78rem;">Socio: <strong id="saludo-socio"></strong></span>
+      </div>
+      <button type="button" id="btn-toggle-admin" class="btn-admin-toggle">🔐 Admin</button>
+    </div>
+
+    <div id="banner-admin" class="banner-modo-admin oculto">
+      <span>🛠️ <strong>Modo Capataz Activo</strong> (Chema / Luis)</span>
+      <button type="button" id="btn-ver-todos-admin" style="background:#b45309; color:white; border:none; border-radius:6px; padding:5px 8px; font-size:0.8rem; font-weight:bold; cursor:pointer;">
+        Ver todos
+      </button>
     </div>
 
     <h2>Mis Turnos de Riego</h2>
@@ -298,22 +403,20 @@
 
     <div class="leyenda">
       <span><i class="punto" style="background:#16a34a;"></i> Regando</span>
-      <span><i class="punto" style="background:#ea580c;"></i> Pendiente</span>
-      <span><i class="punto" style="background:#dc2626;"></i> Finalizado</span>
+      <span><i class="punto" style="background:#ea580c;"></i> Previsión</span>
+      <span><i class="punto" style="background:#dc2626;"></i> Cerrado</span>
     </div>
 
-    <h3>Mis Partidores</h3>
-    <div id="contenedor-mis-partidores" class="lista-mis-partidores">
-      <!-- Aquí aparecerán solo los partidores elegidos por el regante -->
-    </div>
+    <h3 id="titulo-lista-partidores">Mis Tomas / Partidores</h3>
+    <div id="contenedor-mis-partidores" class="lista-mis-partidores"></div>
 
-    <!-- Botón para abrir el selector de partidor -->
-    <button type="button" id="btn-mostrar-selector" class="btn-anadir">+ Añadir mi partidor</button>
+    <!-- Botón para abrir el selector de partidor y toma -->
+    <button type="button" id="btn-mostrar-selector" class="btn-anadir">+ Añadir mi partidor y toma</button>
 
-    <!-- Formulario desplegable para elegir canal y partidor -->
+    <!-- Formulario desplegable para elegir canal, partidor, toma y desfase -->
     <div id="caja-selector-partidor" class="caja-selector oculto">
       <div class="form-group">
-        <label for="select-canal">1. Selecciona el Canal:</label>
+        <label for="select-canal">1. Canal:</label>
         <select id="select-canal">
           <option value="sexta">Canal 6ª Elevación</option>
           <option value="septima">Canal 7ª Elevación</option>
@@ -321,14 +424,27 @@
       </div>
 
       <div class="form-group">
-        <label for="select-partidor">2. Selecciona tu Partidor:</label>
+        <label for="select-partidor">2. Partidor:</label>
         <select id="select-partidor">
           <option value="">Cargando lista...</option>
         </select>
       </div>
 
+      <div class="form-group">
+        <label for="input-toma">3. Tu Toma / Boquera (identificador):</label>
+        <input type="text" id="input-toma" placeholder="Ej: Toma 3, Boquera Camino...">
+      </div>
+
+      <div class="form-group">
+        <label for="input-desfase-toma">4. Minutos desde el Partidor hasta tu Toma:</label>
+        <input type="number" id="input-desfase-toma" min="0" max="600" value="0" placeholder="Ej: 25">
+        <small style="color:#64748b; display:block; margin-top:4px; font-size:0.8rem;">
+          Pon 0 si tu toma está junto al partidor. Este tiempo se sumará automáticamente a la apertura.
+        </small>
+      </div>
+
       <div class="acciones-selector">
-        <button type="button" id="btn-confirmar-partidor" class="btn-guardar-p">Guardar partidor</button>
+        <button type="button" id="btn-confirmar-partidor" class="btn-guardar-p">Guardar mi toma</button>
         <button type="button" id="btn-cancelar-partidor" class="btn-cancelar-p">Cancelar</button>
       </div>
     </div>
@@ -337,12 +453,80 @@
       * Los horarios mostrados son orientativos y están sujetos a variaciones por caudal o incidencias en la red.
     </p>
 
-    <button type="button" id="btn-salir" class="btn-secundario">Cerrar sesión (Prueba)</button>
+    <button type="button" id="btn-salir" class="btn-secundario">Cerrar sesión</button>
+  </div>
+
+  <!-- PANTALLA 3: FICHA INTERIOR DEL PARTIDOR / TOMA -->
+  <div id="pantalla-ficha" class="card oculto">
+    <button type="button" id="btn-volver-panel" class="btn-volver">⬅ Volver a mis tomas</button>
+
+    <h2 id="ficha-titulo-partidor" style="margin-bottom:4px;">Partidor</h2>
+    <p id="ficha-subtitulo" style="text-align:center; color:#64748b; margin-top:0; font-size:0.9rem;"></p>
+
+    <div id="ficha-banner-estado" class="banner-estado estado-sin-datos">
+      Sin información para esta fecha
+    </div>
+
+    <!-- BLOQUE PRINCIPAL: HORA CALCULADA DE LLEGADA A LA TOMA DEL REGANTE -->
+    <div id="bloque-calculo-toma" class="dato-ficha destacado-toma oculto">
+      <span class="etiqueta" id="etiqueta-llegada-toma">Llegada estimada a tu toma</span>
+      <strong id="ficha-hora-toma" class="valor">--:--</strong>
+      <small id="ficha-detalle-calculo" style="display:block; color:#475569; margin-top:4px; font-size:0.82rem;"></small>
+    </div>
+
+    <div class="dato-ficha">
+      <span class="etiqueta">Hora de apertura real del partidor</span>
+      <strong id="ficha-hora-apertura" class="valor">--:--</strong>
+    </div>
+
+    <div class="dato-ficha">
+      <span class="etiqueta">Previsión de apertura del partidor</span>
+      <strong id="ficha-hora-prevision" class="valor">--:--</strong>
+    </div>
+
+    <div id="bloque-observaciones" class="dato-ficha oculto">
+      <span class="etiqueta">Observaciones / Avisos</span>
+      <p id="ficha-observaciones" style="margin:4px 0 0 0; font-size:0.95rem; color:#1e293b;"></p>
+    </div>
+
+    <!-- PANEL DE EDICIÓN SOLO VISIBLE SI ES ADMIN (6767) -->
+    <div id="panel-edicion-admin" class="panel-edicion-admin oculto">
+      <h4>🛠️ Actualizar partidor (Capataz)</h4>
+
+      <div class="form-group">
+        <label for="admin-estado">Estado del partidor:</label>
+        <select id="admin-estado">
+          <option value="sin_datos">⚪ Sin programar / Neutro</option>
+          <option value="naranja">🟠 Pendiente / Previsión de apertura</option>
+          <option value="verde">🟢 Abierto / Regando</option>
+          <option value="rojo">🔴 Cerrado / Riego finalizado</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="admin-hora-apertura">Hora de apertura real del partidor:</label>
+        <input type="time" id="admin-hora-apertura">
+      </div>
+
+      <div class="form-group">
+        <label for="admin-hora-prevision">Previsión de apertura del partidor (si procede):</label>
+        <input type="time" id="admin-hora-prevision">
+      </div>
+
+      <div class="form-group">
+        <label for="admin-observaciones">Observaciones para el regante (opcional):</label>
+        <textarea id="admin-observaciones" rows="2" placeholder="Ej: Retraso por limpieza de rejilla, caudal normal..."></textarea>
+      </div>
+
+      <button type="button" id="btn-guardar-estado-riego" class="btn-primario" style="background:#15803d;">
+        💾 Guardar cambios en tiempo real
+      </button>
+    </div>
   </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
@@ -355,10 +539,13 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const CLAVE_ADMIN = "6767";
 
-  // Elementos del DOM
+  // Elementos DOM
   const pantallaRegistro = document.getElementById("pantalla-registro");
   const pantallaPrincipal = document.getElementById("pantalla-principal");
+  const pantallaFicha = document.getElementById("pantalla-ficha");
+
   const formRegistro = document.getElementById("form-registro");
   const btnRegistrar = document.getElementById("btn-registrar");
   const selectorFecha = document.getElementById("selector-fecha");
@@ -369,38 +556,94 @@
   const selectCanal = document.getElementById("select-canal");
   const selectPartidor = document.getElementById("select-partidor");
 
-  // Fecha de hoy por defecto
   selectorFecha.value = new Date().toISOString().split('T')[0];
 
-  // Variables en memoria
-  let catalogoPartidores = []; // Todos los partidores de Firebase
-  let usuarioActual = null;    // Datos del regante en localStorage
+  // Estado de la aplicación
+  let catalogoPartidores = [];
+  let estadosDelDia = {};
+  let usuarioActual = null;
+  let esAdmin = localStorage.getItem("admin_6y7") === "true";
+  let verTodosAdmin = false;
+  let seleccionAbierta = null; // { datosP, tomaObj }
+
+  // Función auxiliar para sumar minutos a una hora HH:MM
+  function sumarMinutosAHora(horaStr, minutosASumar) {
+    if (!horaStr || !horaStr.includes(":")) return null;
+    const [hh, mm] = horaStr.split(":").map(Number);
+    const desfase = Number(minutosASumar) || 0;
+    const totalMinutos = hh * 60 + mm + desfase;
+    
+    const diasExtra = Math.floor(totalMinutos / 1440);
+    const minDia = ((totalMinutos % 1440) + 1440) % 1440;
+    
+    const hFinal = String(Math.floor(minDia / 60)).padStart(2, "0");
+    const mFinal = String(minDia % 60).padStart(2, "0");
+    
+    return diasExtra > 0 ? `${hFinal}:${mFinal} (+${diasExtra} día)` : `${hFinal}:${mFinal}`;
+  }
+
+  // Normalizar formato antiguo (array de IDs) a nuevo formato (array de objetos con toma y desfase)
+  function normalizarMisTomas(lista) {
+    if (!Array.isArray(lista)) return [];
+    return lista.map((item, idx) => {
+      if (typeof item === "string") {
+        return {
+          uid: `toma_${idx}_${item}`,
+          partidorId: item,
+          toma: "Toma principal",
+          desfaseToma: 0
+        };
+      }
+      return item;
+    });
+  }
 
   function verificarSesion() {
     const reganteGuardado = localStorage.getItem("regante_6y7");
     if (reganteGuardado) {
       usuarioActual = JSON.parse(reganteGuardado);
-      if (!usuarioActual.misPartidores) {
-        usuarioActual.misPartidores = [];
-      }
+      usuarioActual.misTomas = normalizarMisTomas(usuarioActual.misTomas || usuarioActual.misPartidores);
       mostrarPanelPrincipal();
     } else {
       pantallaRegistro.classList.remove("oculto");
       pantallaPrincipal.classList.add("oculto");
+      pantallaFicha.classList.add("oculto");
     }
   }
 
   async function mostrarPanelPrincipal() {
     document.getElementById("saludo-nombre").textContent = usuarioActual.nombre;
     document.getElementById("saludo-socio").textContent = usuarioActual.socio;
+    
+    actualizarUIAdmin();
+
     pantallaRegistro.classList.add("oculto");
+    pantallaFicha.classList.add("oculto");
     pantallaPrincipal.classList.remove("oculto");
 
-    await cargarCatalogoPartidores();
-    pintarMisPartidores();
+    if (catalogoPartidores.length === 0) {
+      await cargarCatalogoPartidores();
+    }
+    await cargarEstadosPorFecha(selectorFecha.value);
+    pintarListaPartidores();
   }
 
-  // Descargar catálogo maestro de PARTIDORES para los desplegables
+  function actualizarUIAdmin() {
+    const btnToggle = document.getElementById("btn-toggle-admin");
+    const bannerAdmin = document.getElementById("banner-admin");
+
+    if (esAdmin) {
+      btnToggle.textContent = "🔓 Admin ON";
+      btnToggle.classList.add("btn-admin-activo");
+      bannerAdmin.classList.remove("oculto");
+    } else {
+      btnToggle.textContent = "🔐 Admin";
+      btnToggle.classList.remove("btn-admin-activo");
+      bannerAdmin.classList.add("oculto");
+      verTodosAdmin = false;
+    }
+  }
+
   async function cargarCatalogoPartidores() {
     try {
       const snapshot = await getDocs(collection(db, "PARTIDORES"));
@@ -408,7 +651,6 @@
       snapshot.forEach((docSnap) => {
         catalogoPartidores.push({ id: docSnap.id, ...docSnap.data() });
       });
-      // Ordenar por desfase (orden hidráulico)
       catalogoPartidores.sort((a, b) => (a.desfase || 0) - (b.desfase || 0));
       actualizarDesplegablePartidores();
     } catch (error) {
@@ -416,9 +658,24 @@
     }
   }
 
-  // Filtrar el desplegable según el canal elegido (6ª o 7ª)
+  async function cargarEstadosPorFecha(fecha) {
+    estadosDelDia = {};
+    try {
+      const q = query(collection(db, "riegos_diarios"), where("fecha", "==", fecha));
+      const snapshot = await getDocs(q);
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        if (data.partidorId) {
+          estadosDelDia[data.partidorId] = data;
+        }
+      });
+    } catch (error) {
+      console.error("Error cargando riegos del día:", error);
+    }
+  }
+
   function actualizarDesplegablePartidores() {
-    const canalElegido = selectCanal.value; // "sexta" o "septima"
+    const canalElegido = selectCanal.value;
     selectPartidor.innerHTML = "";
 
     const filtrados = catalogoPartidores.filter((p) => {
@@ -428,117 +685,375 @@
     });
 
     if (filtrados.length === 0) {
-      selectPartidor.innerHTML = `<option value="">No hay partidores disponibles en este canal</option>`;
+      selectPartidor.innerHTML = `<option value="">Sin partidores en este canal</option>`;
       return;
     }
 
     filtrados.forEach((p) => {
       const opt = document.createElement("option");
       opt.value = p.id;
-      opt.textContent = `${p.nombre} (Desfase: ${p.desfase} min)`;
+      opt.textContent = p.nombre;
       selectPartidor.appendChild(opt);
     });
   }
 
-  // Pintar únicamente los botones de los partidores que el regante ha guardado
-  function pintarMisPartidores() {
+  function pintarListaPartidores() {
     contenedorMisPartidores.innerHTML = "";
+    const titulo = document.getElementById("titulo-lista-partidores");
 
-    if (!usuarioActual.misPartidores || usuarioActual.misPartidores.length === 0) {
+    // MODO CAPATAZ "VER TODOS": muestra todos los partidores del catálogo para editar rápido
+    if (esAdmin && verTodosAdmin) {
+      titulo.textContent = "Todos los Partidores (Vista Capataz)";
+      catalogoPartidores.forEach((datosP) => {
+        const fila = document.createElement("div");
+        fila.className = "item-partidor";
+        const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+        const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
+
+        let claseColor = "estado-sin-datos";
+        let resumen = "Sin programación hoy";
+        if (infoRiego.estado === "verde") {
+          claseColor = "estado-verde";
+          resumen = infoRiego.horaApertura ? `Abierto partidor: ${infoRiego.horaApertura}` : "Abierto / Regando";
+        } else if (infoRiego.estado === "naranja") {
+          claseColor = "estado-naranja";
+          resumen = infoRiego.horaPrevision ? `Previsión partidor: ${infoRiego.horaPrevision}` : "Pendiente / Previsión";
+        } else if (infoRiego.estado === "rojo") {
+          claseColor = "estado-rojo";
+          resumen = infoRiego.horaApertura ? `Abrió ${infoRiego.horaApertura} · Cerrado` : "Cerrado";
+        }
+
+        const btn = document.createElement("button");
+        btn.className = `btn-partidor ${claseColor}`;
+        btn.innerHTML = `
+          <div>
+            <span>${datosP.nombre} <span style="font-weight:normal; font-size:0.85rem;">(${canalTexto})</span></span>
+            <small>${resumen}</small>
+          </div>
+          <span>✏️</span>
+        `;
+        btn.addEventListener("click", () => abrirFichaPartidor(datosP, null));
+        fila.appendChild(btn);
+        contenedorMisPartidores.appendChild(fila);
+      });
+      return;
+    }
+
+    // VISTA PERSONAL DEL REGANTE (SUS TOMAS)
+    titulo.textContent = "Mis Tomas / Partidores";
+    const misTomas = usuarioActual.misTomas || [];
+
+    if (misTomas.length === 0) {
       contenedorMisPartidores.innerHTML = `
         <p style="color:#64748b; font-size:0.95rem; text-align:center; padding: 12px 0;">
-          Aún no tienes ningún partidor asignado.<br>Pulsa el botón inferior para añadir el tuyo.
+          Aún no tienes ningún partidor ni toma registrada.<br>Pulsa el botón inferior para añadir la tuya.
         </p>
       `;
       return;
     }
 
-    usuarioActual.misPartidores.forEach((idPartidor) => {
-      // Buscar los datos actualizados en el catálogo de Firebase
-      const datosP = catalogoPartidores.find((item) => item.id === idPartidor);
+    misTomas.forEach((tomaObj) => {
+      const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
       if (!datosP) return;
 
       const fila = document.createElement("div");
       fila.className = "item-partidor";
 
       const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+      const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
+      const desfaseMin = Number(tomaObj.desfaseToma) || 0;
+
+      let claseColor = "estado-sin-datos";
+      let textoEstado = "Sin programación hoy";
+      let badgeHoraToma = "";
+
+      if (infoRiego.estado === "verde") {
+        claseColor = "estado-verde";
+        if (infoRiego.horaApertura) {
+          const horaLlegada = sumarMinutosAHora(infoRiego.horaApertura, desfaseMin);
+          textoEstado = `Partidor abierto: ${infoRiego.horaApertura} (+${desfaseMin} min)`;
+          badgeHoraToma = `<span class="hora-destacada">💧 Agua en tu toma: ${horaLlegada}</span>`;
+        } else {
+          textoEstado = "Partidor abierto / Regando";
+        }
+      } else if (infoRiego.estado === "naranja") {
+        claseColor = "estado-naranja";
+        if (infoRiego.horaPrevision) {
+          const horaPrevToma = sumarMinutosAHora(infoRiego.horaPrevision, desfaseMin);
+          textoEstado = `Previsión partidor: ${infoRiego.horaPrevision} (+${desfaseMin} min)`;
+          badgeHoraToma = `<span class="hora-destacada">⏱️ Previsión en tu toma: ${horaPrevToma}</span>`;
+        } else {
+          textoEstado = "Pendiente de apertura";
+        }
+      } else if (infoRiego.estado === "rojo") {
+        claseColor = "estado-rojo";
+        textoEstado = infoRiego.horaApertura
+          ? `Abrió ${infoRiego.horaApertura} · Riego cerrado`
+          : "Partidor cerrado / Finalizado";
+      }
 
       const btn = document.createElement("button");
-      btn.className = "btn-partidor estado-sin-datos";
+      btn.className = `btn-partidor ${claseColor}`;
       btn.innerHTML = `
         <div>
-          <span>${datosP.nombre}</span>
-          <small>${canalTexto} · Desfase: ${datosP.desfase} min</small>
+          <span>${datosP.nombre} · ${tomaObj.toma}</span>
+          <small>${canalTexto} · Desfase toma: ${desfaseMin} min</small>
+          <small>${textoEstado}</small>
+          ${badgeHoraToma}
         </div>
         <span>➡️</span>
       `;
 
-      btn.addEventListener("click", () => {
-        alert(`Abriendo ficha de: ${datosP.nombre} (${canalTexto})\nFecha: ${selectorFecha.value}\n\n(En el siguiente paso montamos la vista interior con la hora calculada, estado y observaciones)`);
-      });
+      btn.addEventListener("click", () => abrirFichaPartidor(datosP, tomaObj));
+      fila.appendChild(btn);
 
       const btnEliminar = document.createElement("button");
       btnEliminar.className = "btn-quitar";
-      btnEliminar.title = "Quitar este partidor";
+      btnEliminar.title = "Quitar esta toma";
       btnEliminar.textContent = "✕";
-      btnEliminar.addEventListener("click", () => quitarPartidorDeUsuario(idPartidor, datosP.nombre));
-
-      fila.appendChild(btn);
+      btnEliminar.addEventListener("click", () => quitarTomaDeUsuario(tomaObj.uid, `${datosP.nombre} - ${tomaObj.toma}`));
       fila.appendChild(btnEliminar);
+
       contenedorMisPartidores.appendChild(fila);
     });
   }
 
-  // Guardar nuevo partidor en el perfil del regante (localStorage + Firebase)
-  async function anadirPartidorAUsuario(idPartidor) {
-    if (!idPartidor) return;
-    if (usuarioActual.misPartidores.includes(idPartidor)) {
-      alert("Este partidor ya está en tu lista.");
-      cajaSelector.classList.add("oculto");
-      btnMostrarSelector.classList.remove("oculto");
-      return;
+  function abrirFichaPartidor(datosP, tomaObj) {
+    seleccionAbierta = { datosP, tomaObj };
+    const fecha = selectorFecha.value;
+    const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª Elevación" : "Canal 7ª Elevación";
+    const info = estadosDelDia[datosP.id] || {
+      estado: "sin_datos",
+      horaApertura: "",
+      horaPrevision: "",
+      observaciones: ""
+    };
+
+    document.getElementById("ficha-titulo-partidor").textContent = tomaObj
+      ? `${datosP.nombre} — ${tomaObj.toma}`
+      : datosP.nombre;
+    document.getElementById("ficha-subtitulo").textContent = `${canalTexto} · Fecha: ${fecha.split("-").reverse().join("/")}`;
+
+    const banner = document.getElementById("ficha-banner-estado");
+    banner.className = "banner-estado";
+    if (info.estado === "verde") {
+      banner.classList.add("estado-verde");
+      banner.textContent = "🟢 PARTIDOR ABIERTO / REGANDO";
+    } else if (info.estado === "naranja") {
+      banner.classList.add("estado-naranja");
+      banner.textContent = "🟠 PENDIENTE / PREVISIÓN DE APERTURA";
+    } else if (info.estado === "rojo") {
+      banner.classList.add("estado-rojo");
+      banner.textContent = "🔴 PARTIDOR CERRADO / FINALIZADO";
+    } else {
+      banner.classList.add("estado-sin-datos");
+      banner.textContent = "⚪ SIN PROGRAMACIÓN PARA ESTA FECHA";
     }
 
-    usuarioActual.misPartidores.push(idPartidor);
+    // Cálculo específico para la toma del regante si viene desde su toma
+    const bloqueCalculo = document.getElementById("bloque-calculo-toma");
+    if (tomaObj) {
+      const desfaseMin = Number(tomaObj.desfaseToma) || 0;
+      const etiquetaToma = document.getElementById("etiqueta-llegada-toma");
+      const valorHoraToma = document.getElementById("ficha-hora-toma");
+      const detalleCalculo = document.getElementById("ficha-detalle-calculo");
+
+      if (info.estado === "verde" && info.horaApertura) {
+        bloqueCalculo.classList.remove("oculto");
+        etiquetaToma.textContent = `💧 Hora estimada de agua en "${tomaObj.toma}"`;
+        valorHoraToma.textContent = sumarMinutosAHora(info.horaApertura, desfaseMin);
+        detalleCalculo.textContent = `Apertura partidor (${info.horaApertura}) + ${desfaseMin} min de desfase hasta tu toma.`;
+      } else if (info.estado === "naranja" && info.horaPrevision) {
+        bloqueCalculo.classList.remove("oculto");
+        etiquetaToma.textContent = `⏱️ Previsión de llegada a "${tomaObj.toma}"`;
+        valorHoraToma.textContent = sumarMinutosAHora(info.horaPrevision, desfaseMin);
+        detalleCalculo.textContent = `Previsión partidor (${info.horaPrevision}) + ${desfaseMin} min de desfase hasta tu toma.`;
+      } else {
+        bloqueCalculo.classList.remove("oculto");
+        etiquetaToma.textContent = `💧 Tu toma: "${tomaObj.toma}" (Desfase: +${desfaseMin} min)`;
+        valorHoraToma.textContent = "Pendiente de hora";
+        detalleCalculo.textContent = `Se calculará automáticamente en cuanto se indique la hora del partidor.`;
+      }
+    } else {
+      bloqueCalculo.classList.add("oculto");
+    }
+
+    document.getElementById("ficha-hora-apertura").textContent = info.horaApertura || "No indicada";
+    document.getElementById("ficha-hora-prevision").textContent = info.horaPrevision || "No indicada";
+
+    const bloqueObs = document.getElementById("bloque-observaciones");
+    if (info.observaciones && info.observaciones.trim() !== "") {
+      document.getElementById("ficha-observaciones").textContent = info.observaciones;
+      bloqueObs.classList.remove("oculto");
+    } else {
+      bloqueObs.classList.add("oculto");
+    }
+
+    const panelAdmin = document.getElementById("panel-edicion-admin");
+    if (esAdmin) {
+      panelAdmin.classList.remove("oculto");
+      document.getElementById("admin-estado").value = info.estado || "sin_datos";
+      document.getElementById("admin-hora-apertura").value = info.horaApertura || "";
+      document.getElementById("admin-hora-prevision").value = info.horaPrevision || "";
+      document.getElementById("admin-observaciones").value = info.observaciones || "";
+    } else {
+      panelAdmin.classList.add("oculto");
+    }
+
+    pantallaPrincipal.classList.add("oculto");
+    pantallaFicha.classList.remove("oculto");
+  }
+
+  // Guardar datos desde el panel de Admin (Chema / Luis)
+  document.getElementById("btn-guardar-estado-riego").addEventListener("click", async () => {
+    if (!seleccionAbierta || !esAdmin) return;
+
+    const { datosP, tomaObj } = seleccionAbierta;
+    const btnGuardar = document.getElementById("btn-guardar-estado-riego");
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = "Guardando...";
+
+    const fecha = selectorFecha.value;
+    const docIdRiego = `${fecha}_${datosP.id}`;
+
+    const nuevosDatos = {
+      fecha: fecha,
+      partidorId: datosP.id,
+      partidorNombre: datosP.nombre,
+      canal: datosP.canal,
+      estado: document.getElementById("admin-estado").value,
+      horaApertura: document.getElementById("admin-hora-apertura").value,
+      horaPrevision: document.getElementById("admin-hora-prevision").value,
+      observaciones: document.getElementById("admin-observaciones").value.trim(),
+      actualizadoEn: serverTimestamp()
+    };
+
+    try {
+      await setDoc(doc(db, "riegos_diarios", docIdRiego), nuevosDatos);
+      estadosDelDia[datosP.id] = nuevosDatos;
+      abrirFichaPartidor(datosP, tomaObj);
+      alert("✅ Datos del partidor actualizados.");
+    } catch (error) {
+      console.error("Error guardando estado:", error);
+      alert("Error al guardar los datos en Firebase.");
+    } finally {
+      btnGuardar.disabled = false;
+      btnGuardar.textContent = "💾 Guardar cambios en tiempo real";
+    }
+  });
+
+  document.getElementById("btn-volver-panel").addEventListener("click", () => {
+    pantallaFicha.classList.add("oculto");
+    pantallaPrincipal.classList.remove("oculto");
+    pintarListaPartidores();
+  });
+
+  selectorFecha.addEventListener("change", async () => {
+    await cargarEstadosPorFecha(selectorFecha.value);
+    pintarListaPartidores();
+  });
+
+  // Botones Admin
+  document.getElementById("btn-toggle-admin").addEventListener("click", () => {
+    if (esAdmin) {
+      if (confirm("¿Desactivar modo Capataz/Admin en este dispositivo?")) {
+        esAdmin = false;
+        localStorage.removeItem("admin_6y7");
+        actualizarUIAdmin();
+        pintarListaPartidores();
+      }
+    } else {
+      const clave = prompt("Introduce la clave de Capataz / Guardas:");
+      if (clave === CLAVE_ADMIN) {
+        esAdmin = true;
+        localStorage.setItem("admin_6y7", "true");
+        actualizarUIAdmin();
+        alert("Modo Capataz activado.");
+      } else if (clave !== null) {
+        alert("Clave incorrecta.");
+      }
+    }
+  });
+
+  document.getElementById("btn-acceso-directo-admin").addEventListener("click", () => {
+    const clave = prompt("Introduce la clave de Capataz / Guardas:");
+    if (clave === CLAVE_ADMIN) {
+      esAdmin = true;
+      verTodosAdmin = true;
+      localStorage.setItem("admin_6y7", "true");
+      usuarioActual = {
+        socio: "ADMIN",
+        nombre: "Capataz / Guardas",
+        misTomas: []
+      };
+      localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+      mostrarPanelPrincipal();
+    } else if (clave !== null) {
+      alert("Clave incorrecta.");
+    }
+  });
+
+  document.getElementById("btn-ver-todos-admin").addEventListener("click", () => {
+    verTodosAdmin = !verTodosAdmin;
+    document.getElementById("btn-ver-todos-admin").textContent = verTodosAdmin ? "Ver mis tomas" : "Ver todos";
+    pintarListaPartidores();
+  });
+
+  // Guardar nueva toma personalizada del regante
+  async function anadirTomaAUsuario() {
+    const partidorId = selectPartidor.value;
+    if (!partidorId) return;
+
+    const textoToma = document.getElementById("input-toma").value.trim() || "Toma principal";
+    const desfaseToma = parseInt(document.getElementById("input-desfase-toma").value, 10) || 0;
+
+    const nuevaToma = {
+      uid: `toma_${Date.now()}`,
+      partidorId: partidorId,
+      toma: textoToma,
+      desfaseToma: desfaseToma
+    };
+
+    if (!usuarioActual.misTomas) usuarioActual.misTomas = [];
+    usuarioActual.misTomas.push(nuevaToma);
     localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
 
-    // Si tenemos el ID de su documento en Firestore, actualizamos también ahí
     if (usuarioActual.docId) {
       try {
         await updateDoc(doc(db, "regantes", usuarioActual.docId), {
-          misPartidores: usuarioActual.misPartidores
+          misTomas: usuarioActual.misTomas
         });
       } catch (e) {
-        console.error("No se pudo sincronizar partidor en Firebase:", e);
+        console.error("No se pudo sincronizar toma en Firebase:", e);
       }
     }
 
+    document.getElementById("input-toma").value = "";
+    document.getElementById("input-desfase-toma").value = "0";
     cajaSelector.classList.add("oculto");
     btnMostrarSelector.classList.remove("oculto");
-    pintarMisPartidores();
+    pintarListaPartidores();
   }
 
-  // Quitar un partidor de la lista del regante
-  async function quitarPartidorDeUsuario(idPartidor, nombrePartidor) {
-    if (!confirm(`¿Quitar "${nombrePartidor}" de tu lista de partidores?`)) return;
+  async function quitarTomaDeUsuario(uidToma, etiqueta) {
+    if (!confirm(`¿Quitar "${etiqueta}" de tu lista?`)) return;
 
-    usuarioActual.misPartidores = usuarioActual.misPartidores.filter((id) => id !== idPartidor);
+    usuarioActual.misTomas = usuarioActual.misTomas.filter((t) => t.uid !== uidToma);
     localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
 
     if (usuarioActual.docId) {
       try {
         await updateDoc(doc(db, "regantes", usuarioActual.docId), {
-          misPartidores: usuarioActual.misPartidores
+          misTomas: usuarioActual.misTomas
         });
       } catch (e) {
-        console.error("Error al quitar partidor en Firebase:", e);
+        console.error("Error al quitar toma en Firebase:", e);
       }
     }
 
-    pintarMisPartidores();
+    pintarListaPartidores();
   }
 
-  // Eventos del selector de partidores
   btnMostrarSelector.addEventListener("click", () => {
     btnMostrarSelector.classList.add("oculto");
     cajaSelector.classList.remove("oculto");
@@ -551,10 +1066,7 @@
   });
 
   selectCanal.addEventListener("change", actualizarDesplegablePartidores);
-
-  document.getElementById("btn-confirmar-partidor").addEventListener("click", () => {
-    anadirPartidorAUsuario(selectPartidor.value);
-  });
+  document.getElementById("btn-confirmar-partidor").addEventListener("click", anadirTomaAUsuario);
 
   // Registro inicial del regante
   formRegistro.addEventListener("submit", async (e) => {
@@ -575,7 +1087,7 @@
         nombre,
         telefono,
         consentimiento: true,
-        misPartidores: [],
+        misTomas: [],
         fechaRegistro: serverTimestamp()
       });
 
@@ -584,7 +1096,7 @@
         socio,
         nombre,
         telefono,
-        misPartidores: []
+        misTomas: []
       };
 
       localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
@@ -600,7 +1112,10 @@
 
   document.getElementById("btn-salir").addEventListener("click", () => {
     localStorage.removeItem("regante_6y7");
+    localStorage.removeItem("admin_6y7");
     usuarioActual = null;
+    esAdmin = false;
+    verTodosAdmin = false;
     formRegistro.reset();
     verificarSesion();
   });
