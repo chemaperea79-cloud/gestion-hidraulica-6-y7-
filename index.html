@@ -30,12 +30,12 @@
       color: #0f4c81;
       border-bottom: 2px solid #e2e8f0;
       padding-bottom: 6px;
-      margin-top: 22px;
+      margin-top: 20px;
       margin-bottom: 12px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
     }
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     label {
       display: block;
@@ -43,7 +43,7 @@
       margin-bottom: 6px;
       font-size: 0.95rem;
     }
-    input[type="text"], input[type="tel"], input[type="date"] {
+    input[type="text"], input[type="tel"], input[type="date"], select {
       width: 100%;
       padding: 12px;
       border: 1px solid #cbd5e1;
@@ -78,6 +78,21 @@
     button.btn-primario:disabled {
       background-color: #94a3b8;
     }
+    .btn-anadir {
+      width: 100%;
+      padding: 12px;
+      background-color: #f8fafc;
+      color: #0f4c81;
+      border: 2px dashed #93c5fd;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .btn-anadir:hover {
+      background-color: #eff6ff;
+    }
     .btn-secundario {
       width: 100%;
       background-color: #e2e8f0;
@@ -103,7 +118,6 @@
       font-size: 0.9rem;
       color: #0369a1;
     }
-    /* Leyenda de colores */
     .leyenda {
       display: flex;
       justify-content: space-around;
@@ -126,27 +140,31 @@
       border-radius: 50%;
       display: inline-block;
     }
-    /* Botones físicos de partidores */
-    .grid-partidores {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    .btn-partidor {
-      padding: 14px 10px;
-      border: none;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 3px 0 rgba(0,0,0,0.18);
-      transition: transform 0.1s;
+    /* Lista de partidores del usuario */
+    .lista-mis-partidores {
       display: flex;
       flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .item-partidor {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .btn-partidor {
+      flex: 1;
+      padding: 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.18);
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      min-height: 60px;
     }
     .btn-partidor:active {
       transform: translateY(2px);
@@ -154,14 +172,58 @@
     }
     .btn-partidor small {
       font-weight: normal;
-      font-size: 0.75rem;
-      margin-top: 4px;
+      font-size: 0.8rem;
+      display: block;
+      margin-top: 3px;
       opacity: 0.9;
+    }
+    .btn-quitar {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      border-radius: 10px;
+      padding: 0 14px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    /* Caja desplegable para añadir partidor */
+    .caja-selector {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .acciones-selector {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn-guardar-p {
+      flex: 2;
+      padding: 12px;
+      background: #0f4c81;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-cancelar-p {
+      flex: 1;
+      padding: 12px;
+      background: #cbd5e1;
+      color: #1e293b;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
     }
     /* Estados de color */
     .estado-sin-datos {
       background-color: #e2e8f0;
-      color: #334155;
+      color: #1e293b;
     }
     .estado-verde {
       background-color: #16a34a;
@@ -179,7 +241,7 @@
       font-size: 0.8rem;
       color: #64748b;
       text-align: center;
-      margin-top: 18px;
+      margin-top: 20px;
       font-style: italic;
     }
   </style>
@@ -220,17 +282,17 @@
     </form>
   </div>
 
-  <!-- PANTALLA 2: PANEL PRINCIPAL DE PARTIDORES -->
+  <!-- PANTALLA 2: PANEL PRINCIPAL PERSONALIZADO -->
   <div id="pantalla-principal" class="card oculto">
     <div class="cabecera-usuario">
       <span>👤 <strong id="saludo-nombre"></strong></span>
       <span>Socio: <strong id="saludo-socio"></strong></span>
     </div>
 
-    <h2>Turnos de Riego</h2>
+    <h2>Mis Turnos de Riego</h2>
 
     <div class="form-group">
-      <label for="selector-fecha">Selecciona fecha de riego:</label>
+      <label for="selector-fecha">Fecha de consulta:</label>
       <input type="date" id="selector-fecha">
     </div>
 
@@ -240,14 +302,35 @@
       <span><i class="punto" style="background:#dc2626;"></i> Finalizado</span>
     </div>
 
-    <h3>Canal 6ª Elevación</h3>
-    <div id="lista-sexta" class="grid-partidores">
-      <p style="color:#64748b; font-size:0.9rem;">Cargando partidores...</p>
+    <h3>Mis Partidores</h3>
+    <div id="contenedor-mis-partidores" class="lista-mis-partidores">
+      <!-- Aquí aparecerán solo los partidores elegidos por el regante -->
     </div>
 
-    <h3>Canal 7ª Elevación</h3>
-    <div id="lista-septima" class="grid-partidores">
-      <p style="color:#64748b; font-size:0.9rem;">Cargando partidores...</p>
+    <!-- Botón para abrir el selector de partidor -->
+    <button type="button" id="btn-mostrar-selector" class="btn-anadir">+ Añadir mi partidor</button>
+
+    <!-- Formulario desplegable para elegir canal y partidor -->
+    <div id="caja-selector-partidor" class="caja-selector oculto">
+      <div class="form-group">
+        <label for="select-canal">1. Selecciona el Canal:</label>
+        <select id="select-canal">
+          <option value="sexta">Canal 6ª Elevación</option>
+          <option value="septima">Canal 7ª Elevación</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="select-partidor">2. Selecciona tu Partidor:</label>
+        <select id="select-partidor">
+          <option value="">Cargando lista...</option>
+        </select>
+      </div>
+
+      <div class="acciones-selector">
+        <button type="button" id="btn-confirmar-partidor" class="btn-guardar-p">Guardar partidor</button>
+        <button type="button" id="btn-cancelar-partidor" class="btn-cancelar-p">Cancelar</button>
+      </div>
     </div>
 
     <p class="aviso-orientativo">
@@ -259,7 +342,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
@@ -273,89 +356,207 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // Elementos del DOM
   const pantallaRegistro = document.getElementById("pantalla-registro");
   const pantallaPrincipal = document.getElementById("pantalla-principal");
   const formRegistro = document.getElementById("form-registro");
   const btnRegistrar = document.getElementById("btn-registrar");
   const selectorFecha = document.getElementById("selector-fecha");
 
-  // Poner la fecha de hoy por defecto en el selector
-  const hoy = new Date().toISOString().split('T')[0];
-  selectorFecha.value = hoy;
+  const contenedorMisPartidores = document.getElementById("contenedor-mis-partidores");
+  const btnMostrarSelector = document.getElementById("btn-mostrar-selector");
+  const cajaSelector = document.getElementById("caja-selector-partidor");
+  const selectCanal = document.getElementById("select-canal");
+  const selectPartidor = document.getElementById("select-partidor");
+
+  // Fecha de hoy por defecto
+  selectorFecha.value = new Date().toISOString().split('T')[0];
+
+  // Variables en memoria
+  let catalogoPartidores = []; // Todos los partidores de Firebase
+  let usuarioActual = null;    // Datos del regante en localStorage
 
   function verificarSesion() {
     const reganteGuardado = localStorage.getItem("regante_6y7");
     if (reganteGuardado) {
-      const datos = JSON.parse(reganteGuardado);
-      mostrarPanelPrincipal(datos);
+      usuarioActual = JSON.parse(reganteGuardado);
+      if (!usuarioActual.misPartidores) {
+        usuarioActual.misPartidores = [];
+      }
+      mostrarPanelPrincipal();
     } else {
       pantallaRegistro.classList.remove("oculto");
       pantallaPrincipal.classList.add("oculto");
     }
   }
 
-  function mostrarPanelPrincipal(datos) {
-    document.getElementById("saludo-nombre").textContent = datos.nombre;
-    document.getElementById("saludo-socio").textContent = datos.socio;
+  async function mostrarPanelPrincipal() {
+    document.getElementById("saludo-nombre").textContent = usuarioActual.nombre;
+    document.getElementById("saludo-socio").textContent = usuarioActual.socio;
     pantallaRegistro.classList.add("oculto");
     pantallaPrincipal.classList.remove("oculto");
-    cargarPartidores();
+
+    await cargarCatalogoPartidores();
+    pintarMisPartidores();
   }
 
-  // Cargar partidores desde Firebase y ordenarlos por desfase
-  async function cargarPartidores() {
-    const divSexta = document.getElementById("lista-sexta");
-    const divSeptima = document.getElementById("lista-septima");
-
+  // Descargar catálogo maestro de PARTIDORES para los desplegables
+  async function cargarCatalogoPartidores() {
     try {
       const snapshot = await getDocs(collection(db, "PARTIDORES"));
-      const partidores = [];
-      
-      snapshot.forEach((doc) => {
-        partidores.push({ id: doc.id, ...doc.data() });
+      catalogoPartidores = [];
+      snapshot.forEach((docSnap) => {
+        catalogoPartidores.push({ id: docSnap.id, ...docSnap.data() });
       });
-
-      // Ordenar por desfase de menor a mayor (según orden hidráulico del canal)
-      partidores.sort((a, b) => (a.desfase || 0) - (b.desfase || 0));
-
-      divSexta.innerHTML = "";
-      divSeptima.innerHTML = "";
-
-      let haySexta = false;
-      let haySeptima = false;
-
-      partidores.forEach((p) => {
-        const boton = document.createElement("button");
-        boton.className = "btn-partidor estado-sin-datos";
-        boton.innerHTML = `
-          <span>${p.nombre}</span>
-          <small>Desfase: ${p.desfase} min</small>
-        `;
-        
-        // Al pulsar un partidor (en el siguiente paso abriremos su ficha detallada)
-        boton.addEventListener("click", () => {
-          alert(`Partidor: ${p.nombre}\nCanal: ${p.canal}\nDesfase: ${p.desfase} min\nFecha: ${selectorFecha.value}\n\n(Aquí abriremos la ficha de turnos y edición)`);
-        });
-
-        const canalNormalizado = (p.canal || "").toUpperCase().trim();
-        if (canalNormalizado.includes("SEXTA") || canalNormalizado === "6") {
-          divSexta.appendChild(boton);
-          haySexta = true;
-        } else {
-          divSeptima.appendChild(boton);
-          haySeptima = true;
-        }
-      });
-
-      if (!haySexta) divSexta.innerHTML = "<p style='color:#64748b; font-size:0.9rem;'>Sin partidores registrados.</p>";
-      if (!haySeptima) divSeptima.innerHTML = "<p style='color:#64748b; font-size:0.9rem;'>Pendiente de añadir partidores de 7ª.</p>";
-
+      // Ordenar por desfase (orden hidráulico)
+      catalogoPartidores.sort((a, b) => (a.desfase || 0) - (b.desfase || 0));
+      actualizarDesplegablePartidores();
     } catch (error) {
-      console.error("Error cargando partidores:", error);
-      divSexta.innerHTML = "<p style='color:#dc2626;'>Error al cargar los datos.</p>";
+      console.error("Error cargando catálogo:", error);
     }
   }
 
+  // Filtrar el desplegable según el canal elegido (6ª o 7ª)
+  function actualizarDesplegablePartidores() {
+    const canalElegido = selectCanal.value; // "sexta" o "septima"
+    selectPartidor.innerHTML = "";
+
+    const filtrados = catalogoPartidores.filter((p) => {
+      const c = (p.canal || "").toLowerCase().trim();
+      if (canalElegido === "sexta") return c.includes("sexta") || c === "6";
+      return c.includes("septima") || c.includes("séptima") || c === "7";
+    });
+
+    if (filtrados.length === 0) {
+      selectPartidor.innerHTML = `<option value="">No hay partidores disponibles en este canal</option>`;
+      return;
+    }
+
+    filtrados.forEach((p) => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = `${p.nombre} (Desfase: ${p.desfase} min)`;
+      selectPartidor.appendChild(opt);
+    });
+  }
+
+  // Pintar únicamente los botones de los partidores que el regante ha guardado
+  function pintarMisPartidores() {
+    contenedorMisPartidores.innerHTML = "";
+
+    if (!usuarioActual.misPartidores || usuarioActual.misPartidores.length === 0) {
+      contenedorMisPartidores.innerHTML = `
+        <p style="color:#64748b; font-size:0.95rem; text-align:center; padding: 12px 0;">
+          Aún no tienes ningún partidor asignado.<br>Pulsa el botón inferior para añadir el tuyo.
+        </p>
+      `;
+      return;
+    }
+
+    usuarioActual.misPartidores.forEach((idPartidor) => {
+      // Buscar los datos actualizados en el catálogo de Firebase
+      const datosP = catalogoPartidores.find((item) => item.id === idPartidor);
+      if (!datosP) return;
+
+      const fila = document.createElement("div");
+      fila.className = "item-partidor";
+
+      const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+
+      const btn = document.createElement("button");
+      btn.className = "btn-partidor estado-sin-datos";
+      btn.innerHTML = `
+        <div>
+          <span>${datosP.nombre}</span>
+          <small>${canalTexto} · Desfase: ${datosP.desfase} min</small>
+        </div>
+        <span>➡️</span>
+      `;
+
+      btn.addEventListener("click", () => {
+        alert(`Abriendo ficha de: ${datosP.nombre} (${canalTexto})\nFecha: ${selectorFecha.value}\n\n(En el siguiente paso montamos la vista interior con la hora calculada, estado y observaciones)`);
+      });
+
+      const btnEliminar = document.createElement("button");
+      btnEliminar.className = "btn-quitar";
+      btnEliminar.title = "Quitar este partidor";
+      btnEliminar.textContent = "✕";
+      btnEliminar.addEventListener("click", () => quitarPartidorDeUsuario(idPartidor, datosP.nombre));
+
+      fila.appendChild(btn);
+      fila.appendChild(btnEliminar);
+      contenedorMisPartidores.appendChild(fila);
+    });
+  }
+
+  // Guardar nuevo partidor en el perfil del regante (localStorage + Firebase)
+  async function anadirPartidorAUsuario(idPartidor) {
+    if (!idPartidor) return;
+    if (usuarioActual.misPartidores.includes(idPartidor)) {
+      alert("Este partidor ya está en tu lista.");
+      cajaSelector.classList.add("oculto");
+      btnMostrarSelector.classList.remove("oculto");
+      return;
+    }
+
+    usuarioActual.misPartidores.push(idPartidor);
+    localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+
+    // Si tenemos el ID de su documento en Firestore, actualizamos también ahí
+    if (usuarioActual.docId) {
+      try {
+        await updateDoc(doc(db, "regantes", usuarioActual.docId), {
+          misPartidores: usuarioActual.misPartidores
+        });
+      } catch (e) {
+        console.error("No se pudo sincronizar partidor en Firebase:", e);
+      }
+    }
+
+    cajaSelector.classList.add("oculto");
+    btnMostrarSelector.classList.remove("oculto");
+    pintarMisPartidores();
+  }
+
+  // Quitar un partidor de la lista del regante
+  async function quitarPartidorDeUsuario(idPartidor, nombrePartidor) {
+    if (!confirm(`¿Quitar "${nombrePartidor}" de tu lista de partidores?`)) return;
+
+    usuarioActual.misPartidores = usuarioActual.misPartidores.filter((id) => id !== idPartidor);
+    localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+
+    if (usuarioActual.docId) {
+      try {
+        await updateDoc(doc(db, "regantes", usuarioActual.docId), {
+          misPartidores: usuarioActual.misPartidores
+        });
+      } catch (e) {
+        console.error("Error al quitar partidor en Firebase:", e);
+      }
+    }
+
+    pintarMisPartidores();
+  }
+
+  // Eventos del selector de partidores
+  btnMostrarSelector.addEventListener("click", () => {
+    btnMostrarSelector.classList.add("oculto");
+    cajaSelector.classList.remove("oculto");
+    actualizarDesplegablePartidores();
+  });
+
+  document.getElementById("btn-cancelar-partidor").addEventListener("click", () => {
+    cajaSelector.classList.add("oculto");
+    btnMostrarSelector.classList.remove("oculto");
+  });
+
+  selectCanal.addEventListener("change", actualizarDesplegablePartidores);
+
+  document.getElementById("btn-confirmar-partidor").addEventListener("click", () => {
+    anadirPartidorAUsuario(selectPartidor.value);
+  });
+
+  // Registro inicial del regante
   formRegistro.addEventListener("submit", async (e) => {
     e.preventDefault();
     const socio = document.getElementById("socio").value.trim();
@@ -369,16 +570,25 @@
     btnRegistrar.textContent = "Guardando datos...";
 
     try {
-      await addDoc(collection(db, "regantes"), {
+      const docRef = await addDoc(collection(db, "regantes"), {
         socio,
         nombre,
         telefono,
         consentimiento: true,
+        misPartidores: [],
         fechaRegistro: serverTimestamp()
       });
 
-      localStorage.setItem("regante_6y7", JSON.stringify({ socio, nombre, telefono }));
-      mostrarPanelPrincipal({ socio, nombre });
+      usuarioActual = {
+        docId: docRef.id,
+        socio,
+        nombre,
+        telefono,
+        misPartidores: []
+      };
+
+      localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+      mostrarPanelPrincipal();
     } catch (error) {
       console.error("Error al registrar:", error);
       alert("Error al guardar el registro.");
@@ -390,6 +600,7 @@
 
   document.getElementById("btn-salir").addEventListener("click", () => {
     localStorage.removeItem("regante_6y7");
+    usuarioActual = null;
     formRegistro.reset();
     verificarSesion();
   });
