@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riegos 6ª y 7ª Elevación</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 16px;
+      color: #1e293b;
+    }
+    .card {
+      background: white;
+      max-width: 500px;
+      margin: 12px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-top: 0;
+      color: #0f4c81;
+      text-align: center;
+      font-size: 1.35rem;
+    }
+    h3 {
+      color: #0f4c81;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 22px;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    input[type="text"], input[type="tel"], input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      background: #fff;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 18px 0;
+      font-size: 0.9rem;
+      color: #475569;
+    }
+    .checkbox-group input {
+      margin-top: 3px;
+      transform: scale(1.2);
+    }
+    button.btn-primario {
+      width: 100%;
+      padding: 14px;
+      background-color: #0f4c81;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.btn-primario:disabled {
+      background-color: #94a3b8;
+    }
+    .btn-secundario {
+      width: 100%;
+      background-color: #e2e8f0;
+      color: #334155;
+      border: none;
+      border-radius: 8px;
+      margin-top: 24px;
+      font-size: 0.9rem;
+      padding: 10px;
+      cursor: pointer;
+    }
+    .oculto {
+      display: none;
+    }
+    .cabecera-usuario {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #e0f2fe;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: #0369a1;
+    }
+    /* Leyenda de colores */
+    .leyenda {
+      display: flex;
+      justify-content: space-around;
+      font-size: 0.8rem;
+      margin: 12px 0;
+      background: #f8fafc;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .leyenda span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+    .punto {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    /* Botones físicos de partidores */
+    .grid-partidores {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .btn-partidor {
+      padding: 14px 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.18);
+      transition: transform 0.1s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+    }
+    .btn-partidor:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.18);
+    }
+    .btn-partidor small {
+      font-weight: normal;
+      font-size: 0.75rem;
+      margin-top: 4px;
+      opacity: 0.9;
+    }
+    /* Estados de color */
+    .estado-sin-datos {
+      background-color: #e2e8f0;
+      color: #334155;
+    }
+    .estado-verde {
+      background-color: #16a34a;
+      color: white;
+    }
+    .estado-naranja {
+      background-color: #ea580c;
+      color: white;
+    }
+    .estado-rojo {
+      background-color: #dc2626;
+      color: white;
+    }
+    .aviso-orientativo {
+      font-size: 0.8rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 18px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PANTALLA 1: REGISTRO DE REGANTE -->
+  <div id="pantalla-registro" class="card oculto">
+    <h2>Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
+    <p style="text-align: center; color: #64748b; font-size: 0.9rem;">
+      Regístrate una única vez para consultar los turnos de riego en tiempo real.
+    </p>
+    
+    <form id="form-registro">
+      <div class="form-group">
+        <label for="socio">Número de Socio / Comunero</label>
+        <input type="text" id="socio" placeholder="Ej: 1045" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nombre">Nombre y Apellidos</label>
+        <input type="text" id="nombre" placeholder="Ej: Juan Pérez García" required>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono móvil</label>
+        <input type="tel" id="telefono" placeholder="Ej: 600123456" required>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="consentimiento" required>
+        <label for="consentimiento" style="font-weight: normal; margin: 0;">
+          Acepto el registro de mis datos para la gestión y consulta de turnos de riego de la Comunidad.
+        </label>
+      </div>
+
+      <button type="submit" id="btn-registrar" class="btn-primario">Acceder a los riegos</button>
+    </form>
+  </div>
+
+  <!-- PANTALLA 2: PANEL PRINCIPAL DE PARTIDORES -->
+  <div id="pantalla-principal" class="card oculto">
+    <div class="cabecera-usuario">
+      <span>👤 <strong id="saludo-nombre"></strong></span>
+      <span>Socio: <strong id="saludo-socio"></strong></span>
+    </div>
+
+    <h2>Turnos de Riego</h2>
+
+    <div class="form-group">
+      <label for="selector-fecha">Selecciona fecha de riego:</label>
+      <input type="date" id="selector-fecha">
+    </div>
+
+    <div class="leyenda">
+      <span><i class="punto" style="background:#16a34a;"></i> Regando</span>
+      <span><i class="punto" style="background:#ea580c;"></i> Pendiente</span>
+      <span><i class="punto" style="background:#dc2626;"></i> Finalizado</span>
+    </div>
+
+    <h3>Canal 6ª Elevación</h3>
+    <div id="lista-sexta" class="grid-partidores">
+      <p style="color:#64748b; font-size:0.9rem;">Cargando partidores...</p>
+    </div>
+
+    <h3>Canal 7ª Elevación</h3>
+    <div id="lista-septima" class="grid-partidores">
+      <p style="color:#64748b; font-size:0.9rem;">Cargando partidores...</p>
+    </div>
+
+    <p class="aviso-orientativo">
+      * Los horarios mostrados son orientativos y están sujetos a variaciones por caudal o incidencias en la red.
+    </p>
+
+    <button type="button" id="btn-salir" class="btn-secundario">Cerrar sesión (Prueba)</button>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
+    authDomain: "sexta-y-septima-riego.firebaseapp.com",
+    projectId: "sexta-y-septima-riego",
+    storageBucket: "sexta-y-septima-riego.firebasestorage.app",
+    messagingSenderId: "1031850424918",
+    appId: "1:1031850424918:web:89508ea107686feaf4d9f7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const pantallaRegistro = document.getElementById("pantalla-registro");
+  const pantallaPrincipal = document.getElementById("pantalla-principal");
+  const formRegistro = document.getElementById("form-registro");
+  const btnRegistrar = document.getElementById("btn-registrar");
+  const selectorFecha = document.getElementById("selector-fecha");
+
+  // Poner la fecha de hoy por defecto en el selector
+  const hoy = new Date().toISOString().split('T')[0];
+  selectorFecha.value = hoy;
+
+  function verificarSesion() {
+    const reganteGuardado = localStorage.getItem("regante_6y7");
+    if (reganteGuardado) {
+      const datos = JSON.parse(reganteGuardado);
+      mostrarPanelPrincipal(datos);
+    } else {
+      pantallaRegistro.classList.remove("oculto");
+      pantallaPrincipal.classList.add("oculto");
+    }
+  }
+
+  function mostrarPanelPrincipal(datos) {
+    document.getElementById("saludo-nombre").textContent = datos.nombre;
+    document.getElementById("saludo-socio").textContent = datos.socio;
+    pantallaRegistro.classList.add("oculto");
+    pantallaPrincipal.classList.remove("oculto");
+    cargarPartidores();
+  }
+
+  // Cargar partidores desde Firebase y ordenarlos por desfase
+  async function cargarPartidores() {
+    const divSexta = document.getElementById("lista-sexta");
+    const divSeptima = document.getElementById("lista-septima");
+
+    try {
+      const snapshot = await getDocs(collection(db, "partidores"));
+      const partidores = [];
+      
+      snapshot.forEach((doc) => {
+        partidores.push({ id: doc.id, ...doc.data() });
+      });
+
+      // Ordenar por desfase de menor a mayor (según orden hidráulico del canal)
+      partidores.sort((a, b) => (a.desfase || 0) - (b.desfase || 0));
+
+      divSexta.innerHTML = "";
+      divSeptima.innerHTML = "";
+
+      let haySexta = false;
+      let haySeptima = false;
+
+      partidores.forEach((p) => {
+        const boton = document.createElement("button");
+        boton.className = "btn-partidor estado-sin-datos";
+        boton.innerHTML = `
+          <span>${p.nombre}</span>
+          <small>Desfase: ${p.desfase} min</small>
+        `;
+        
+        // Al pulsar un partidor (en el siguiente paso abriremos su ficha detallada)
+        boton.addEventListener("click", () => {
+          alert(`Partidor: ${p.nombre}\nCanal: ${p.canal}\nDesfase: ${p.desfase} min\nFecha: ${selectorFecha.value}\n\n(Aquí abriremos la ficha de turnos y edición)`);
+        });
+
+        const canalNormalizado = (p.canal || "").toUpperCase().trim();
+        if (canalNormalizado.includes("SEXTA") || canalNormalizado === "6") {
+          divSexta.appendChild(boton);
+          haySexta = true;
+        } else {
+          divSeptima.appendChild(boton);
+          haySeptima = true;
+        }
+      });
+
+      if (!haySexta) divSexta.innerHTML = "<p style='color:#64748b; font-size:0.9rem;'>Sin partidores registrados.</p>";
+      if (!haySeptima) divSeptima.innerHTML = "<p style='color:#64748b; font-size:0.9rem;'>Pendiente de añadir partidores de 7ª.</p>";
+
+    } catch (error) {
+      console.error("Error cargando partidores:", error);
+      divSexta.innerHTML = "<p style='color:#dc2626;'>Error al cargar los datos.</p>";
+    }
+  }
+
+  formRegistro.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const socio = document.getElementById("socio").value.trim();
+    const nombre = document.getElementById("nombre").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+    const consentimiento = document.getElementById("consentimiento").checked;
+
+    if (!consentimiento) return;
+
+    btnRegistrar.disabled = true;
+    btnRegistrar.textContent = "Guardando datos...";
+
+    try {
+      await addDoc(collection(db, "regantes"), {
+        socio,
+        nombre,
+        telefono,
+        consentimiento: true,
+        fechaRegistro: serverTimestamp()
+      });
+
+      localStorage.setItem("regante_6y7", JSON.stringify({ socio, nombre, telefono }));
+      mostrarPanelPrincipal({ socio, nombre });
+    } catch (error) {
+      console.error("Error al registrar:", error);
+      alert("Error al guardar el registro.");
+    } finally {
+      btnRegistrar.disabled = false;
+      btnRegistrar.textContent = "Acceder a los riegos";
+    }
+  });
+
+  document.getElementById("btn-salir").addEventListener("click", () => {
+    localStorage.removeItem("regante_6y7");
+    formRegistro.reset();
+    verificarSesion();
+  });
+
+  verificarSesion();
+</script>
+</body>
+</html>
