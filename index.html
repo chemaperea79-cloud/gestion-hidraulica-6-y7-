@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Riegos 6ª y 7ª Elevación</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f4c81">
+  <link rel="apple-touch-icon" href="./icono-app.jpg">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -482,6 +485,23 @@
 
   <div id="visor-error-emergencia"></div>
 
+  <!-- BANNER DE INSTALACIÓN PWA -->
+  <div id="caja-instalar-pwa" class="card oculto" style="background:#eff6ff; border:2px solid #0f4c81; text-align:center; padding:14px;">
+    <p style="margin:0 0 10px 0; font-weight:700; color:#0f4c81; font-size:0.95rem;">
+      📱 Pon el icono en tu móvil para entrar con un solo toque
+    </p>
+    <button type="button" id="btn-instalar-pwa" class="btn-primario" style="background:#0f4c81; font-size:1rem;">
+      📲 Instalar aplicación en mi móvil
+    </button>
+    <div id="instrucciones-ios-pwa" class="oculto" style="margin-top:12px; background:white; padding:12px; border-radius:8px; border:1px solid #bfdbfe; text-align:left; font-size:0.88rem; color:#1e293b;">
+      <strong>En iPhone (Safari):</strong>
+      <ol style="margin:6px 0 0 0; padding-left:20px; line-height:1.5;">
+        <li>Pulsa el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba ⬆️) abajo en el centro.</li>
+        <li>Desliza hacia abajo y toca en <strong>"Añadir a pantalla de inicio"</strong>.</li>
+      </ol>
+    </div>
+  </div>
+
   <!-- PANTALLA 1: REGISTRO DE REGANTE -->
   <div id="pantalla-registro" class="card">
     <h2>Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
@@ -766,7 +786,7 @@
   };
 
   (async function iniciarAplicacion() {
-    const APP_DATA_VERSION = "v5_privacidad_atras";
+    const APP_DATA_VERSION = "v6_pwa_completa";
     try {
       const versionGuardada = localStorage.getItem("app_version_6y7");
       if (versionGuardada !== APP_DATA_VERSION) {
@@ -851,7 +871,6 @@
     let unsubscribeTurnosVivo = null;
     let ultimaNotificacionEnviada = "";
 
-    // GESTIÓN DEL BOTÓN ATRÁS DEL MÓVIL (EVITA SALIR DEL NAVEGADOR AL VOLVER DE UN PARTIDOR)
     function regresarAPanelDesdeFicha() {
       detenerEscuchasEnVivo();
       seleccionAbierta = null;
@@ -1027,7 +1046,7 @@
 
           new Notification(titulo, {
             body: cuerpo,
-            icon: "https://cdn-icons-png.flaticon.com/512/3105/3105807.png"
+            icon: "./icono-app.jpg"
           });
         } catch (e) {}
       }
@@ -1490,7 +1509,6 @@
 
         const esMio = usuarioActual && turno.socio === usuarioActual.socio && turno.nombre === usuarioActual.nombre;
 
-        // Visibilidad del teléfono: por defecto visible; si marcó ocultar, solo lo ve el propio usuario o Admin
         let bloqueTelefonoHTML = "";
         if (turno.ocultarTelefono && !esMio && !esAdmin) {
           bloqueTelefonoHTML = `<span class="turno-tel-oculto">🔒 Teléfono oculto</span>`;
@@ -1557,7 +1575,7 @@
           tarjeta.appendChild(pie);
         }
 
-        contenedor.appendChild(tarjeta);
+          contenedor.appendChild(tarjeta);
       });
     }
 
@@ -1571,7 +1589,6 @@
       seleccionAbierta = { datosP, tomaObj };
       miTurnoDocId = null;
 
-      // Registrar estado en el historial del navegador para que el botón "Atrás" del móvil vuelva aquí
       try {
         history.pushState({ vista: "ficha", partidorId: datosP.id }, "", "#partidor");
       } catch (e) {}
@@ -1984,6 +2001,50 @@
       formRegistro.reset();
       verificarSesion();
     });
+
+    // REGISTRO DE PWA Y BOTÓN DE INSTALACIÓN FÁCIL
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+
+    let eventoInstalacionPWA = null;
+    const cajaInstalarPWA = document.getElementById("caja-instalar-pwa");
+    const btnInstalarPWA = document.getElementById("btn-instalar-pwa");
+    const instruccionesIOS = document.getElementById("instrucciones-ios-pwa");
+
+    const yaInstalada = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+    if (!yaInstalada) {
+      if (esIOS) {
+        cajaInstalarPWA.classList.remove("oculto");
+      }
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        eventoInstalacionPWA = e;
+        cajaInstalarPWA.classList.remove("oculto");
+      });
+
+      btnInstalarPWA.addEventListener("click", async () => {
+        if (eventoInstalacionPWA) {
+          eventoInstalacionPWA.prompt();
+          const { outcome } = await eventoInstalacionPWA.userChoice;
+          if (outcome === "accepted") {
+            cajaInstalarPWA.classList.add("oculto");
+          }
+          eventoInstalacionPWA = null;
+        } else if (esIOS) {
+          instruccionesIOS.classList.toggle("oculto");
+        } else {
+          alert("Pulsa los tres puntos arriba a la derecha de tu navegador y toca en 'Instalar aplicación' o 'Añadir a pantalla de inicio'.");
+        }
+      });
+
+      window.addEventListener("appinstalled", () => {
+        cajaInstalarPWA.classList.add("oculto");
+      });
+    }
 
     verificarSesion();
   })();
