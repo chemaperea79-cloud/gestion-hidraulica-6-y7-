@@ -305,6 +305,12 @@
     }
     .celda-fija.destacada { background: #eff6ff; border: 1px solid #93c5fd; grid-column: span 2; }
     .celda-fija.prevision-box { background: #fffbeb; border: 1px solid #fcd34d; grid-column: span 2; }
+    .celda-fija.apertura-verde { background: #dcfce7; border: 2px solid #16a34a; }
+    .celda-fija.apertura-verde span { color: #166534; }
+    .celda-fija.apertura-verde strong { color: #15803d; }
+    .celda-fija.apertura-naranja { background: #ffedd5; border: 2px solid #ea580c; }
+    .celda-fija.apertura-naranja span { color: #9a3412; }
+    .celda-fija.apertura-naranja strong { color: #c2410c; }
     .celda-fija span {
       display: block;
       font-size: 0.74rem;
@@ -364,6 +370,8 @@
       border-radius: 6px;
       padding: 7px 9px;
     }
+    .turno-dato-item.item-verde { background: #dcfce7; border-color: #86efac; }
+    .turno-dato-item.item-naranja { background: #ffedd5; border-color: #fdba74; }
     .turno-dato-item.destacado-lista {
       grid-column: span 2;
       background: #eff6ff;
@@ -409,6 +417,13 @@
       margin-top: 20px;
     }
     .panel-edicion-admin h4 { margin-top: 0; color: #b45309; margin-bottom: 12px; }
+    .caja-admin-bloque {
+      background: #ffffff;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
     .banner-modo-admin {
       background: #fef3c7;
       border: 1px solid #f59e0b;
@@ -445,17 +460,7 @@
 
   <div id="visor-error-emergencia"></div>
 
-  <script>
-    window.onerror = function(msg, url, line) {
-      var box = document.getElementById("visor-error-emergencia");
-      if (box) {
-        box.style.display = "block";
-        box.innerHTML = "<strong>Error detectado (línea " + line + "):</strong> " + msg;
-      }
-    };
-  </script>
-
-  <!-- PANTALLA 1: REGISTRO DE REGANTE (VISIBLE POR DEFECTO HASTA COMPROBAR SESIÓN) -->
+  <!-- PANTALLA 1: REGISTRO DE REGANTE -->
   <div id="pantalla-registro" class="card">
     <h2>Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
     <p style="text-align: center; color: #64748b; font-size: 0.9rem;">
@@ -521,7 +526,7 @@
     </div>
 
     <div class="leyenda">
-      <span><i class="punto" style="background:#16a34a;"></i> Regando</span>
+      <span><i class="punto" style="background:#16a34a;"></i> En hora / Regando</span>
       <span><i class="punto" style="background:#ea580c;"></i> Retraso / Previsión</span>
       <span><i class="punto" style="background:#dc2626;"></i> Cerrado</span>
     </div>
@@ -639,13 +644,13 @@
             <strong id="fijo-hora-maquinas">--:--</strong>
             <small id="fijo-desfase-canal">Desfase canal: -- min</small>
           </div>
-          <div class="celda-fija">
-            <span>Apertura del partidor</span>
+          <div id="celda-fija-partidor" class="celda-fija">
+            <span id="etiqueta-fijo-partidor">Apertura del partidor</span>
             <strong id="fijo-hora-partidor">--:--</strong>
             <small id="fijo-detalle-partidor">Según desfase por defecto</small>
           </div>
           <div class="celda-fija prevision-box">
-            <span>Previsión de apertura del partidor (Capataz)</span>
+            <span>Previsión de apertura del partidor</span>
             <strong id="fijo-prevision-admin">Sin especificar</strong>
             <small id="fijo-detalle-prevision">Calculado con desfase por defecto desde máquinas</small>
           </div>
@@ -668,1072 +673,1265 @@
     </div>
 
     <div id="panel-edicion-admin" class="panel-edicion-admin oculto">
-      <h4>🛠️ Actualizar estado del partidor (Capataz)</h4>
+      <h4>🛠️ Control del Partidor (Capataz)</h4>
 
-      <div class="form-group">
-        <label for="admin-estado">Estado / Color del partidor:</label>
-        <select id="admin-estado">
-          <option value="sin_datos">⚪ Sin programar / Neutro</option>
-          <option value="naranja">🟠 Retraso / Previsión de apertura</option>
-          <option value="verde">🟢 Abierto / Regando</option>
-          <option value="rojo">🔴 Cerrado / Riego finalizado</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Previsión de apertura del partidor (si lleva retraso o cambia la hora):</label>
+      <div class="caja-admin-bloque">
+        <label>1. Previsión de apertura (si vas con retraso antes de abrir):</label>
         <div class="caja-hora-numerica">
           <input type="text" id="admin-prev-hh" inputmode="numeric" maxlength="2" placeholder="HH">
           <span class="separador-hora">:</span>
           <input type="text" id="admin-prev-mm" inputmode="numeric" maxlength="2" placeholder="MM">
         </div>
         <small style="color:#92400e; display:block; margin-top:4px; font-size:0.78rem;">
-          Déjalo vacío para dejar "Sin especificar". Si lleva retraso respecto a máquinas, pasará automáticamente a Naranja y recalculará toda la lista.
+          Modifica los horarios en naranja para avisar a los regantes. Se borrará automáticamente al marcar la hora real de apertura.
+        </small>
+      </div>
+
+      <div class="caja-admin-bloque" style="border-color:#86efac; background:#f0fdf4;">
+        <label style="color:#166534;">2. Hora real de apertura del partidor (al abrir):</label>
+        <div class="caja-hora-numerica">
+          <input type="text" id="admin-real-hh" inputmode="numeric" maxlength="2" placeholder="HH">
+          <span class="separador-hora">:</span>
+          <input type="text" id="admin-real-mm" inputmode="numeric" maxlength="2" placeholder="MM">
+        </div>
+        <small style="color:#166534; display:block; margin-top:4px; font-size:0.78rem;">
+          Al rellenar esta hora: vacía la previsión, fija los horarios definitivos, marca en <strong>Verde</strong> si fue puntual o en <strong>Naranja</strong> con los minutos de retraso.
         </small>
       </div>
 
       <div class="form-group">
-        <label for="admin-observaciones">Observaciones para los regantes (opcional):</label>
+        <label for="admin-estado">3. Estado manual / Cierre del partidor:</label>
+        <select id="admin-estado">
+          <option value="sin_datos">⚪ Automático / Sin programar</option>
+          <option value="naranja">🟠 Retraso / Previsión</option>
+          <option value="verde">🟢 Abierto / En hora</option>
+          <option value="rojo">🔴 Cerrado / Riego finalizado</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="admin-observaciones">4. Observaciones para los regantes (opcional):</label>
         <textarea id="admin-observaciones" rows="2" placeholder="Ej: Retraso por limpieza de rejilla, caudal normal..."></textarea>
       </div>
 
       <button type="button" id="btn-guardar-estado-riego" class="btn-primario" style="background:#b45309;">
-        💾 Guardar estado y recalcular turnos
+        💾 Guardar y actualizar horarios
       </button>
     </div>
   </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
-
-  const APP_DATA_VERSION = "v3_turnos_fijos";
-  try {
-    const versionGuardada = localStorage.getItem("app_version_6y7");
-    if (versionGuardada !== APP_DATA_VERSION) {
-      const sesionAnterior = localStorage.getItem("regante_6y7");
-      if (sesionAnterior) {
-        const parsed = JSON.parse(sesionAnterior);
-        if (!parsed || typeof parsed !== "object" || !parsed.nombre) {
-          localStorage.removeItem("regante_6y7");
-        }
-      }
-      localStorage.setItem("app_version_6y7", APP_DATA_VERSION);
+<script>
+  function mostrarErrorEnPantalla(texto) {
+    var box = document.getElementById("visor-error-emergencia");
+    if (box) {
+      box.style.display = "block";
+      box.innerHTML = "<strong>Aviso del sistema:</strong> " + texto;
     }
-  } catch (e) {
-    localStorage.clear();
-    localStorage.setItem("app_version_6y7", APP_DATA_VERSION);
   }
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
-    authDomain: "sexta-y-septima-riego.firebaseapp.com",
-    projectId: "sexta-y-septima-riego",
-    storageBucket: "sexta-y-septima-riego.firebasestorage.app",
-    messagingSenderId: "1031850424918",
-    appId: "1:1031850424918:web:89508ea107686feaf4d9f7"
+  window.onerror = function(msg, url, line) {
+    mostrarErrorEnPantalla("Línea " + line + ": " + msg);
+    return false;
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const CLAVE_ADMIN = "6767";
+  window.onunhandledrejection = function(event) {
+    var motivo = event && event.reason ? (event.reason.message || String(event.reason)) : "Error de conexión";
+    mostrarErrorEnPantalla(motivo);
+  };
 
-  const pantallaRegistro = document.getElementById("pantalla-registro");
-  const pantallaPrincipal = document.getElementById("pantalla-principal");
-  const pantallaFicha = document.getElementById("pantalla-ficha");
-
-  const formRegistro = document.getElementById("form-registro");
-  const btnRegistrar = document.getElementById("btn-registrar");
-  const selectorFecha = document.getElementById("selector-fecha");
-
-  const contenedorMisPartidores = document.getElementById("contenedor-mis-partidores");
-  const btnMostrarSelector = document.getElementById("btn-mostrar-selector");
-  const cajaSelector = document.getElementById("caja-selector-partidor");
-  const selectCanal = document.getElementById("select-canal");
-  const selectPartidor = document.getElementById("select-partidor");
-
-  selectorFecha.value = new Date().toISOString().split('T')[0];
-
-  let catalogoPartidores = [];
-  let estadosDelDia = {};
-  let turnosDelPartidor = [];
-  let usuarioActual = null;
-  let esAdmin = localStorage.getItem("admin_6y7") === "true";
-  let verTodosAdmin = false;
-  let seleccionAbierta = null;
-  let miTurnoDocId = null;
-  let unsubscribeEstadoVivo = null;
-  let unsubscribeTurnosVivo = null;
-  let ultimaNotificacionEnviada = "";
-
-  function configurarInputsHora(idHH, idMM, onChangeCallback) {
-    const inpH = document.getElementById(idHH);
-    const inpM = document.getElementById(idMM);
-
-    inpH.addEventListener("input", () => {
-      inpH.value = inpH.value.replace(/\D/g, "").slice(0, 2);
-      if (parseInt(inpH.value, 10) > 23) inpH.value = "23";
-      if (inpH.value.length === 2) inpM.focus();
-      if (onChangeCallback) onChangeCallback();
-    });
-
-    inpM.addEventListener("input", () => {
-      inpM.value = inpM.value.replace(/\D/g, "").slice(0, 2);
-      if (parseInt(inpM.value, 10) > 59) inpM.value = "59";
-      if (onChangeCallback) onChangeCallback();
-    });
-
-    inpH.addEventListener("blur", () => {
-      if (inpH.value.length === 1) inpH.value = inpH.value.padStart(2, "0");
-      if (onChangeCallback) onChangeCallback();
-    });
-
-    inpM.addEventListener("blur", () => {
-      if (inpM.value.length === 1) inpM.value = inpM.value.padStart(2, "0");
-      if (onChangeCallback) onChangeCallback();
-    });
-  }
-
-  function leerHoraDeInputs(idHH, idMM) {
-    const h = document.getElementById(idHH).value.trim();
-    const m = document.getElementById(idMM).value.trim();
-    if (h === "" && m === "") return "";
-    const hh = String(Math.min(23, Math.max(0, parseInt(h || "0", 10)))).padStart(2, "0");
-    const mm = String(Math.min(59, Math.max(0, parseInt(m || "0", 10)))).padStart(2, "0");
-    return `${hh}:${mm}`;
-  }
-
-  function rellenarInputsHora(idHH, idMM, horaStr) {
-    if (!horaStr || !horaStr.includes(":")) {
-      document.getElementById(idHH).value = "";
-      document.getElementById(idMM).value = "";
-      return;
+  (async function iniciarAplicacion() {
+    // 1. SANEADO DE VERSIÓN PARA EVITAR BLOQUEOS POR DATOS ANTIGUOS
+    const APP_DATA_VERSION = "v4_blindado";
+    try {
+      const versionGuardada = localStorage.getItem("app_version_6y7");
+      if (versionGuardada !== APP_DATA_VERSION) {
+        const sesionAnterior = localStorage.getItem("regante_6y7");
+        if (sesionAnterior) {
+          const parsed = JSON.parse(sesionAnterior);
+          if (!parsed || typeof parsed !== "object" || !parsed.nombre) {
+            localStorage.removeItem("regante_6y7");
+          }
+        }
+        localStorage.setItem("app_version_6y7", APP_DATA_VERSION);
+      }
+    } catch (e) {
+      try {
+        localStorage.clear();
+        localStorage.setItem("app_version_6y7", APP_DATA_VERSION);
+      } catch (err) {}
     }
-    const [hh, mm] = horaStr.split(":");
-    document.getElementById(idHH).value = hh;
-    document.getElementById(idMM).value = mm;
-  }
 
-  function formatearNombreToma(valor) {
-    const limpio = (valor || "").trim();
-    if (!limpio) return "Toma 1";
-    if (/^toma\b/i.test(limpio)) {
-      return limpio.charAt(0).toUpperCase() + limpio.slice(1);
+    // 2. CARGA SEGURA DE FIREBASE (SI FALLA LA RED NO DEJA PANTALLA EN BLANCO)
+    let fbApp, db, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp;
+    let firebaseListo = false;
+
+    try {
+      const fbAppMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+      const fbDbMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+
+      collection = fbDbMod.collection;
+      addDoc = fbDbMod.addDoc;
+      getDocs = fbDbMod.getDocs;
+      doc = fbDbMod.doc;
+      setDoc = fbDbMod.setDoc;
+      updateDoc = fbDbMod.updateDoc;
+      deleteDoc = fbDbMod.deleteDoc;
+      query = fbDbMod.query;
+      where = fbDbMod.where;
+      onSnapshot = fbDbMod.onSnapshot;
+      serverTimestamp = fbDbMod.serverTimestamp;
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
+        authDomain: "sexta-y-septima-riego.firebaseapp.com",
+        projectId: "sexta-y-septima-riego",
+        storageBucket: "sexta-y-septima-riego.firebasestorage.app",
+        messagingSenderId: "1031850424918",
+        appId: "1:1031850424918:web:89508ea107686feaf4d9f7"
+      };
+
+      fbApp = fbAppMod.initializeApp(firebaseConfig);
+      db = fbDbMod.getFirestore(fbApp);
+      firebaseListo = true;
+    } catch (errFirebase) {
+      mostrarErrorEnPantalla("No se pudo conectar con el servidor de datos. Comprueba tu conexión a internet y recarga.");
     }
-    return `Toma ${limpio}`;
-  }
 
-  function sumarMinutosAHora(horaStr, minutosASumar) {
-    if (!horaStr || !horaStr.includes(":")) return null;
-    const base = horaStr.split(" ")[0];
-    const [hh, mm] = base.split(":").map(Number);
-    const desfase = Number(minutosASumar) || 0;
-    const totalMinutos = hh * 60 + mm + desfase;
-    
-    const diasExtra = Math.floor(totalMinutos / 1440);
-    const minDia = ((totalMinutos % 1440) + 1440) % 1440;
-    
-    const hFinal = String(Math.floor(minDia / 60)).padStart(2, "0");
-    const mFinal = String(minDia % 60).padStart(2, "0");
-    
-    return diasExtra > 0 ? `${hFinal}:${mFinal} (+${diasExtra}d)` : `${hFinal}:${mFinal}`;
-  }
+    const CLAVE_ADMIN = "6767";
 
-  function horaAMinutos(horaStr) {
-    if (!horaStr || !horaStr.includes(":")) return 99999;
-    const base = horaStr.split(" ")[0];
-    const [hh, mm] = base.split(":").map(Number);
-    return hh * 60 + mm;
-  }
+    const pantallaRegistro = document.getElementById("pantalla-registro");
+    const pantallaPrincipal = document.getElementById("pantalla-principal");
+    const pantallaFicha = document.getElementById("pantalla-ficha");
 
-  function calcularDesplazamientoRetraso(previsionAdmin, desfasePartidor, listaTurnos) {
-    if (!previsionAdmin || !previsionAdmin.includes(":")) return 0;
-    const minPrevision = horaAMinutos(previsionAdmin);
+    const formRegistro = document.getElementById("form-registro");
+    const btnRegistrar = document.getElementById("btn-registrar");
+    const selectorFecha = document.getElementById("selector-fecha");
 
-    if (listaTurnos && listaTurnos.length > 0) {
-      const ordenados = [...listaTurnos].sort((a, b) => horaAMinutos(a.horaMaquinas) - horaAMinutos(b.horaMaquinas));
-      const primerTurno = ordenados[0];
-      const horaTeoricaPrimero = sumarMinutosAHora(primerTurno.horaMaquinas, desfasePartidor);
-      const minTeoricoPrimero = horaAMinutos(horaTeoricaPrimero);
-      return minPrevision - minTeoricoPrimero;
+    const contenedorMisPartidores = document.getElementById("contenedor-mis-partidores");
+    const btnMostrarSelector = document.getElementById("btn-mostrar-selector");
+    const cajaSelector = document.getElementById("caja-selector-partidor");
+    const selectCanal = document.getElementById("select-canal");
+    const selectPartidor = document.getElementById("select-partidor");
+
+    selectorFecha.value = new Date().toISOString().split('T')[0];
+
+    let catalogoPartidores = [];
+    let estadosDelDia = {};
+    let turnosDelPartidor = [];
+    let usuarioActual = null;
+    let esAdmin = localStorage.getItem("admin_6y7") === "true";
+    let verTodosAdmin = false;
+    let seleccionAbierta = null;
+    let miTurnoDocId = null;
+    let unsubscribeEstadoVivo = null;
+    let unsubscribeTurnosVivo = null;
+    let ultimaNotificacionEnviada = "";
+
+    function configurarInputsHora(idHH, idMM, onChangeCallback) {
+      const inpH = document.getElementById(idHH);
+      const inpM = document.getElementById(idMM);
+      if (!inpH || !inpM) return;
+
+      inpH.addEventListener("input", () => {
+        inpH.value = inpH.value.replace(/\D/g, "").slice(0, 2);
+        if (parseInt(inpH.value, 10) > 23) inpH.value = "23";
+        if (inpH.value.length === 2) inpM.focus();
+        if (onChangeCallback) onChangeCallback();
+      });
+
+      inpM.addEventListener("input", () => {
+        inpM.value = inpM.value.replace(/\D/g, "").slice(0, 2);
+        if (parseInt(inpM.value, 10) > 59) inpM.value = "59";
+        if (onChangeCallback) onChangeCallback();
+      });
+
+      inpH.addEventListener("blur", () => {
+        if (inpH.value.length === 1) inpH.value = inpH.value.padStart(2, "0");
+        if (onChangeCallback) onChangeCallback();
+      });
+
+      inpM.addEventListener("blur", () => {
+        if (inpM.value.length === 1) inpM.value = inpM.value.padStart(2, "0");
+        if (onChangeCallback) onChangeCallback();
+      });
     }
-    return 0;
-  }
 
-  function calcularTiemposTurno(horaMaquinas, desfasePartidor, desfaseToma, previsionAdmin, listaTurnos) {
-    const dPart = Number(desfasePartidor) || 0;
-    const dToma = Number(desfaseToma) || 0;
+    function leerHoraDeInputs(idHH, idMM) {
+      const h = document.getElementById(idHH).value.trim();
+      const m = document.getElementById(idMM).value.trim();
+      if (h === "" && m === "") return "";
+      const hh = String(Math.min(23, Math.max(0, parseInt(h || "0", 10)))).padStart(2, "0");
+      const mm = String(Math.min(59, Math.max(0, parseInt(m || "0", 10)))).padStart(2, "0");
+      return `${hh}:${mm}`;
+    }
 
-    if (!horaMaquinas || !horaMaquinas.includes(":")) {
+    function rellenarInputsHora(idHH, idMM, horaStr) {
+      if (!horaStr || !horaStr.includes(":")) {
+        document.getElementById(idHH).value = "";
+        document.getElementById(idMM).value = "";
+        return;
+      }
+      const [hh, mm] = horaStr.split(":");
+      document.getElementById(idHH).value = hh;
+      document.getElementById(idMM).value = mm;
+    }
+
+    function formatearNombreToma(valor) {
+      const limpio = (valor || "").trim();
+      if (!limpio) return "Toma 1";
+      if (/^toma\b/i.test(limpio)) {
+        return limpio.charAt(0).toUpperCase() + limpio.slice(1);
+      }
+      return `Toma ${limpio}`;
+    }
+
+    function sumarMinutosAHora(horaStr, minutosASumar) {
+      if (!horaStr || !horaStr.includes(":")) return null;
+      const base = horaStr.split(" ")[0];
+      const [hh, mm] = base.split(":").map(Number);
+      const desfase = Number(minutosASumar) || 0;
+      const totalMinutos = hh * 60 + mm + desfase;
+      
+      const diasExtra = Math.floor(totalMinutos / 1440);
+      const minDia = ((totalMinutos % 1440) + 1440) % 1440;
+      
+      const hFinal = String(Math.floor(minDia / 60)).padStart(2, "0");
+      const mFinal = String(minDia % 60).padStart(2, "0");
+      
+      return diasExtra > 0 ? `${hFinal}:${mFinal} (+${diasExtra}d)` : `${hFinal}:${mFinal}`;
+    }
+
+    function horaAMinutos(horaStr) {
+      if (!horaStr || !horaStr.includes(":")) return 99999;
+      const base = horaStr.split(" ")[0];
+      const [hh, mm] = base.split(":").map(Number);
+      return hh * 60 + mm;
+    }
+
+    // Calcula el desfase (en minutos) entre una hora objetivo (real o previsión) y la hora teórica del primer turno
+    function calcularDiferenciaContraTeorico(horaObjetivo, desfasePartidor, listaTurnos) {
+      if (!horaObjetivo || !horaObjetivo.includes(":")) return 0;
+      const minObjetivo = horaAMinutos(horaObjetivo);
+
+      if (listaTurnos && listaTurnos.length > 0) {
+        const ordenados = [...listaTurnos].sort((a, b) => horaAMinutos(a.horaMaquinas) - horaAMinutos(b.horaMaquinas));
+        const primerTurno = ordenados[0];
+        const horaTeoricaPrimero = sumarMinutosAHora(primerTurno.horaMaquinas, desfasePartidor);
+        const minTeoricoPrimero = horaAMinutos(horaTeoricaPrimero);
+        return minObjetivo - minTeoricoPrimero;
+      }
+      return 0;
+    }
+
+    // Cálculo completo teniendo en cuenta: 1º Hora Real Apertura (si existe), 2º Previsión Apertura, 3º Teórica
+    function calcularTiemposTurno(horaMaquinas, desfasePartidor, desfaseToma, infoRiego, listaTurnos) {
+      const dPart = Number(desfasePartidor) || 0;
+      const dToma = Number(desfaseToma) || 0;
+      const horaReal = (infoRiego && infoRiego.horaRealApertura) ? infoRiego.horaRealApertura : "";
+      const horaPrev = (infoRiego && infoRiego.horaPrevision) ? infoRiego.horaPrevision : "";
+
+      if (!horaMaquinas || !horaMaquinas.includes(":")) {
+        return {
+          horaPartidor: "--:--",
+          horaTomaFinal: "--:--",
+          desplazamientoMin: 0,
+          modo: "sin_hora" // "real" | "prevision" | "teorico"
+        };
+      }
+
+      const horaPartidorTeorica = sumarMinutosAHora(horaMaquinas, dPart);
+      let horaPartidorFinal = horaPartidorTeorica;
+      let desplazamiento = 0;
+      let modo = "teorico";
+
+      if (horaReal && horaReal.includes(":")) {
+        modo = "real";
+        if (listaTurnos && listaTurnos.length > 0) {
+          desplazamiento = calcularDiferenciaContraTeorico(horaReal, dPart, listaTurnos);
+          horaPartidorFinal = sumarMinutosAHora(horaPartidorTeorica, desplazamiento);
+        } else {
+          horaPartidorFinal = horaReal;
+          desplazamiento = horaAMinutos(horaReal) - horaAMinutos(horaPartidorTeorica);
+        }
+      } else if (horaPrev && horaPrev.includes(":")) {
+        modo = "prevision";
+        if (listaTurnos && listaTurnos.length > 0) {
+          desplazamiento = calcularDiferenciaContraTeorico(horaPrev, dPart, listaTurnos);
+          horaPartidorFinal = sumarMinutosAHora(horaPartidorTeorica, desplazamiento);
+        } else {
+          horaPartidorFinal = horaPrev;
+          desplazamiento = horaAMinutos(horaPrev) - horaAMinutos(horaPartidorTeorica);
+        }
+      }
+
+      const horaTomaFinal = sumarMinutosAHora(horaPartidorFinal, dToma);
+
       return {
-        horaPartidor: "--:--",
-        horaTomaFinal: "--:--",
-        desplazamientoMin: 0,
-        condicionadoPorAdmin: Boolean(previsionAdmin)
+        horaPartidor: horaPartidorFinal,
+        horaTomaFinal: horaTomaFinal,
+        desplazamientoMin: desplazamiento,
+        modo: modo
       };
     }
 
-    const horaPartidorTeorica = sumarMinutosAHora(horaMaquinas, dPart);
-    let horaPartidorFinal = horaPartidorTeorica;
-    let desplazamiento = 0;
-    let condicionado = false;
+    function dispararNotificacionRetraso(nombrePartidor, horaRef, minutosRetraso, esAperturaReal) {
+      const claveUnica = `${nombrePartidor}_${horaRef}_${minutosRetraso}_${esAperturaReal}`;
+      if (ultimaNotificacionEnviada === claveUnica) return;
+      ultimaNotificacionEnviada = claveUnica;
 
-    if (previsionAdmin && previsionAdmin.includes(":")) {
-      condicionado = true;
-      if (listaTurnos && listaTurnos.length > 0) {
-        desplazamiento = calcularDesplazamientoRetraso(previsionAdmin, dPart, listaTurnos);
-        horaPartidorFinal = sumarMinutosAHora(horaPartidorTeorica, desplazamiento);
-      } else {
-        horaPartidorFinal = previsionAdmin;
-        desplazamiento = horaAMinutos(previsionAdmin) - horaAMinutos(horaPartidorTeorica);
+      if ("Notification" in window && Notification.permission === "granted") {
+        try {
+          const titulo = esAperturaReal
+            ? `🟠 Partidor ${nombrePartidor} abierto con retraso`
+            : `⚠️ Previsión de retraso en ${nombrePartidor}`;
+          const cuerpo = esAperturaReal
+            ? `Abierto a las ${horaRef} (${minutosRetraso} min de retraso). Horarios definitivos actualizados.`
+            : `Previsión de apertura: ${horaRef} (+${minutosRetraso} min). Se han recalculado los turnos.`;
+
+          new Notification(titulo, {
+            body: cuerpo,
+            icon: "https://cdn-icons-png.flaticon.com/512/3105/3105807.png"
+          });
+        } catch (e) {}
       }
     }
 
-    const horaTomaFinal = sumarMinutosAHora(horaPartidorFinal, dToma);
+    function normalizarMisTomas(lista) {
+      if (!Array.isArray(lista)) return [];
+      return lista.map((item, idx) => {
+        if (typeof item === "string") {
+          return { uid: `toma_${idx}_${item}`, partidorId: item, toma: "Toma 1", desfaseToma: 0 };
+        }
+        return { ...item, toma: formatearNombreToma(item.toma) };
+      });
+    }
 
-    return {
-      horaPartidor: horaPartidorFinal,
-      horaTomaFinal: horaTomaFinal,
-      desplazamientoMin: desplazamiento,
-      condicionadoPorAdmin: condicionado
-    };
-  }
-
-  function dispararNotificacionRetraso(nombrePartidor, horaPrevision, minutosRetraso) {
-    const claveUnica = `${nombrePartidor}_${horaPrevision}_${minutosRetraso}`;
-    if (ultimaNotificacionEnviada === claveUnica) return;
-    ultimaNotificacionEnviada = claveUnica;
-
-    if ("Notification" in window && Notification.permission === "granted") {
+    function verificarSesion() {
       try {
-        new Notification(`⚠️ Retraso en ${nombrePartidor}`, {
-          body: `Previsión de apertura: ${horaPrevision}${minutosRetraso > 0 ? ` (+${minutosRetraso} min de retraso)` : ""}. Se han recalculado los turnos.`,
-          icon: "https://cdn-icons-png.flaticon.com/512/3105/3105807.png"
-        });
-      } catch (e) {}
-    }
-  }
-
-  function normalizarMisTomas(lista) {
-    if (!Array.isArray(lista)) return [];
-    return lista.map((item, idx) => {
-      if (typeof item === "string") {
-        return { uid: `toma_${idx}_${item}`, partidorId: item, toma: "Toma 1", desfaseToma: 0 };
-      }
-      return { ...item, toma: formatearNombreToma(item.toma) };
-    });
-  }
-
-  function verificarSesion() {
-    try {
-      const reganteGuardado = localStorage.getItem("regante_6y7");
-      if (reganteGuardado) {
-        usuarioActual = JSON.parse(reganteGuardado);
-        usuarioActual.misTomas = normalizarMisTomas(usuarioActual.misTomas || usuarioActual.misPartidores);
-        mostrarPanelPrincipal();
-      } else {
+        const reganteGuardado = localStorage.getItem("regante_6y7");
+        if (reganteGuardado) {
+          usuarioActual = JSON.parse(reganteGuardado);
+          usuarioActual.misTomas = normalizarMisTomas(usuarioActual.misTomas || usuarioActual.misPartidores);
+          mostrarPanelPrincipal();
+        } else {
+          pantallaRegistro.classList.remove("oculto");
+          pantallaPrincipal.classList.add("oculto");
+          pantallaFicha.classList.add("oculto");
+        }
+      } catch (e) {
+        localStorage.removeItem("regante_6y7");
         pantallaRegistro.classList.remove("oculto");
         pantallaPrincipal.classList.add("oculto");
         pantallaFicha.classList.add("oculto");
       }
-    } catch (e) {
-      localStorage.removeItem("regante_6y7");
-      pantallaRegistro.classList.remove("oculto");
-      pantallaPrincipal.classList.add("oculto");
+    }
+
+    async function mostrarPanelPrincipal() {
+      detenerEscuchasEnVivo();
+      document.getElementById("saludo-nombre").textContent = usuarioActual.nombre;
+      document.getElementById("saludo-socio").textContent = usuarioActual.socio;
+      
+      actualizarUIAdmin();
+
+      pantallaRegistro.classList.add("oculto");
       pantallaFicha.classList.add("oculto");
-    }
-  }
+      pantallaPrincipal.classList.remove("oculto");
 
-  async function mostrarPanelPrincipal() {
-    detenerEscuchasEnVivo();
-    document.getElementById("saludo-nombre").textContent = usuarioActual.nombre;
-    document.getElementById("saludo-socio").textContent = usuarioActual.socio;
-    
-    actualizarUIAdmin();
-
-    pantallaRegistro.classList.add("oculto");
-    pantallaFicha.classList.add("oculto");
-    pantallaPrincipal.classList.remove("oculto");
-
-    if (catalogoPartidores.length === 0) {
-      await cargarCatalogoPartidores();
-    }
-    await cargarEstadosPorFecha(selectorFecha.value);
-    pintarListaPartidores();
-  }
-
-  function actualizarUIAdmin() {
-    const btnToggle = document.getElementById("btn-toggle-admin");
-    const bannerAdmin = document.getElementById("banner-admin");
-
-    if (esAdmin) {
-      btnToggle.textContent = "🔓 Admin ON";
-      btnToggle.classList.add("btn-admin-activo");
-      bannerAdmin.classList.remove("oculto");
-    } else {
-      btnToggle.textContent = "🔐 Admin";
-      btnToggle.classList.remove("btn-admin-activo");
-      bannerAdmin.classList.add("oculto");
-      verTodosAdmin = false;
-    }
-  }
-
-  async function cargarCatalogoPartidores() {
-    try {
-      const snapshot = await getDocs(collection(db, "PARTIDORES"));
-      catalogoPartidores = [];
-      snapshot.forEach((docSnap) => {
-        catalogoPartidores.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      catalogoPartidores.sort((a, b) => (a.desfase || 0) - (b.desfase || 0));
-      actualizarDesplegablePartidores();
-    } catch (error) {
-      console.error("Error cargando catálogo:", error);
-    }
-  }
-
-  async function cargarEstadosPorFecha(fecha) {
-    estadosDelDia = {};
-    try {
-      const q = query(collection(db, "riegos_diarios"), where("fecha", "==", fecha));
-      const snapshot = await getDocs(q);
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        if (data.partidorId) estadosDelDia[data.partidorId] = data;
-      });
-    } catch (error) {
-      console.error("Error cargando riegos del día:", error);
-    }
-  }
-
-  function actualizarDesplegablePartidores() {
-    const canalElegido = selectCanal.value;
-    selectPartidor.innerHTML = "";
-
-    const filtrados = catalogoPartidores.filter((p) => {
-      const c = (p.canal || "").toLowerCase().trim();
-      if (canalElegido === "sexta") return c.includes("sexta") || c === "6";
-      return c.includes("septima") || c.includes("séptima") || c === "7";
-    });
-
-    if (filtrados.length === 0) {
-      selectPartidor.innerHTML = `<option value="">Sin partidores en este canal</option>`;
-      return;
-    }
-
-    filtrados.forEach((p) => {
-      const opt = document.createElement("option");
-      opt.value = p.id;
-      opt.textContent = p.nombre;
-      selectPartidor.appendChild(opt);
-    });
-  }
-
-  function actualizarDesplegableEliminar() {
-    const zonaEliminar = document.getElementById("zona-eliminar-segura");
-    const selectEliminar = document.getElementById("select-eliminar-toma");
-    const misTomas = usuarioActual.misTomas || [];
-
-    if (misTomas.length === 0 || (esAdmin && verTodosAdmin)) {
-      zonaEliminar.classList.add("oculto");
-      return;
-    }
-
-    zonaEliminar.classList.remove("oculto");
-    selectEliminar.innerHTML = "";
-
-    misTomas.forEach((tomaObj) => {
-      const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
-      const nombreP = datosP ? datosP.nombre : "Partidor";
-      const opt = document.createElement("option");
-      opt.value = tomaObj.uid;
-      opt.textContent = `${nombreP} · ${formatearNombreToma(tomaObj.toma)}`;
-      selectEliminar.appendChild(opt);
-    });
-  }
-
-  function pintarListaPartidores() {
-    contenedorMisPartidores.innerHTML = "";
-    const titulo = document.getElementById("titulo-lista-partidores");
-
-    if (esAdmin && verTodosAdmin) {
-      titulo.textContent = "Todos los Partidores (Vista Capataz)";
-      document.getElementById("zona-eliminar-segura").classList.add("oculto");
-
-      catalogoPartidores.forEach((datosP) => {
-        const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
-        const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
-
-        let claseColor = "estado-sin-datos";
-        let resumen = `Desfase canal: ${datosP.desfase || 0} min`;
-        if (infoRiego.estado === "verde") {
-          claseColor = "estado-verde";
-          resumen = infoRiego.horaPrevision ? `Abierto · Previsión: ${infoRiego.horaPrevision}` : "Abierto / Regando";
-        } else if (infoRiego.estado === "naranja") {
-          claseColor = "estado-naranja";
-          resumen = infoRiego.horaPrevision ? `⚠️ Retraso / Previsión: ${infoRiego.horaPrevision}` : "⚠️ Retraso / Previsión";
-        } else if (infoRiego.estado === "rojo") {
-          claseColor = "estado-rojo";
-          resumen = "Cerrado / Finalizado";
+      if (firebaseListo) {
+        if (catalogoPartidores.length === 0) {
+          await cargarCatalogoPartidores();
         }
+        await cargarEstadosPorFecha(selectorFecha.value);
+      }
+      pintarListaPartidores();
+    }
 
-        const btn = document.createElement("button");
-        btn.className = `btn-partidor ${claseColor}`;
-        btn.innerHTML = `
-          <div>
-            <span>${datosP.nombre} <span style="font-weight:normal; font-size:0.85rem;">(${canalTexto})</span></span>
-            <small>${resumen}</small>
-          </div>
-          <span>✏️</span>
-        `;
-        btn.addEventListener("click", () => abrirFichaPartidor(datosP, null));
-        contenedorMisPartidores.appendChild(btn);
+    function actualizarUIAdmin() {
+      const btnToggle = document.getElementById("btn-toggle-admin");
+      const bannerAdmin = document.getElementById("banner-admin");
+
+      if (esAdmin) {
+        btnToggle.textContent = "🔓 Admin ON";
+        btnToggle.classList.add("btn-admin-activo");
+        bannerAdmin.classList.remove("oculto");
+      } else {
+        btnToggle.textContent = "🔐 Admin";
+        btnToggle.classList.remove("btn-admin-activo");
+        bannerAdmin.classList.add("oculto");
+        verTodosAdmin = false;
+      }
+    }
+
+    async function cargarCatalogoPartidores() {
+      if (!firebaseListo) return;
+      try {
+        const snapshot = await getDocs(collection(db, "PARTIDORES"));
+        catalogoPartidores = [];
+        snapshot.forEach((docSnap) => {
+          catalogoPartidores.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        catalogoPartidores.sort((a, b) => (a.desfase || 0) - (b.desfase || 0));
+        actualizarDesplegablePartidores();
+      } catch (error) {
+        mostrarErrorEnPantalla("Error cargando lista de partidores: " + error.message);
+      }
+    }
+
+    async function cargarEstadosPorFecha(fecha) {
+      estadosDelDia = {};
+      if (!firebaseListo) return;
+      try {
+        const q = query(collection(db, "riegos_diarios"), where("fecha", "==", fecha));
+        const snapshot = await getDocs(q);
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          if (data.partidorId) estadosDelDia[data.partidorId] = data;
+        });
+      } catch (error) {
+        console.error("Error cargando riegos del día:", error);
+      }
+    }
+
+    function actualizarDesplegablePartidores() {
+      const canalElegido = selectCanal.value;
+      selectPartidor.innerHTML = "";
+
+      const filtrados = catalogoPartidores.filter((p) => {
+        const c = (p.canal || "").toLowerCase().trim();
+        if (canalElegido === "sexta") return c.includes("sexta") || c === "6";
+        return c.includes("septima") || c.includes("séptima") || c === "7";
       });
-      return;
+
+      if (filtrados.length === 0) {
+        selectPartidor.innerHTML = `<option value="">Sin partidores en este canal</option>`;
+        return;
+      }
+
+      filtrados.forEach((p) => {
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = p.nombre;
+        selectPartidor.appendChild(opt);
+      });
     }
 
-    titulo.textContent = "Mis Partidores";
-    const misTomas = usuarioActual.misTomas || [];
-    actualizarDesplegableEliminar();
+    function actualizarDesplegableEliminar() {
+      const zonaEliminar = document.getElementById("zona-eliminar-segura");
+      const selectEliminar = document.getElementById("select-eliminar-toma");
+      const misTomas = usuarioActual.misTomas || [];
 
-    if (misTomas.length === 0) {
-      contenedorMisPartidores.innerHTML = `
-        <p style="color:#64748b; font-size:0.95rem; text-align:center; padding: 12px 0;">
-          Aún no tienes ningún partidor registrado.<br>Pulsa el botón inferior para añadir el tuyo.
-        </p>
-      `;
-      return;
+      if (misTomas.length === 0 || (esAdmin && verTodosAdmin)) {
+        zonaEliminar.classList.add("oculto");
+        return;
+      }
+
+      zonaEliminar.classList.remove("oculto");
+      selectEliminar.innerHTML = "";
+
+      misTomas.forEach((tomaObj) => {
+        const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
+        const nombreP = datosP ? datosP.nombre : "Partidor";
+        const opt = document.createElement("option");
+        opt.value = tomaObj.uid;
+        opt.textContent = `${nombreP} · ${formatearNombreToma(tomaObj.toma)}`;
+        selectEliminar.appendChild(opt);
+      });
     }
 
-    misTomas.forEach((tomaObj) => {
-      const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
-      if (!datosP) return;
-
-      const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
-      const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
-      const etiquetaToma = formatearNombreToma(tomaObj.toma);
-      const desfaseToma = Number(tomaObj.desfaseToma) || 0;
-
+    function describirEstadoBoton(infoRiego, textoBase) {
       let claseColor = "estado-sin-datos";
-      let textoEstado = "Pulsa para anotar hora de máquinas y ver turnos";
+      let textoEstado = textoBase;
 
       if (infoRiego.estado === "verde") {
         claseColor = "estado-verde";
-        textoEstado = infoRiego.horaPrevision
-          ? `Regando · Previsión partidor: ${infoRiego.horaPrevision}`
-          : "Partidor abierto / Regando";
+        textoEstado = infoRiego.horaRealApertura
+          ? `Abierto en hora: ${infoRiego.horaRealApertura}`
+          : "Partidor abierto / En hora";
       } else if (infoRiego.estado === "naranja") {
         claseColor = "estado-naranja";
-        textoEstado = infoRiego.horaPrevision
-          ? `⚠️ Retraso · Previsión apertura: ${infoRiego.horaPrevision}`
-          : "⚠️ Retraso / Pendiente de apertura";
+        if (infoRiego.horaRealApertura) {
+          const r = Number(infoRiego.retrasoMinutos) || 0;
+          textoEstado = r > 0
+            ? `Abierto: ${infoRiego.horaRealApertura} (con ${r} min de retraso)`
+            : `Abierto con retraso: ${infoRiego.horaRealApertura}`;
+        } else if (infoRiego.horaPrevision) {
+          textoEstado = `⚠️ Previsión apertura: ${infoRiego.horaPrevision}`;
+        } else {
+          textoEstado = "⚠️ Retraso / Pendiente de apertura";
+        }
       } else if (infoRiego.estado === "rojo") {
         claseColor = "estado-rojo";
         textoEstado = "Partidor cerrado / Finalizado";
       }
 
-      const btn = document.createElement("button");
-      btn.className = `btn-partidor ${claseColor}`;
-      btn.innerHTML = `
-        <div>
-          <span>${datosP.nombre} · ${etiquetaToma}</span>
-          <small>${canalTexto} · Desfase a tu toma: ${desfaseToma} min</small>
-          <small>${textoEstado}</small>
-        </div>
-        <span>➡️</span>
-      `;
-
-      btn.addEventListener("click", () => abrirFichaPartidor(datosP, tomaObj));
-      contenedorMisPartidores.appendChild(btn);
-    });
-  }
-
-  function actualizarPanelResumenFijo() {
-    if (!seleccionAbierta) return;
-    const { datosP, tomaObj } = seleccionAbierta;
-    const horaMaquinas = leerHoraDeInputs("regante-maq-hh", "regante-maq-mm");
-    const info = estadosDelDia[datosP.id] || {};
-    const desfasePart = Number(datosP.desfase) || 0;
-    const desfaseToma = tomaObj ? (Number(tomaObj.desfaseToma) || 0) : 0;
-
-    const elMaq = document.getElementById("fijo-hora-maquinas");
-    const elDesfCanal = document.getElementById("fijo-desfase-canal");
-    const elPart = document.getElementById("fijo-hora-partidor");
-    const elDetPart = document.getElementById("fijo-detalle-partidor");
-    const elPrevAdmin = document.getElementById("fijo-prevision-admin");
-    const elDetPrev = document.getElementById("fijo-detalle-prevision");
-    const elToma = document.getElementById("fijo-hora-toma");
-    const elDetToma = document.getElementById("fijo-detalle-toma");
-
-    elDesfCanal.textContent = `Desfase canal al partidor: +${desfasePart} min`;
-
-    if (info.horaPrevision && info.horaPrevision.includes(":")) {
-      elPrevAdmin.textContent = info.horaPrevision;
-      elPrevAdmin.style.color = "#b45309";
-    } else {
-      elPrevAdmin.textContent = "Sin especificar";
-      elPrevAdmin.style.color = "#64748b";
+      return { claseColor, textoEstado };
     }
 
-    if (!horaMaquinas) {
-      elMaq.textContent = "--:--";
-      elPart.textContent = "--:--";
-      elDetPart.textContent = "Introduce tu hora de máquinas";
-      elDetPrev.textContent = "Se aplicará automáticamente si el capataz indica previsión";
-      elToma.textContent = "--:--";
-      elDetToma.textContent = `Desfase partidor → tu toma: +${desfaseToma} min`;
-      return;
+    function pintarListaPartidores() {
+      contenedorMisPartidores.innerHTML = "";
+      const titulo = document.getElementById("titulo-lista-partidores");
+
+      if (esAdmin && verTodosAdmin) {
+        titulo.textContent = "Todos los Partidores (Vista Capataz)";
+        document.getElementById("zona-eliminar-segura").classList.add("oculto");
+
+        catalogoPartidores.forEach((datosP) => {
+          const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+          const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
+          const { claseColor, textoEstado } = describirEstadoBoton(infoRiego, `Desfase canal: ${datosP.desfase || 0} min`);
+
+          const btn = document.createElement("button");
+          btn.className = `btn-partidor ${claseColor}`;
+          btn.innerHTML = `
+            <div>
+              <span>${datosP.nombre} <span style="font-weight:normal; font-size:0.85rem;">(${canalTexto})</span></span>
+              <small>${textoEstado}</small>
+            </div>
+            <span>✏️</span>
+          `;
+          btn.addEventListener("click", () => abrirFichaPartidor(datosP, null));
+          contenedorMisPartidores.appendChild(btn);
+        });
+        return;
+      }
+
+      titulo.textContent = "Mis Partidores";
+      const misTomas = usuarioActual.misTomas || [];
+      actualizarDesplegableEliminar();
+
+      if (misTomas.length === 0) {
+        contenedorMisPartidores.innerHTML = `
+          <p style="color:#64748b; font-size:0.95rem; text-align:center; padding: 12px 0;">
+            Aún no tienes ningún partidor registrado.<br>Pulsa el botón inferior para añadir el tuyo.
+          </p>
+        `;
+        return;
+      }
+
+      misTomas.forEach((tomaObj) => {
+        const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
+        if (!datosP) return;
+
+        const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+        const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
+        const etiquetaToma = formatearNombreToma(tomaObj.toma);
+        const desfaseToma = Number(tomaObj.desfaseToma) || 0;
+
+        const { claseColor, textoEstado } = describirEstadoBoton(infoRiego, "Pulsa para anotar hora de máquinas y ver turnos");
+
+        const btn = document.createElement("button");
+        btn.className = `btn-partidor ${claseColor}`;
+        btn.innerHTML = `
+          <div>
+            <span>${datosP.nombre} · ${etiquetaToma}</span>
+            <small>${canalTexto} · Desfase a tu toma: ${desfaseToma} min</small>
+            <small>${textoEstado}</small>
+          </div>
+          <span>➡️</span>
+        `;
+
+        btn.addEventListener("click", () => abrirFichaPartidor(datosP, tomaObj));
+        contenedorMisPartidores.appendChild(btn);
+      });
     }
 
-    elMaq.textContent = horaMaquinas;
+    // Actualizar el panel fijo e inamovible del regante
+    function actualizarPanelResumenFijo() {
+      if (!seleccionAbierta) return;
+      const { datosP, tomaObj } = seleccionAbierta;
+      const horaMaquinas = leerHoraDeInputs("regante-maq-hh", "regante-maq-mm");
+      const info = estadosDelDia[datosP.id] || {};
+      const desfasePart = Number(datosP.desfase) || 0;
+      const desfaseToma = tomaObj ? (Number(tomaObj.desfaseToma) || 0) : 0;
 
-    const calc = calcularTiemposTurno(horaMaquinas, desfasePart, desfaseToma, info.horaPrevision, turnosDelPartidor);
-    elPart.textContent = calc.horaPartidor;
-    elToma.textContent = calc.horaTomaFinal;
+      const elMaq = document.getElementById("fijo-hora-maquinas");
+      const elDesfCanal = document.getElementById("fijo-desfase-canal");
+      const celdaPart = document.getElementById("celda-fija-partidor");
+      const etiqPart = document.getElementById("etiqueta-fijo-partidor");
+      const elPart = document.getElementById("fijo-hora-partidor");
+      const elDetPart = document.getElementById("fijo-detalle-partidor");
+      const elPrevAdmin = document.getElementById("fijo-prevision-admin");
+      const elDetPrev = document.getElementById("fijo-detalle-prevision");
+      const elToma = document.getElementById("fijo-hora-toma");
+      const elDetToma = document.getElementById("fijo-detalle-toma");
 
-    if (calc.condicionadoPorAdmin) {
-      const signo = calc.desplazamientoMin > 0 ? `+${calc.desplazamientoMin} min retraso` : `${calc.desplazamientoMin} min`;
-      elDetPart.textContent = `Recalculado por previsión del Capataz (${signo})`;
-      elDetPrev.textContent = `Previsión activa: ${info.horaPrevision} (modifica la hora teórica)`;
-    } else {
-      elDetPart.textContent = `Calculado por defecto (${horaMaquinas} + ${desfasePart} min)`;
-      elDetPrev.textContent = "Calculado con desfase por defecto desde máquinas";
+      elDesfCanal.textContent = `Desfase canal al partidor: +${desfasePart} min`;
+
+      // Reset estilos del recuadro de apertura del partidor
+      celdaPart.classList.remove("apertura-verde", "apertura-naranja");
+      etiqPart.textContent = "Apertura del partidor";
+
+      const tieneHoraReal = Boolean(info.horaRealApertura && info.horaRealApertura.includes(":"));
+      const tienePrevision = Boolean(!tieneHoraReal && info.horaPrevision && info.horaPrevision.includes(":"));
+
+      // Cuadro de Previsión: vacío ("Sin especificar") cuando ya se marcó hora real de apertura
+      if (tienePrevision) {
+        elPrevAdmin.textContent = info.horaPrevision;
+        elPrevAdmin.style.color = "#b45309";
+        elDetPrev.textContent = "Previsión provisional antes de abrir (modifica horarios)";
+      } else {
+        elPrevAdmin.textContent = "Sin especificar";
+        elPrevAdmin.style.color = "#64748b";
+        elDetPrev.textContent = tieneHoraReal
+          ? "Previsión cerrada al confirmarse la hora real de apertura"
+          : "Calculado con desfase por defecto desde máquinas";
+      }
+
+      if (!horaMaquinas) {
+        elMaq.textContent = "--:--";
+        if (tieneHoraReal) {
+          const retraso = Number(info.retrasoMinutos) || 0;
+          etiqPart.textContent = "Hora real apertura";
+          if (retraso > 0) {
+            celdaPart.classList.add("apertura-naranja");
+            elPart.textContent = `${info.horaRealApertura} (${retraso} min retraso)`;
+            elDetPart.textContent = "Partidor abierto con retraso";
+          } else {
+            celdaPart.classList.add("apertura-verde");
+            elPart.textContent = info.horaRealApertura;
+            elDetPart.textContent = "Partidor abierto en hora";
+          }
+        } else {
+          elPart.textContent = "--:--";
+          elDetPart.textContent = "Introduce tu hora de máquinas";
+        }
+        elToma.textContent = "--:--";
+        elDetToma.textContent = `Desfase partidor → tu toma: +${desfaseToma} min`;
+        return;
+      }
+
+      elMaq.textContent = horaMaquinas;
+
+      const calc = calcularTiemposTurno(horaMaquinas, desfasePart, desfaseToma, info, turnosDelPartidor);
+      elToma.textContent = calc.horaTomaFinal;
+
+      if (calc.modo === "real") {
+        const retraso = calc.desplazamientoMin > 0 ? calc.desplazamientoMin : (Number(info.retrasoMinutos) || 0);
+        etiqPart.textContent = "Hora real apertura";
+        if (retraso > 0) {
+          celdaPart.classList.add("apertura-naranja");
+          elPart.textContent = `${calc.horaPartidor} (${retraso} min retraso)`;
+          elDetPart.textContent = "Apertura real confirmada con retraso";
+        } else {
+          celdaPart.classList.add("apertura-verde");
+          elPart.textContent = calc.horaPartidor;
+          elDetPart.textContent = "Apertura real confirmada en hora";
+        }
+      } else if (calc.modo === "prevision") {
+        celdaPart.classList.add("apertura-naranja");
+        elPart.textContent = calc.horaPartidor;
+        const signo = calc.desplazamientoMin > 0 ? `+${calc.desplazamientoMin} min retraso` : `${calc.desplazamientoMin} min`;
+        elDetPart.textContent = `Según previsión del Capataz (${signo})`;
+      } else {
+        elPart.textContent = calc.horaPartidor;
+        elDetPart.textContent = `Calculado por defecto (${horaMaquinas} + ${desfasePart} min)`;
+      }
+
+      const horasRiego = parseInt(document.getElementById("regante-horas-riego").value, 10) || 0;
+      const minRiego = parseInt(document.getElementById("regante-minutos-riego").value, 10) || 0;
+      const totalDuracion = horasRiego * 60 + minRiego;
+      const horaFin = totalDuracion > 0 ? sumarMinutosAHora(calc.horaTomaFinal, totalDuracion) : null;
+
+      elDetToma.textContent = horaFin
+        ? `Partidor (${calc.horaPartidor}) + ${desfaseToma} min toma · Fin estimado: ${horaFin}`
+        : `Partidor (${calc.horaPartidor}) + ${desfaseToma} min hasta tu toma`;
     }
 
-    const horasRiego = parseInt(document.getElementById("regante-horas-riego").value, 10) || 0;
-    const minRiego = parseInt(document.getElementById("regante-minutos-riego").value, 10) || 0;
-    const totalDuracion = horasRiego * 60 + minRiego;
-    const horaFin = totalDuracion > 0 ? sumarMinutosAHora(calc.horaTomaFinal, totalDuracion) : null;
+    function pintarBannerYEstadoFicha(datosP) {
+      const info = estadosDelDia[datosP.id] || {
+        estado: "sin_datos",
+        horaPrevision: "",
+        horaRealApertura: "",
+        retrasoMinutos: 0,
+        observaciones: ""
+      };
 
-    elDetToma.textContent = horaFin
-      ? `Partidor (${calc.horaPartidor}) + ${desfaseToma} min toma · Fin estimado: ${horaFin}`
-      : `Partidor (${calc.horaPartidor}) + ${desfaseToma} min hasta tu toma`;
-  }
+      const banner = document.getElementById("ficha-banner-estado");
+      banner.className = "banner-estado";
+      if (info.estado === "verde") {
+        banner.classList.add("estado-verde");
+        banner.textContent = info.horaRealApertura
+          ? `🟢 ABIERTO EN HORA: ${info.horaRealApertura}`
+          : "🟢 PARTIDOR ABIERTO / REGANDO";
+      } else if (info.estado === "naranja") {
+        banner.classList.add("estado-naranja");
+        if (info.horaRealApertura) {
+          const r = Number(info.retrasoMinutos) || 0;
+          banner.textContent = r > 0
+            ? `🟠 ABIERTO: ${info.horaRealApertura} (con ${r} min de retraso)`
+            : `🟠 ABIERTO CON RETRASO: ${info.horaRealApertura}`;
+        } else {
+          banner.textContent = info.horaPrevision
+            ? `🟠 PREVISIÓN DE APERTURA: ${info.horaPrevision}`
+            : "🟠 RETRASO / PREVISIÓN DE APERTURA";
+        }
+      } else if (info.estado === "rojo") {
+        banner.classList.add("estado-rojo");
+        banner.textContent = "🔴 PARTIDOR CERRADO / FINALIZADO";
+      } else {
+        banner.classList.add("estado-sin-datos");
+        banner.textContent = "⚪ SIN PROGRAMACIÓN DE ESTADO";
+      }
 
-  function pintarBannerYEstadoFicha(datosP) {
-    const info = estadosDelDia[datosP.id] || {
-      estado: "sin_datos",
-      horaPrevision: "",
-      observaciones: ""
-    };
+      const alertaRetraso = document.getElementById("banner-alerta-retraso");
+      const desfasePart = Number(datosP.desfase) || 0;
 
-    const banner = document.getElementById("ficha-banner-estado");
-    banner.className = "banner-estado";
-    if (info.estado === "verde") {
-      banner.classList.add("estado-verde");
-      banner.textContent = "🟢 PARTIDOR ABIERTO / REGANDO";
-    } else if (info.estado === "naranja") {
-      banner.classList.add("estado-naranja");
-      banner.textContent = "🟠 RETRASO / PREVISIÓN DE APERTURA";
-    } else if (info.estado === "rojo") {
-      banner.classList.add("estado-rojo");
-      banner.textContent = "🔴 PARTIDOR CERRADO / FINALIZADO";
-    } else {
-      banner.classList.add("estado-sin-datos");
-      banner.textContent = "⚪ SIN PROGRAMACIÓN DE ESTADO";
+      if (info.horaRealApertura && (Number(info.retrasoMinutos) > 0 || info.estado === "naranja")) {
+        const r = Number(info.retrasoMinutos) || calcularDiferenciaContraTeorico(info.horaRealApertura, desfasePart, turnosDelPartidor);
+        alertaRetraso.classList.remove("oculto");
+        alertaRetraso.textContent = r > 0
+          ? `🟠 PARTIDOR ABIERTO A LAS ${info.horaRealApertura} (con ${r} min de retraso). Todos los horarios de llegada a toma están actualizados.`
+          : `🟠 PARTIDOR ABIERTO A LAS ${info.horaRealApertura} con retraso. Horarios definitivos actualizados.`;
+        dispararNotificacionRetraso(datosP.nombre, info.horaRealApertura, r, true);
+      } else if (!info.horaRealApertura && info.horaPrevision && (info.estado === "naranja" || calcularDiferenciaContraTeorico(info.horaPrevision, desfasePart, turnosDelPartidor) > 0)) {
+        const rPrev = calcularDiferenciaContraTeorico(info.horaPrevision, desfasePart, turnosDelPartidor);
+        alertaRetraso.classList.remove("oculto");
+        alertaRetraso.textContent = rPrev > 0
+          ? `⚠️ AVISO DE RETRASO: Previsión de apertura a las ${info.horaPrevision} (+${rPrev} min de retraso). Turnos recalculados automáticamente.`
+          : `⚠️ PREVISIÓN DE APERTURA: El Capataz ha fijado previsión a las ${info.horaPrevision}. Horarios recalculados.`;
+        dispararNotificacionRetraso(datosP.nombre, info.horaPrevision, rPrev, false);
+      } else {
+        alertaRetraso.classList.add("oculto");
+      }
+
+      const bloqueObs = document.getElementById("bloque-observaciones");
+      if (info.observaciones && info.observaciones.trim() !== "") {
+        document.getElementById("ficha-observaciones").textContent = info.observaciones;
+        bloqueObs.classList.remove("oculto");
+      } else {
+        bloqueObs.classList.add("oculto");
+      }
+
+      if (esAdmin) {
+        document.getElementById("admin-estado").value = info.estado || "sin_datos";
+        rellenarInputsHora("admin-prev-hh", "admin-prev-mm", info.horaRealApertura ? "" : (info.horaPrevision || ""));
+        rellenarInputsHora("admin-real-hh", "admin-real-mm", info.horaRealApertura || "");
+        document.getElementById("admin-observaciones").value = info.observaciones || "";
+      }
     }
 
-    const alertaRetraso = document.getElementById("banner-alerta-retraso");
-    const desfasePart = Number(datosP.desfase) || 0;
-    const retrasoMin = calcularDesplazamientoRetraso(info.horaPrevision, desfasePart, turnosDelPartidor);
+    function pintarListaTurnos() {
+      const contenedor = document.getElementById("contenedor-lista-turnos");
+      contenedor.innerHTML = "";
 
-    if (info.horaPrevision && (info.estado === "naranja" || retrasoMin > 0)) {
-      alertaRetraso.classList.remove("oculto");
-      alertaRetraso.textContent = retrasoMin > 0
-        ? `⚠️ AVISO DE RETRASO: La previsión de apertura del partidor es a las ${info.horaPrevision} (+${retrasoMin} min de retraso). Todos los turnos de la lista se han recalculado automáticamente.`
-        : `⚠️ PREVISIÓN DE APERTURA: El Capataz ha fijado previsión a las ${info.horaPrevision}. Horarios recalculados automáticamente.`;
-      dispararNotificacionRetraso(datosP.nombre, info.horaPrevision, retrasoMin);
-    } else {
-      alertaRetraso.classList.add("oculto");
+      if (turnosDelPartidor.length === 0) {
+        contenedor.innerHTML = `
+          <p style="color:#64748b; font-size:0.9rem; text-align:center; padding:12px 0;">
+            Todavía ningún regante ha anotado su turno en este partidor para esta fecha.
+          </p>
+        `;
+        return;
+      }
+
+      const { datosP } = seleccionAbierta;
+      const info = estadosDelDia[datosP.id] || {};
+      const desfasePart = Number(datosP.desfase) || 0;
+
+      turnosDelPartidor.forEach((turno) => {
+        const calc = calcularTiemposTurno(
+          turno.horaMaquinas,
+          desfasePart,
+          turno.desfaseToma,
+          info,
+          turnosDelPartidor
+        );
+
+        
+        const duracionMin = (Number(turno.horasRiego) || 0) * 60 + (Number(turno.minutosRiego) || 0);
+        const textoDuracion = `${turno.horasRiego || 0}h ${String(turno.minutosRiego || 0).padStart(2, "0")}m`;
+        const horaFinToma = duracionMin > 0 ? sumarMinutosAHora(calc.horaTomaFinal, duracionMin) : null;
+
+        let claseCeldaPartidor = "";
+        let textoPartidorLista = calc.horaPartidor;
+        if (calc.modo === "real") {
+          const r = calc.desplazamientoMin > 0 ? calc.desplazamientoMin : (Number(info.retrasoMinutos) || 0);
+          if (r > 0) {
+            claseCeldaPartidor = "item-naranja";
+            textoPartidorLista = `${calc.horaPartidor} (+${r}m)`;
+          } else {
+            claseCeldaPartidor = "item-verde";
+          }
+        } else if (calc.modo === "prevision") {
+          claseCeldaPartidor = "item-naranja";
+        }
+
+        const esMio = usuarioActual && turno.socio === usuarioActual.socio && turno.nombre === usuarioActual.nombre;
+
+        const tarjeta = document.createElement("div");
+        tarjeta.className = `tarjeta-turno ${esMio ? "mi-turno" : ""}`;
+        tarjeta.innerHTML = `
+          <div class="turno-cabecera">
+            <div>
+              <span class="turno-nombre">${turno.nombre}</span>
+              <span class="turno-toma-badge">${formatearNombreToma(turno.toma)}</span>
+            </div>
+            <a href="tel:${turno.telefono}" class="turno-tel">📞 ${turno.telefono || "Sin tel."}</a>
+          </div>
+
+          <div class="turno-tabla-datos">
+            <div class="turno-dato-item">
+              <span class="turno-dato-label">Hora de máquinas</span>
+              <span class="turno-dato-valor">${turno.horaMaquinas}</span>
+            </div>
+            <div class="turno-dato-item">
+              <span class="turno-dato-label">Tiempo de riego</span>
+              <span class="turno-dato-valor">${textoDuracion}</span>
+            </div>
+            <div class="turno-dato-item ${claseCeldaPartidor}">
+              <span class="turno-dato-label">Apertura partidor</span>
+              <span class="turno-dato-valor">${textoPartidorLista}</span>
+            </div>
+            <div class="turno-dato-item">
+              <span class="turno-dato-label">Fin estimado toma</span>
+              <span class="turno-dato-valor">${horaFinToma || "--:--"}</span>
+            </div>
+            <div class="turno-dato-item destacado-lista">
+              <span class="turno-dato-label">💧 Hora estimada de llegada a tu toma</span>
+              <span class="turno-dato-valor">${calc.horaTomaFinal}</span>
+            </div>
+          </div>
+        `;
+
+        if (esMio || esAdmin) {
+          const pie = document.createElement("div");
+          pie.className = "turno-pie";
+          pie.innerHTML = `<span>${esMio ? "Tu turno publicado" : "Gestión Capataz"}</span>`;
+
+          const btnBorrar = document.createElement("button");
+          btnBorrar.className = "btn-borrar-mi-turno";
+          btnBorrar.textContent = esMio ? "🗑️ Borrar mi turno" : "🗑️ Eliminar (Admin)";
+          btnBorrar.addEventListener("click", async () => {
+            if (!confirm(`¿Eliminar el turno de ${turno.nombre} (${turno.horaMaquinas})?`)) return;
+            try {
+              await deleteDoc(doc(db, "turnos_partidor", turno.id));
+              if (esMio) miTurnoDocId = null;
+            } catch (e) {
+              alert("No se pudo borrar el turno.");
+            }
+          });
+          pie.appendChild(btnBorrar);
+          tarjeta.appendChild(pie);
+        }
+
+        contenedor.appendChild(tarjeta);
+      });
     }
 
-    const bloqueObs = document.getElementById("bloque-observaciones");
-    if (info.observaciones && info.observaciones.trim() !== "") {
-      document.getElementById("ficha-observaciones").textContent = info.observaciones;
-      bloqueObs.classList.remove("oculto");
-    } else {
-      bloqueObs.classList.add("oculto");
+    function detenerEscuchasEnVivo() {
+      if (unsubscribeEstadoVivo) { unsubscribeEstadoVivo(); unsubscribeEstadoVivo = null; }
+      if (unsubscribeTurnosVivo) { unsubscribeTurnosVivo(); unsubscribeTurnosVivo = null; }
     }
 
-    if (esAdmin) {
-      document.getElementById("admin-estado").value = info.estado || "sin_datos";
-      rellenarInputsHora("admin-prev-hh", "admin-prev-mm", info.horaPrevision || "");
-      document.getElementById("admin-observaciones").value = info.observaciones || "";
-    }
-  }
+    function abrirFichaPartidor(datosP, tomaObj) {
+      detenerEscuchasEnVivo();
+      seleccionAbierta = { datosP, tomaObj };
+      miTurnoDocId = null;
 
-  function pintarListaTurnos() {
-    const contenedor = document.getElementById("contenedor-lista-turnos");
-    contenedor.innerHTML = "";
+      const fecha = selectorFecha.value;
+      const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª Elevación" : "Canal 7ª Elevación";
+      const tituloToma = tomaObj ? ` — ${formatearNombreToma(tomaObj.toma)}` : "";
 
-    if (turnosDelPartidor.length === 0) {
-      contenedor.innerHTML = `
-        <p style="color:#64748b; font-size:0.9rem; text-align:center; padding:12px 0;">
-          Todavía ningún regante ha anotado su turno en este partidor para esta fecha.
-        </p>
-      `;
-      return;
-    }
+      document.getElementById("ficha-titulo-partidor").textContent = `${datosP.nombre}${tituloToma}`;
+      document.getElementById("ficha-subtitulo").textContent = `${canalTexto} · Fecha: ${fecha.split("-").reverse().join("/")}`;
 
-    const { datosP } = seleccionAbierta;
-    const info = estadosDelDia[datosP.id] || {};
-    const desfasePart = Number(datosP.desfase) || 0;
+      const bloqueFormRegante = document.getElementById("bloque-formulario-regante");
+      if (tomaObj) {
+        bloqueFormRegante.classList.remove("oculto");
+        rellenarInputsHora("regante-maq-hh", "regante-maq-mm", "");
+        document.getElementById("regante-horas-riego").value = "";
+        document.getElementById("regante-minutos-riego").value = "0";
+        actualizarPanelResumenFijo();
+      } else {
+        bloqueFormRegante.classList.add("oculto");
+      }
 
-    turnosDelPartidor.forEach((turno) => {
-      const calc = calcularTiemposTurno(
-        turno.horaMaquinas,
-        desfasePart,
-        turno.desfaseToma,
-        info.horaPrevision,
-        turnosDelPartidor
+      const panelAdmin = document.getElementById("panel-edicion-admin");
+      if (esAdmin) panelAdmin.classList.remove("oculto");
+      else panelAdmin.classList.add("oculto");
+
+      pintarBannerYEstadoFicha(datosP);
+
+      pantallaPrincipal.classList.add("oculto");
+      pantallaFicha.classList.remove("oculto");
+
+      if (!firebaseListo) return;
+
+      const docIdRiego = `${fecha}_${datosP.id}`;
+      unsubscribeEstadoVivo = onSnapshot(doc(db, "riegos_diarios", docIdRiego), (docSnap) => {
+        if (docSnap.exists()) estadosDelDia[datosP.id] = docSnap.data();
+        else delete estadosDelDia[datosP.id];
+        pintarBannerYEstadoFicha(datosP);
+        actualizarPanelResumenFijo();
+        pintarListaTurnos();
+      });
+
+      const qTurnos = query(
+        collection(db, "turnos_partidor"),
+        where("partidorId", "==", datosP.id),
+        where("fecha", "==", fecha)
       );
 
-      const duracionMin = (Number(turno.horasRiego) || 0) * 60 + (Number(turno.minutosRiego) || 0);
-      const textoDuracion = `${turno.horasRiego || 0}h ${String(turno.minutosRiego || 0).padStart(2, "0")}m`;
-      const horaFinToma = duracionMin > 0 ? sumarMinutosAHora(calc.horaTomaFinal, duracionMin) : null;
-
-      const esMio = usuarioActual && turno.socio === usuarioActual.socio && turno.nombre === usuarioActual.nombre;
-
-      const tarjeta = document.createElement("div");
-      tarjeta.className = `tarjeta-turno ${esMio ? "mi-turno" : ""}`;
-      tarjeta.innerHTML = `
-        <div class="turno-cabecera">
-          <div>
-            <span class="turno-nombre">${turno.nombre}</span>
-            <span class="turno-toma-badge">${formatearNombreToma(turno.toma)}</span>
-          </div>
-          <a href="tel:${turno.telefono}" class="turno-tel">📞 ${turno.telefono || "Sin tel."}</a>
-        </div>
-
-        <div class="turno-tabla-datos">
-          <div class="turno-dato-item">
-            <span class="turno-dato-label">Hora de máquinas</span>
-            <span class="turno-dato-valor">${turno.horaMaquinas}</span>
-          </div>
-          <div class="turno-dato-item">
-            <span class="turno-dato-label">Tiempo de riego</span>
-            <span class="turno-dato-valor">${textoDuracion}</span>
-          </div>
-          <div class="turno-dato-item">
-            <span class="turno-dato-label">Hora de partidor</span>
-            <span class="turno-dato-valor">${calc.horaPartidor}</span>
-          </div>
-          <div class="turno-dato-item">
-            <span class="turno-dato-label">Fin estimado toma</span>
-            <span class="turno-dato-valor">${horaFinToma || "--:--"}</span>
-          </div>
-          <div class="turno-dato-item destacado-lista">
-            <span class="turno-dato-label">💧 Hora estimada de llegada a tu toma</span>
-            <span class="turno-dato-valor">${calc.horaTomaFinal}</span>
-          </div>
-        </div>
-      `;
-
-      if (esMio || esAdmin) {
-        const pie = document.createElement("div");
-        pie.className = "turno-pie";
-        pie.innerHTML = `<span>${esMio ? "Tu turno publicado" : "Gestión Capataz"}</span>`;
-
-        const btnBorrar = document.createElement("button");
-        btnBorrar.className = "btn-borrar-mi-turno";
-        btnBorrar.textContent = esMio ? "🗑️ Borrar mi turno" : "🗑️ Eliminar (Admin)";
-        btnBorrar.addEventListener("click", async () => {
-          if (!confirm(`¿Eliminar el turno de ${turno.nombre} (${turno.horaMaquinas})?`)) return;
-          try {
-            await deleteDoc(doc(db, "turnos_partidor", turno.id));
-            if (esMio) miTurnoDocId = null;
-          } catch (e) {
-            alert("No se pudo borrar el turno.");
-          }
+      let primeraCarga = true;
+      unsubscribeTurnosVivo = onSnapshot(qTurnos, (snapshot) => {
+        turnosDelPartidor = [];
+        snapshot.forEach((docSnap) => {
+          turnosDelPartidor.push({ id: docSnap.id, ...docSnap.data() });
         });
-        pie.appendChild(btnBorrar);
-        tarjeta.appendChild(pie);
-      }
+        turnosDelPartidor.sort((a, b) => horaAMinutos(a.horaMaquinas) - horaAMinutos(b.horaMaquinas));
 
-      contenedor.appendChild(tarjeta);
-    });
-  }
-
-  function detenerEscuchasEnVivo() {
-    if (unsubscribeEstadoVivo) { unsubscribeEstadoVivo(); unsubscribeEstadoVivo = null; }
-    if (unsubscribeTurnosVivo) { unsubscribeTurnosVivo(); unsubscribeTurnosVivo = null; }
-  }
-
-  function abrirFichaPartidor(datosP, tomaObj) {
-    detenerEscuchasEnVivo();
-    seleccionAbierta = { datosP, tomaObj };
-    miTurnoDocId = null;
-
-    const fecha = selectorFecha.value;
-    const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª Elevación" : "Canal 7ª Elevación";
-    const tituloToma = tomaObj ? ` — ${formatearNombreToma(tomaObj.toma)}` : "";
-
-    document.getElementById("ficha-titulo-partidor").textContent = `${datosP.nombre}${tituloToma}`;
-    document.getElementById("ficha-subtitulo").textContent = `${canalTexto} · Fecha: ${fecha.split("-").reverse().join("/")}`;
-
-    const bloqueFormRegante = document.getElementById("bloque-formulario-regante");
-    if (tomaObj) {
-      bloqueFormRegante.classList.remove("oculto");
-      rellenarInputsHora("regante-maq-hh", "regante-maq-mm", "");
-      document.getElementById("regante-horas-riego").value = "";
-      document.getElementById("regante-minutos-riego").value = "0";
-      actualizarPanelResumenFijo();
-    } else {
-      bloqueFormRegante.classList.add("oculto");
-    }
-
-    const panelAdmin = document.getElementById("panel-edicion-admin");
-    if (esAdmin) panelAdmin.classList.remove("oculto");
-    else panelAdmin.classList.add("oculto");
-
-    pintarBannerYEstadoFicha(datosP);
-
-    pantallaPrincipal.classList.add("oculto");
-    pantallaFicha.classList.remove("oculto");
-
-    const docIdRiego = `${fecha}_${datosP.id}`;
-    unsubscribeEstadoVivo = onSnapshot(doc(db, "riegos_diarios", docIdRiego), (docSnap) => {
-      if (docSnap.exists()) estadosDelDia[datosP.id] = docSnap.data();
-      else delete estadosDelDia[datosP.id];
-      pintarBannerYEstadoFicha(datosP);
-      actualizarPanelResumenFijo();
-      pintarListaTurnos();
-    });
-
-    const qTurnos = query(
-      collection(db, "turnos_partidor"),
-      where("partidorId", "==", datosP.id),
-      where("fecha", "==", fecha)
-    );
-
-    let primeraCarga = true;
-    unsubscribeTurnosVivo = onSnapshot(qTurnos, (snapshot) => {
-      turnosDelPartidor = [];
-      snapshot.forEach((docSnap) => {
-        turnosDelPartidor.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      turnosDelPartidor.sort((a, b) => horaAMinutos(a.horaMaquinas) - horaAMinutos(b.horaMaquinas));
-
-      if (tomaObj && usuarioActual) {
-        const miTurno = turnosDelPartidor.find(
-          (t) => t.socio === usuarioActual.socio && t.nombre === usuarioActual.nombre && formatearNombreToma(t.toma) === formatearNombreToma(tomaObj.toma)
-        );
-        if (miTurno) {
-          miTurnoDocId = miTurno.id;
-          if (primeraCarga) {
-            rellenarInputsHora("regante-maq-hh", "regante-maq-mm", miTurno.horaMaquinas);
-            document.getElementById("regante-horas-riego").value = miTurno.horasRiego;
-            document.getElementById("regante-minutos-riego").value = String(miTurno.minutosRiego || 0);
+        if (tomaObj && usuarioActual) {
+          const miTurno = turnosDelPartidor.find(
+            (t) => t.socio === usuarioActual.socio && t.nombre === usuarioActual.nombre && formatearNombreToma(t.toma) === formatearNombreToma(tomaObj.toma)
+          );
+          if (miTurno) {
+            miTurnoDocId = miTurno.id;
+            if (primeraCarga) {
+              rellenarInputsHora("regante-maq-hh", "regante-maq-mm", miTurno.horaMaquinas);
+              document.getElementById("regante-horas-riego").value = miTurno.horasRiego;
+              document.getElementById("regante-minutos-riego").value = String(miTurno.minutosRiego || 0);
+            }
           }
         }
-      }
-      primeraCarga = false;
+        primeraCarga = false;
 
-      pintarBannerYEstadoFicha(datosP);
-      actualizarPanelResumenFijo();
-      pintarListaTurnos();
+        pintarBannerYEstadoFicha(datosP);
+        actualizarPanelResumenFijo();
+        pintarListaTurnos();
+      });
+    }
+
+    document.getElementById("btn-publicar-turno").addEventListener("click", async () => {
+      if (!seleccionAbierta || !seleccionAbierta.tomaObj) return;
+      if (!firebaseListo) {
+        alert("Sin conexión con la base de datos.");
+        return;
+      }
+
+      const hhStr = document.getElementById("regante-maq-hh").value.trim();
+      const mmStr = document.getElementById("regante-maq-mm").value.trim();
+      if (hhStr === "" || mmStr === "") {
+        alert("Por favor, escribe la Hora y los Minutos de máquinas (recibo).");
+        return;
+      }
+
+      const horaMaquinas = leerHoraDeInputs("regante-maq-hh", "regante-maq-mm");
+      rellenarInputsHora("regante-maq-hh", "regante-maq-mm", horaMaquinas);
+
+      const horasVal = document.getElementById("regante-horas-riego").value;
+      const minutosVal = parseInt(document.getElementById("regante-minutos-riego").value, 10) || 0;
+
+      const horasEnteras = parseInt(horasVal, 10);
+      if (isNaN(horasEnteras) || horasEnteras < 0) {
+        alert("Introduce un número entero de horas (por ejemplo 0, 1, 2...).");
+        return;
+      }
+      if (horasEnteras === 0 && minutosVal === 0) {
+        alert("El tiempo de riego debe ser mayor que 0.");
+        return;
+      }
+
+      const btn = document.getElementById("btn-publicar-turno");
+      btn.disabled = true;
+      btn.textContent = "Guardando turno...";
+
+      const { datosP, tomaObj } = seleccionAbierta;
+      const fecha = selectorFecha.value;
+
+      const payloadTurno = {
+        fecha: fecha,
+        partidorId: datosP.id,
+        partidorNombre: datosP.nombre,
+        canal: datosP.canal,
+        socio: usuarioActual.socio,
+        nombre: usuarioActual.nombre,
+        telefono: usuarioActual.telefono || "",
+        toma: formatearNombreToma(tomaObj.toma),
+        desfaseToma: Number(tomaObj.desfaseToma) || 0,
+        horaMaquinas: horaMaquinas,
+        horasRiego: horasEnteras,
+        minutosRiego: minutosVal,
+        actualizadoEn: serverTimestamp()
+      };
+
+      try {
+        if (miTurnoDocId) {
+          await updateDoc(doc(db, "turnos_partidor", miTurnoDocId), payloadTurno);
+        } else {
+          const nuevoRef = await addDoc(collection(db, "turnos_partidor"), {
+            ...payloadTurno,
+            creadoEn: serverTimestamp()
+          });
+          miTurnoDocId = nuevoRef.id;
+        }
+
+        actualizarPanelResumenFijo();
+        alert("✅ Turno guardado. Tus datos quedan visibles arriba y en la lista.");
+      } catch (error) {
+        alert("Error al guardar tu turno en Firebase.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "✔ Guardar / Actualizar mi turno en la lista";
+      }
     });
-  }
 
-  document.getElementById("btn-publicar-turno").addEventListener("click", async () => {
-    if (!seleccionAbierta || !seleccionAbierta.tomaObj) return;
+    document.getElementById("btn-guardar-estado-riego").addEventListener("click", async () => {
+      if (!seleccionAbierta || !esAdmin) return;
+      if (!firebaseListo) {
+        alert("Sin conexión con la base de datos.");
+        return;
+      }
 
-    const hhStr = document.getElementById("regante-maq-hh").value.trim();
-    const mmStr = document.getElementById("regante-maq-mm").value.trim();
-    if (hhStr === "" || mmStr === "") {
-      alert("Por favor, escribe la Hora y los Minutos de máquinas (recibo).");
-      return;
-    }
+      const { datosP } = seleccionAbierta;
+      const btnGuardar = document.getElementById("btn-guardar-estado-riego");
+      btnGuardar.disabled = true;
+      btnGuardar.textContent = "Guardando y recalculando...";
 
-    const horaMaquinas = leerHoraDeInputs("regante-maq-hh", "regante-maq-mm");
-    rellenarInputsHora("regante-maq-hh", "regante-maq-mm", horaMaquinas);
+      const fecha = selectorFecha.value;
+      const docIdRiego = `${fecha}_${datosP.id}`;
 
-    const horasVal = document.getElementById("regante-horas-riego").value;
-    const minutosVal = parseInt(document.getElementById("regante-minutos-riego").value, 10) || 0;
+      let estadoElegido = document.getElementById("admin-estado").value;
+      let horaPrevision = leerHoraDeInputs("admin-prev-hh", "admin-prev-mm");
+      const horaRealApertura = leerHoraDeInputs("admin-real-hh", "admin-real-mm");
+      const observaciones = document.getElementById("admin-observaciones").value.trim();
 
-    const horasEnteras = parseInt(horasVal, 10);
-    if (isNaN(horasEnteras) || horasEnteras < 0) {
-      alert("Introduce un número entero de horas (por ejemplo 0, 1, 2...).");
-      return;
-    }
-    if (horasEnteras === 0 && minutosVal === 0) {
-      alert("El tiempo de riego debe ser mayor que 0.");
-      return;
-    }
+      const desfasePart = Number(datosP.desfase) || 0;
+      let retrasoMinutos = 0;
 
-    const btn = document.getElementById("btn-publicar-turno");
-    btn.disabled = true;
-    btn.textContent = "Guardando turno...";
+      if (horaRealApertura) {
+        horaPrevision = "";
+        rellenarInputsHora("admin-prev-hh", "admin-prev-mm", "");
 
-    const { datosP, tomaObj } = seleccionAbierta;
-    const fecha = selectorFecha.value;
+        const diff = calcularDiferenciaContraTeorico(horaRealApertura, desfasePart, turnosDelPartidor);
+        retrasoMinutos = diff > 0 ? diff : 0;
 
-    const payloadTurno = {
-      fecha: fecha,
-      partidorId: datosP.id,
-      partidorNombre: datosP.nombre,
-      canal: datosP.canal,
-      socio: usuarioActual.socio,
-      nombre: usuarioActual.nombre,
-      telefono: usuarioActual.telefono || "",
-      toma: formatearNombreToma(tomaObj.toma),
-      desfaseToma: Number(tomaObj.desfaseToma) || 0,
-      horaMaquinas: horaMaquinas,
-      horasRiego: horasEnteras,
-      minutosRiego: minutosVal,
-      actualizadoEn: serverTimestamp()
-    };
+        if (estadoElegido !== "rojo") {
+          estadoElegido = retrasoMinutos > 0 ? "naranja" : "verde";
+          document.getElementById("admin-estado").value = estadoElegido;
+        }
+      } else if (horaPrevision) {
+        const diffPrev = calcularDiferenciaContraTeorico(horaPrevision, desfasePart, turnosDelPartidor);
+        retrasoMinutos = diffPrev > 0 ? diffPrev : 0;
+        if (estadoElegido !== "rojo" && (retrasoMinutos > 0 || estadoElegido === "sin_datos")) {
+          estadoElegido = "naranja";
+          document.getElementById("admin-estado").value = "naranja";
+        }
+      }
 
-    try {
-      if (miTurnoDocId) {
-        await updateDoc(doc(db, "turnos_partidor", miTurnoDocId), payloadTurno);
+      const nuevosDatos = {
+        fecha: fecha,
+        partidorId: datosP.id,
+        partidorNombre: datosP.nombre,
+        canal: datosP.canal,
+        estado: estadoElegido,
+        horaPrevision: horaPrevision,
+        horaRealApertura: horaRealApertura,
+        retrasoMinutos: retrasoMinutos,
+        observaciones: observaciones,
+        actualizadoEn: serverTimestamp()
+      };
+
+      try {
+        await setDoc(doc(db, "riegos_diarios", docIdRiego), nuevosDatos);
+        estadosDelDia[datosP.id] = nuevosDatos;
+        pintarBannerYEstadoFicha(datosP);
+        actualizarPanelResumenFijo();
+        pintarListaTurnos();
+        alert("✅ Horarios y estado actualizados correctamente.");
+      } catch (error) {
+        alert("Error al guardar en Firebase: " + error.message);
+      } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.textContent = "💾 Guardar y actualizar horarios";
+      }
+    });
+
+    configurarInputsHora("regante-maq-hh", "regante-maq-mm", actualizarPanelResumenFijo);
+    configurarInputsHora("admin-prev-hh", "admin-prev-mm", null);
+    configurarInputsHora("admin-real-hh", "admin-real-mm", null);
+    document.getElementById("regante-horas-riego").addEventListener("input", actualizarPanelResumenFijo);
+    document.getElementById("regante-minutos-riego").addEventListener("change", actualizarPanelResumenFijo);
+
+    document.getElementById("btn-activar-notifs").addEventListener("click", async () => {
+      if (!("Notification" in window)) {
+        alert("Tu navegador no soporta notificaciones emergentes, pero verás los avisos de retraso en naranja dentro de la app.");
+        return;
+      }
+      const permiso = await Notification.requestPermission();
+      if (permiso === "granted") {
+        alert("🔔 Avisos activados. Recibirás una notificación si el Capataz registra un retraso o apertura tardía en tu partidor.");
       } else {
-        const nuevoRef = await addDoc(collection(db, "turnos_partidor"), {
-          ...payloadTurno,
-          creadoEn: serverTimestamp()
-        });
-        miTurnoDocId = nuevoRef.id;
+        alert("No se han activado las notificaciones del navegador. Puedes habilitarlas en los ajustes del sitio web en tu móvil.");
       }
+    });
 
-      actualizarPanelResumenFijo();
-      alert("✅ Turno guardado. Tus datos quedan visibles arriba y en la lista.");
-    } catch (error) {
-      console.error("Error guardando turno:", error);
-      alert("Error al guardar tu turno en Firebase.");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "✔ Guardar / Actualizar mi turno en la lista";
-    }
-  });
+    document.getElementById("btn-volver-panel").addEventListener("click", () => {
+      detenerEscuchasEnVivo();
+      pantallaFicha.classList.add("oculto");
+      pantallaPrincipal.classList.remove("oculto");
+      pintarListaPartidores();
+    });
 
-  document.getElementById("btn-guardar-estado-riego").addEventListener("click", async () => {
-    if (!seleccionAbierta || !esAdmin) return;
+    selectorFecha.addEventListener("change", async () => {
+      await cargarEstadosPorFecha(selectorFecha.value);
+      pintarListaPartidores();
+    });
 
-    const { datosP } = seleccionAbierta;
-    const btnGuardar = document.getElementById("btn-guardar-estado-riego");
-    btnGuardar.disabled = true;
-    btnGuardar.textContent = "Guardando y recalculando...";
-
-    const fecha = selectorFecha.value;
-    const docIdRiego = `${fecha}_${datosP.id}`;
-
-    let estadoElegido = document.getElementById("admin-estado").value;
-    const horaPrevision = leerHoraDeInputs("admin-prev-hh", "admin-prev-mm");
-    const observaciones = document.getElementById("admin-observaciones").value.trim();
-
-    const desfasePart = Number(datosP.desfase) || 0;
-    const retrasoMin = calcularDesplazamientoRetraso(horaPrevision, desfasePart, turnosDelPartidor);
-    if (horaPrevision && estadoElegido !== "rojo" && (retrasoMin > 0 || estadoElegido === "sin_datos")) {
-      estadoElegido = "naranja";
-      document.getElementById("admin-estado").value = "naranja";
-    }
-
-    const nuevosDatos = {
-      fecha: fecha,
-      partidorId: datosP.id,
-      partidorNombre: datosP.nombre,
-      canal: datosP.canal,
-      estado: estadoElegido,
-      horaPrevision: horaPrevision,
-      observaciones: observaciones,
-      actualizadoEn: serverTimestamp()
-    };
-
-    try {
-      await setDoc(doc(db, "riegos_diarios", docIdRiego), nuevosDatos);
-      estadosDelDia[datosP.id] = nuevosDatos;
-      alert("✅ Estado actualizado y turnos recalculados automáticamente.");
-    } catch (error) {
-      console.error("Error guardando estado:", error);
-      alert("Error al guardar en Firebase.");
-    } finally {
-      btnGuardar.disabled = false;
-      btnGuardar.textContent = "💾 Guardar estado y recalcular turnos";
-    }
-  });
-
-  configurarInputsHora("regante-maq-hh", "regante-maq-mm", actualizarPanelResumenFijo);
-  configurarInputsHora("admin-prev-hh", "admin-prev-mm", null);
-  document.getElementById("regante-horas-riego").addEventListener("input", actualizarPanelResumenFijo);
-  document.getElementById("regante-minutos-riego").addEventListener("change", actualizarPanelResumenFijo);
-
-  document.getElementById("btn-activar-notifs").addEventListener("click", async () => {
-    if (!("Notification" in window)) {
-      alert("Tu navegador no soporta notificaciones emergentes, pero verás los avisos de retraso en naranja dentro de la app.");
-      return;
-    }
-    const permiso = await Notification.requestPermission();
-    if (permiso === "granted") {
-      alert("🔔 Avisos activados. Recibirás una notificación si el Capataz registra un retraso en tu partidor.");
-    } else {
-      alert("No se han activado las notificaciones del navegador. Puedes habilitarlas en los ajustes del sitio web en tu móvil.");
-    }
-  });
-
-  document.getElementById("btn-volver-panel").addEventListener("click", () => {
-    detenerEscuchasEnVivo();
-    pantallaFicha.classList.add("oculto");
-    pantallaPrincipal.classList.remove("oculto");
-    pintarListaPartidores();
-  });
-
-  selectorFecha.addEventListener("change", async () => {
-    await cargarEstadosPorFecha(selectorFecha.value);
-    pintarListaPartidores();
-  });
-
-  document.getElementById("btn-toggle-admin").addEventListener("click", () => {
-    if (esAdmin) {
-      if (confirm("¿Desactivar modo Capataz/Admin en este dispositivo?")) {
-        esAdmin = false;
-        localStorage.removeItem("admin_6y7");
-        actualizarUIAdmin();
-        pintarListaPartidores();
+    document.getElementById("btn-toggle-admin").addEventListener("click", () => {
+      if (esAdmin) {
+        if (confirm("¿Desactivar modo Capataz/Admin en este dispositivo?")) {
+          esAdmin = false;
+          localStorage.removeItem("admin_6y7");
+          actualizarUIAdmin();
+          pintarListaPartidores();
+        }
+      } else {
+        const clave = prompt("Introduce la clave de Capataz / Guardas:");
+        if (clave === CLAVE_ADMIN) {
+          esAdmin = true;
+          localStorage.setItem("admin_6y7", "true");
+          actualizarUIAdmin();
+          alert("Modo Capataz activado.");
+        } else if (clave !== null) {
+          alert("Clave incorrecta.");
+        }
       }
-    } else {
+    });
+
+    document.getElementById("btn-acceso-directo-admin").addEventListener("click", () => {
       const clave = prompt("Introduce la clave de Capataz / Guardas:");
       if (clave === CLAVE_ADMIN) {
         esAdmin = true;
+        verTodosAdmin = true;
         localStorage.setItem("admin_6y7", "true");
-        actualizarUIAdmin();
-        alert("Modo Capataz activado.");
+        usuarioActual = { socio: "ADMIN", nombre: "Capataz / Guardas", telefono: "", misTomas: [] };
+        localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+        mostrarPanelPrincipal();
       } else if (clave !== null) {
         alert("Clave incorrecta.");
       }
-    }
-  });
+    });
 
-  document.getElementById("btn-acceso-directo-admin").addEventListener("click", () => {
-    const clave = prompt("Introduce la clave de Capataz / Guardas:");
-    if (clave === CLAVE_ADMIN) {
-      esAdmin = true;
-      verTodosAdmin = true;
-      localStorage.setItem("admin_6y7", "true");
-      usuarioActual = { socio: "ADMIN", nombre: "Capataz / Guardas", telefono: "", misTomas: [] };
+    document.getElementById("btn-ver-todos-admin").addEventListener("click", () => {
+      verTodosAdmin = !verTodosAdmin;
+      document.getElementById("btn-ver-todos-admin").textContent = verTodosAdmin ? "Ver mis partidores" : "Ver todos";
+      pintarListaPartidores();
+    });
+
+    async function anadirTomaAUsuario() {
+      const partidorId = selectPartidor.value;
+      if (!partidorId) return;
+
+      const textoToma = formatearNombreToma(document.getElementById("input-toma").value);
+      const desfaseToma = parseInt(document.getElementById("input-desfase-toma").value, 10) || 0;
+
+      const nuevaToma = {
+        uid: `toma_${Date.now()}`,
+        partidorId: partidorId,
+        toma: textoToma,
+        desfaseToma: desfaseToma
+      };
+
+      if (!usuarioActual.misTomas) usuarioActual.misTomas = [];
+      usuarioActual.misTomas.push(nuevaToma);
       localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
-      mostrarPanelPrincipal();
-    } else if (clave !== null) {
-      alert("Clave incorrecta.");
-    }
-  });
 
-  document.getElementById("btn-ver-todos-admin").addEventListener("click", () => {
-    verTodosAdmin = !verTodosAdmin;
-    document.getElementById("btn-ver-todos-admin").textContent = verTodosAdmin ? "Ver mis partidores" : "Ver todos";
-    pintarListaPartidores();
-  });
+      if (firebaseListo && usuarioActual.docId) {
+        try {
+          await updateDoc(doc(db, "regantes", usuarioActual.docId), { misTomas: usuarioActual.misTomas });
+        } catch (e) {}
+      }
 
-  async function anadirTomaAUsuario() {
-    const partidorId = selectPartidor.value;
-    if (!partidorId) return;
-
-    const textoToma = formatearNombreToma(document.getElementById("input-toma").value);
-    const desfaseToma = parseInt(document.getElementById("input-desfase-toma").value, 10) || 0;
-
-    const nuevaToma = {
-      uid: `toma_${Date.now()}`,
-      partidorId: partidorId,
-      toma: textoToma,
-      desfaseToma: desfaseToma
-    };
-
-    if (!usuarioActual.misTomas) usuarioActual.misTomas = [];
-    usuarioActual.misTomas.push(nuevaToma);
-    localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
-
-    if (usuarioActual.docId) {
-      try {
-        await updateDoc(doc(db, "regantes", usuarioActual.docId), { misTomas: usuarioActual.misTomas });
-      } catch (e) {}
+      document.getElementById("input-toma").value = "";
+      document.getElementById("input-desfase-toma").value = "0";
+      cajaSelector.classList.add("oculto");
+      btnMostrarSelector.classList.remove("oculto");
+      pintarListaPartidores();
     }
 
-    document.getElementById("input-toma").value = "";
-    document.getElementById("input-desfase-toma").value = "0";
-    cajaSelector.classList.add("oculto");
-    btnMostrarSelector.classList.remove("oculto");
-    pintarListaPartidores();
-  }
+    document.getElementById("btn-confirmar-eliminar").addEventListener("click", async () => {
+      const selectEliminar = document.getElementById("select-eliminar-toma");
+      const uidSeleccionado = selectEliminar.value;
+      if (!uidSeleccionado) return;
 
-  document.getElementById("btn-confirmar-eliminar").addEventListener("click", async () => {
-    const selectEliminar = document.getElementById("select-eliminar-toma");
-    const uidSeleccionado = selectEliminar.value;
-    if (!uidSeleccionado) return;
+      const etiqueta = selectEliminar.options[selectEliminar.selectedIndex].textContent;
+      if (!confirm(`¿Seguro que quieres eliminar "${etiqueta}" de tu lista de partidores?`)) return;
 
-    const etiqueta = selectEliminar.options[selectEliminar.selectedIndex].textContent;
-    if (!confirm(`¿Seguro que quieres eliminar "${etiqueta}" de tu lista de partidores?`)) return;
-
-    usuarioActual.misTomas = usuarioActual.misTomas.filter((t) => t.uid !== uidSeleccionado);
-    localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
-
-    if (usuarioActual.docId) {
-      try {
-        await updateDoc(doc(db, "regantes", usuarioActual.docId), { misTomas: usuarioActual.misTomas });
-      } catch (e) {}
-    }
-
-    pintarListaPartidores();
-  });
-
-  btnMostrarSelector.addEventListener("click", () => {
-    btnMostrarSelector.classList.add("oculto");
-    cajaSelector.classList.remove("oculto");
-    actualizarDesplegablePartidores();
-  });
-
-  document.getElementById("btn-cancelar-partidor").addEventListener("click", () => {
-    cajaSelector.classList.add("oculto");
-    btnMostrarSelector.classList.remove("oculto");
-  });
-
-  selectCanal.addEventListener("change", actualizarDesplegablePartidores);
-  document.getElementById("btn-confirmar-partidor").addEventListener("click", anadirTomaAUsuario);
-
-  formRegistro.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const socio = document.getElementById("socio").value.trim();
-    const nombre = document.getElementById("nombre").value.trim();
-    const telefono = document.getElementById("telefono").value.trim();
-    const consentimiento = document.getElementById("consentimiento").checked;
-
-    if (!consentimiento) return;
-
-    btnRegistrar.disabled = true;
-    btnRegistrar.textContent = "Guardando datos...";
-
-    try {
-      const docRef = await addDoc(collection(db, "regantes"), {
-        socio,
-        nombre,
-        telefono,
-        consentimiento: true,
-        misTomas: [],
-        fechaRegistro: serverTimestamp()
-      });
-
-      usuarioActual = { docId: docRef.id, socio, nombre, telefono, misTomas: [] };
+      usuarioActual.misTomas = usuarioActual.misTomas.filter((t) => t.uid !== uidSeleccionado);
       localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
-      mostrarPanelPrincipal();
-    } catch (error) {
-      console.error("Error al registrar:", error);
-      alert("Error al guardar el registro.");
-    } finally {
-      btnRegistrar.disabled = false;
-      btnRegistrar.textContent = "Acceder a los riegos";
-    }
-  });
 
-  document.getElementById("btn-salir").addEventListener("click", () => {
-    detenerEscuchasEnVivo();
-    localStorage.removeItem("regante_6y7");
-    localStorage.removeItem("admin_6y7");
-    usuarioActual = null;
-    esAdmin = false;
-    verTodosAdmin = false;
-    formRegistro.reset();
+      if (firebaseListo && usuarioActual.docId) {
+        try {
+          await updateDoc(doc(db, "regantes", usuarioActual.docId), { misTomas: usuarioActual.misTomas });
+        } catch (e) {}
+      }
+
+      pintarListaPartidores();
+    });
+
+    btnMostrarSelector.addEventListener("click", () => {
+      btnMostrarSelector.classList.add("oculto");
+      cajaSelector.classList.remove("oculto");
+      actualizarDesplegablePartidores();
+    });
+
+    document.getElementById("btn-cancelar-partidor").addEventListener("click", () => {
+      cajaSelector.classList.add("oculto");
+      btnMostrarSelector.classList.remove("oculto");
+    });
+
+    selectCanal.addEventListener("change", actualizarDesplegablePartidores);
+    document.getElementById("btn-confirmar-partidor").addEventListener("click", anadirTomaAUsuario);
+
+    formRegistro.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const socio = document.getElementById("socio").value.trim();
+      const nombre = document.getElementById("nombre").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const consentimiento = document.getElementById("consentimiento").checked;
+
+      if (!consentimiento) return;
+
+      btnRegistrar.disabled = true;
+      btnRegistrar.textContent = "Guardando datos...";
+
+      try {
+        let docId = null;
+        if (firebaseListo) {
+          const docRef = await addDoc(collection(db, "regantes"), {
+            socio,
+            nombre,
+            telefono,
+            consentimiento: true,
+            misTomas: [],
+            fechaRegistro: serverTimestamp()
+          });
+          docId = docRef.id;
+        }
+
+        usuarioActual = { docId, socio, nombre, telefono, misTomas: [] };
+        localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+        mostrarPanelPrincipal();
+      } catch (error) {
+        alert("Error al guardar el registro.");
+      } finally {
+        btnRegistrar.disabled = false;
+        btnRegistrar.textContent = "Acceder a los riegos";
+      }
+    });
+
+    document.getElementById("btn-salir").addEventListener("click", () => {
+      detenerEscuchasEnVivo();
+      localStorage.removeItem("regante_6y7");
+      localStorage.removeItem("admin_6y7");
+      usuarioActual = null;
+      esAdmin = false;
+      verTodosAdmin = false;
+      formRegistro.reset();
+      verificarSesion();
+    });
+
     verificarSesion();
-  });
-
-  verificarSesion();
+  })();
 </script>
 </body>
 </html>
