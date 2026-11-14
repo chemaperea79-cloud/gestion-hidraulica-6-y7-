@@ -34,16 +34,14 @@
       margin-bottom: 12px;
       font-size: 1.05rem;
     }
-    .form-group {
-      margin-bottom: 14px;
-    }
+    .form-group { margin-bottom: 14px; }
     label {
       display: block;
       font-weight: 600;
       margin-bottom: 6px;
       font-size: 0.92rem;
     }
-    input[type="text"], input[type="tel"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
+    input[type="text"], input[type="tel"], input[type="date"], input[type="number"], select, textarea {
       width: 100%;
       padding: 12px;
       border: 1px solid #cbd5e1;
@@ -53,14 +51,8 @@
       background: #fff;
       font-family: inherit;
     }
-    .fila-doble {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .fila-doble > div {
-      flex: 1;
-    }
+    .fila-doble { display: flex; gap: 10px; align-items: center; }
+    .fila-doble > div { flex: 1; }
     .caja-hora-numerica {
       display: flex;
       align-items: center;
@@ -74,11 +66,7 @@
       letter-spacing: 1px;
       padding: 10px;
     }
-    .separador-hora {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #0f4c81;
-    }
+    .separador-hora { font-size: 1.5rem; font-weight: bold; color: #0f4c81; }
     .checkbox-group {
       display: flex;
       align-items: flex-start;
@@ -87,10 +75,7 @@
       font-size: 0.9rem;
       color: #475569;
     }
-    .checkbox-group input {
-      margin-top: 3px;
-      transform: scale(1.2);
-    }
+    .checkbox-group input { margin-top: 3px; transform: scale(1.2); }
     button.btn-primario {
       width: 100%;
       padding: 14px;
@@ -102,9 +87,7 @@
       font-weight: bold;
       cursor: pointer;
     }
-    button.btn-primario:disabled {
-      background-color: #94a3b8;
-    }
+    button.btn-primario:disabled { background-color: #94a3b8; }
     .btn-anadir {
       width: 100%;
       padding: 12px;
@@ -128,9 +111,7 @@
       padding: 10px;
       cursor: pointer;
     }
-    .oculto {
-      display: none !important;
-    }
+    .oculto { display: none !important; }
     .cabecera-usuario {
       display: flex;
       justify-content: space-between;
@@ -143,11 +124,7 @@
       color: #0369a1;
       gap: 8px;
     }
-    .acciones-cabecera {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
+    .acciones-cabecera { display: flex; gap: 6px; align-items: center; }
     .btn-admin-toggle {
       background: #0f4c81;
       color: white;
@@ -159,9 +136,7 @@
       cursor: pointer;
       white-space: nowrap;
     }
-    .btn-admin-activo {
-      background: #15803d;
-    }
+    .btn-admin-activo { background: #15803d; }
     .btn-notif {
       background: #0284c7;
       color: white;
@@ -182,24 +157,9 @@
       border-radius: 8px;
       border: 1px solid #e2e8f0;
     }
-    .leyenda span {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: 600;
-    }
-    .punto {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .lista-mis-partidores {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 10px;
-    }
+    .leyenda span { display: flex; align-items: center; gap: 5px; font-weight: 600; }
+    .punto { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .lista-mis-partidores { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
     .btn-partidor {
       width: 100%;
       padding: 15px 16px;
@@ -214,9 +174,1566 @@
       justify-content: space-between;
       align-items: center;
     }
-    .btn-partidor:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.18);
+    .btn-partidor:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.18); }
+    .btn-partidor small { font-weight: normal; font-size: 0.84rem; display: block; margin-top: 4px; opacity: 0.95; }
+    .caja-selector {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 14px;
     }
-    .btn-partidor small {
-      font
+    .acciones-selector { display: flex; gap: 10px; margin-top: 12px; }
+    .btn-guardar-p {
+      flex: 2;
+      padding: 12px;
+      background: #0f4c81;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-cancelar-p {
+      flex: 1;
+      padding: 12px;
+      background: #cbd5e1;
+      color: #1e293b;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .zona-eliminar {
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px dashed #cbd5e1;
+    }
+    .zona-eliminar label { font-size: 0.85rem; color: #64748b; }
+    .fila-eliminar { display: flex; gap: 8px; margin-top: 6px; }
+    .fila-eliminar select { flex: 2; padding: 10px; font-size: 0.9rem; }
+    .btn-eliminar-seguro {
+      flex: 1;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.88rem;
+      cursor: pointer;
+      padding: 10px;
+    }
+    .estado-sin-datos { background-color: #e2e8f0; color: #1e293b; }
+    .estado-verde { background-color: #16a34a; color: white; }
+    .estado-naranja { background-color: #ea580c; color: white; }
+    .estado-rojo { background-color: #dc2626; color: white; }
+    .btn-volver {
+      background: #e2e8f0;
+      color: #1e293b;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 14px;
+      font-size: 0.92rem;
+    }
+    .banner-estado {
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+    }
+    .alerta-retraso-vivo {
+      background: #ffedd5;
+      border: 2px solid #ea580c;
+      color: #9a3412;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .dato-ficha {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 11px 13px;
+      margin-bottom: 10px;
+    }
+    .dato-ficha span.etiqueta {
+      display: block;
+      font-size: 0.76rem;
+      color: #64748b;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .caja-turno-regante {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    .caja-turno-regante h4 { margin: 0 0 12px 0; color: #166534; font-size: 1rem; }
+    .resumen-fijo-regante {
+      background: #ffffff;
+      border: 2px solid #0f4c81;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+    .resumen-fijo-titulo {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #0f4c81;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 5px;
+    }
+    .grid-resumen-fijo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .celda-fija {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 9px 10px;
+    }
+    .celda-fija.destacada { background: #eff6ff; border: 1px solid #93c5fd; grid-column: span 2; }
+    .celda-fija.prevision-box { background: #fffbeb; border: 1px solid #fcd34d; grid-column: span 2; }
+    .celda-fija span {
+      display: block;
+      font-size: 0.74rem;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .celda-fija strong { font-size: 1.25rem; color: #0f172a; }
+    .celda-fija.destacada strong { font-size: 1.5rem; color: #0f4c81; }
+    .celda-fija small { display: block; font-size: 0.78rem; color: #475569; margin-top: 2px; }
+    .lista-turnos-partidor { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+    .tarjeta-turno {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-left: 5px solid #0f4c81;
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+    .tarjeta-turno.mi-turno { background: #f8fafc; border-left-color: #16a34a; border-color: #86efac; }
+    .turno-cabecera {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #e2e8f0;
+      gap: 8px;
+    }
+    .turno-nombre { font-weight: 700; font-size: 0.98rem; color: #0f172a; }
+    .turno-toma-badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 5px;
+      margin-left: 4px;
+    }
+    .turno-tel {
+      background: #f1f5f9;
+      color: #0f4c81;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 5px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+      border: 1px solid #cbd5e1;
+    }
+    .turno-tabla-datos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .turno-dato-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 7px 9px;
+    }
+    .turno-dato-item.destacado-lista {
+      grid-column: span 2;
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .turno-dato-label {
+      display: block;
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .turno-dato-valor { font-size: 1.02rem; font-weight: 800; color: #0f172a; }
+    .turno-dato-item.destacado-lista .turno-dato-valor { font-size: 1.15rem; color: #0f4c81; }
+    .turno-pie {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .btn-borrar-mi-turno {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .panel-edicion-admin {
+      background: #fffbeb;
+      border: 2px solid #f59e0b;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .panel-edicion-admin h4 { margin-top: 0; color: #b45309; margin-bottom: 12px; }
+    .banner-modo-admin {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      color: #92400e;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .aviso-orientativo {
+      font-size: 0.8rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+    }
+    #visor-error-emergencia {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 2px solid #dc2626;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px auto;
+      max-width: 540px;
+      font-size: 0.85rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="visor-error-emergencia"></div>
+
+  <script>
+    window.onerror = function(msg, url, line) {
+      var box = document.getElementById("visor-error-emergencia");
+      if (box) {
+        box.style.display = "block";
+        box.innerHTML = "<strong>Error detectado (línea " + line + "):</strong> " + msg;
+      }
+    };
+  </script>
+
+  <!-- PANTALLA 1: REGISTRO DE REGANTE (VISIBLE POR DEFECTO HASTA COMPROBAR SESIÓN) -->
+  <div id="pantalla-registro" class="card">
+    <h2>Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
+    <p style="text-align: center; color: #64748b; font-size: 0.9rem;">
+      Regístrate una única vez para consultar y anotar tus turnos de riego.
+    </p>
+    
+    <form id="form-registro">
+      <div class="form-group">
+        <label for="socio">Número de Socio / Comunero</label>
+        <input type="text" id="socio" placeholder="Ej: 1045" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nombre">Nombre y Apellidos</label>
+        <input type="text" id="nombre" placeholder="Ej: Juan Pérez García" required>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono móvil</label>
+        <input type="tel" id="telefono" placeholder="Ej: 600123456" required>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="consentimiento" required>
+        <label for="consentimiento" style="font-weight: normal; margin: 0;">
+          Acepto el registro de mis datos para la gestión y consulta de turnos de riego de la Comunidad.
+        </label>
+      </div>
+
+      <button type="submit" id="btn-registrar" class="btn-primario">Acceder a los riegos</button>
+    </form>
+
+    <button type="button" id="btn-acceso-directo-admin" class="btn-secundario" style="margin-top:16px;">
+      🔐 Acceso Capataz / Guardas
+    </button>
+  </div>
+
+  <!-- PANTALLA 2: PANEL PRINCIPAL -->
+  <div id="pantalla-principal" class="card oculto">
+    <div class="cabecera-usuario">
+      <div>
+        👤 <strong id="saludo-nombre"></strong><br>
+        <span style="font-size:0.78rem;">Socio: <strong id="saludo-socio"></strong></span>
+      </div>
+      <div class="acciones-cabecera">
+        <button type="button" id="btn-activar-notifs" class="btn-notif" title="Activar avisos de retraso">🔔 Avisos</button>
+        <button type="button" id="btn-toggle-admin" class="btn-admin-toggle">🔐 Admin</button>
+      </div>
+    </div>
+
+    <div id="banner-admin" class="banner-modo-admin oculto">
+      <span>🛠️ <strong>Modo Capataz Activo</strong> (Chema / Luis)</span>
+      <button type="button" id="btn-ver-todos-admin" style="background:#b45309; color:white; border:none; border-radius:6px; padding:5px 8px; font-size:0.8rem; font-weight:bold; cursor:pointer;">
+        Ver todos
+      </button>
+    </div>
+
+    <h2>Mis Turnos de Riego</h2>
+
+    <div class="form-group">
+      <label for="selector-fecha">Fecha de consulta:</label>
+      <input type="date" id="selector-fecha">
+    </div>
+
+    <div class="leyenda">
+      <span><i class="punto" style="background:#16a34a;"></i> Regando</span>
+      <span><i class="punto" style="background:#ea580c;"></i> Retraso / Previsión</span>
+      <span><i class="punto" style="background:#dc2626;"></i> Cerrado</span>
+    </div>
+
+    <h3 id="titulo-lista-partidores">Mis Partidores</h3>
+    <div id="contenedor-mis-partidores" class="lista-mis-partidores"></div>
+
+    <button type="button" id="btn-mostrar-selector" class="btn-anadir">+ Añadir mi partidor</button>
+
+    <div id="caja-selector-partidor" class="caja-selector oculto">
+      <div class="form-group">
+        <label for="select-canal">1. Canal:</label>
+        <select id="select-canal">
+          <option value="sexta">Canal 6ª Elevación</option>
+          <option value="septima">Canal 7ª Elevación</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="select-partidor">2. Partidor:</label>
+        <select id="select-partidor">
+          <option value="">Cargando lista...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="input-toma">3. Número o nombre de tu Toma:</label>
+        <input type="text" id="input-toma" placeholder="Ej: 3 (se mostrará como Toma 3)">
+      </div>
+
+      <div class="form-group">
+        <label for="input-desfase-toma">4. Desfase desde el Partidor hasta tu Toma (minutos):</label>
+        <input type="number" id="input-desfase-toma" inputmode="numeric" min="0" max="600" value="0" placeholder="Ej: 25">
+        <small style="color:#64748b; display:block; margin-top:4px; font-size:0.8rem;">
+          Pon 0 si tu toma está junto al partidor. Quedará guardado de forma permanente.
+        </small>
+      </div>
+
+      <div class="acciones-selector">
+        <button type="button" id="btn-confirmar-partidor" class="btn-guardar-p">Guardar partidor</button>
+        <button type="button" id="btn-cancelar-partidor" class="btn-cancelar-p">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="zona-eliminar-segura" class="zona-eliminar oculto">
+      <label for="select-eliminar-toma">¿Quieres quitar alguno de tus partidores guardados?</label>
+      <div class="fila-eliminar">
+        <select id="select-eliminar-toma"></select>
+        <button type="button" id="btn-confirmar-eliminar" class="btn-eliminar-seguro">Eliminar</button>
+      </div>
+    </div>
+
+    <p class="aviso-orientativo">
+      * Los horarios mostrados son orientativos y están sujetos a variaciones por caudal o incidencias en la red.
+    </p>
+
+    <button type="button" id="btn-salir" class="btn-secundario">Cerrar sesión</button>
+  </div>
+
+  <!-- PANTALLA 3: FICHA INTERIOR DEL PARTIDOR -->
+  <div id="pantalla-ficha" class="card oculto">
+    <button type="button" id="btn-volver-panel" class="btn-volver">⬅ Volver a mis partidores</button>
+
+    <h2 id="ficha-titulo-partidor" style="margin-bottom:4px;">Partidor</h2>
+    <p id="ficha-subtitulo" style="text-align:center; color:#64748b; margin-top:0; font-size:0.9rem;"></p>
+
+    <div id="ficha-banner-estado" class="banner-estado estado-sin-datos">
+      Sin información para esta fecha
+    </div>
+
+    <div id="banner-alerta-retraso" class="alerta-retraso-vivo oculto"></div>
+
+    <div id="bloque-observaciones" class="dato-ficha oculto">
+      <span class="etiqueta">Observaciones / Avisos del Capataz</span>
+      <p id="ficha-observaciones" style="margin:4px 0 0 0; font-size:0.95rem; color:#1e293b;"></p>
+    </div>
+
+    <div id="bloque-formulario-regante" class="caja-turno-regante">
+      <h4>💧 Mis datos de riego para este día</h4>
+      
+      <div class="form-group">
+        <label>Hora de máquinas (recibo):</label>
+        <div class="caja-hora-numerica">
+          <input type="text" id="regante-maq-hh" inputmode="numeric" maxlength="2" placeholder="HH">
+          <span class="separador-hora">:</span>
+          <input type="text" id="regante-maq-mm" inputmode="numeric" maxlength="2" placeholder="MM">
+        </div>
+        <small style="color:#475569; font-size:0.78rem; display:block; margin-top:4px;">
+          Escribe hora (00 a 23) y minutos (00 a 59). Ej: 09 y 30.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Tiempo de riego:</label>
+        <div class="fila-doble">
+          <div>
+            <input type="number" id="regante-horas-riego" inputmode="numeric" min="0" max="48" placeholder="Horas (ej: 2)">
+          </div>
+          <div>
+            <select id="regante-minutos-riego">
+              <option value="0">0 min</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+              <option value="45">45 min</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="resumen-fijo-regante">
+        <div class="resumen-fijo-titulo">📊 Resumen de tus tiempos calculados</div>
+        <div class="grid-resumen-fijo">
+          <div class="celda-fija">
+            <span>Hora máquinas (recibo)</span>
+            <strong id="fijo-hora-maquinas">--:--</strong>
+            <small id="fijo-desfase-canal">Desfase canal: -- min</small>
+          </div>
+          <div class="celda-fija">
+            <span>Apertura del partidor</span>
+            <strong id="fijo-hora-partidor">--:--</strong>
+            <small id="fijo-detalle-partidor">Según desfase por defecto</small>
+          </div>
+          <div class="celda-fija prevision-box">
+            <span>Previsión de apertura del partidor (Capataz)</span>
+            <strong id="fijo-prevision-admin">Sin especificar</strong>
+            <small id="fijo-detalle-prevision">Calculado con desfase por defecto desde máquinas</small>
+          </div>
+          <div class="celda-fija destacada">
+            <span>💧 Hora estimada de llegada a tu toma</span>
+            <strong id="fijo-hora-toma">--:--</strong>
+            <small id="fijo-detalle-toma">Desfase partidor → tu toma: -- min</small>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" id="btn-publicar-turno" class="btn-primario" style="background:#16a34a;">
+        ✔ Guardar / Actualizar mi turno en la lista
+      </button>
+    </div>
+
+    <h3>📋 Turnos anotados en este partidor</h3>
+    <div id="contenedor-lista-turnos" class="lista-turnos-partidor">
+      <p style="color:#64748b; font-size:0.9rem; text-align:center;">Cargando turnos...</p>
+    </div>
+
+    <div id="panel-edicion-admin" class="panel-edicion-admin oculto">
+      <h4>🛠️ Actualizar estado del partidor (Capataz)</h4>
+
+      <div class="form-group">
+        <label for="admin-estado">Estado / Color del partidor:</label>
+        <select id="admin-estado">
+          <option value="sin_datos">⚪ Sin programar / Neutro</option>
+          <option value="naranja">🟠 Retraso / Previsión de apertura</option>
+          <option value="verde">🟢 Abierto / Regando</option>
+          <option value="rojo">🔴 Cerrado / Riego finalizado</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Previsión de apertura del partidor (si lleva retraso o cambia la hora):</label>
+        <div class="caja-hora-numerica">
+          <input type="text" id="admin-prev-hh" inputmode="numeric" maxlength="2" placeholder="HH">
+          <span class="separador-hora">:</span>
+          <input type="text" id="admin-prev-mm" inputmode="numeric" maxlength="2" placeholder="MM">
+        </div>
+        <small style="color:#92400e; display:block; margin-top:4px; font-size:0.78rem;">
+          Déjalo vacío para dejar "Sin especificar". Si lleva retraso respecto a máquinas, pasará automáticamente a Naranja y recalculará toda la lista.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="admin-observaciones">Observaciones para los regantes (opcional):</label>
+        <textarea id="admin-observaciones" rows="2" placeholder="Ej: Retraso por limpieza de rejilla, caudal normal..."></textarea>
+      </div>
+
+      <button type="button" id="btn-guardar-estado-riego" class="btn-primario" style="background:#b45309;">
+        💾 Guardar estado y recalcular turnos
+      </button>
+    </div>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+  const APP_DATA_VERSION = "v3_turnos_fijos";
+  try {
+    const versionGuardada = localStorage.getItem("app_version_6y7");
+    if (versionGuardada !== APP_DATA_VERSION) {
+      const sesionAnterior = localStorage.getItem("regante_6y7");
+      if (sesionAnterior) {
+        const parsed = JSON.parse(sesionAnterior);
+        if (!parsed || typeof parsed !== "object" || !parsed.nombre) {
+          localStorage.removeItem("regante_6y7");
+        }
+      }
+      localStorage.setItem("app_version_6y7", APP_DATA_VERSION);
+    }
+  } catch (e) {
+    localStorage.clear();
+    localStorage.setItem("app_version_6y7", APP_DATA_VERSION);
+  }
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
+    authDomain: "sexta-y-septima-riego.firebaseapp.com",
+    projectId: "sexta-y-septima-riego",
+    storageBucket: "sexta-y-septima-riego.firebasestorage.app",
+    messagingSenderId: "1031850424918",
+    appId: "1:1031850424918:web:89508ea107686feaf4d9f7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const CLAVE_ADMIN = "6767";
+
+  const pantallaRegistro = document.getElementById("pantalla-registro");
+  const pantallaPrincipal = document.getElementById("pantalla-principal");
+  const pantallaFicha = document.getElementById("pantalla-ficha");
+
+  const formRegistro = document.getElementById("form-registro");
+  const btnRegistrar = document.getElementById("btn-registrar");
+  const selectorFecha = document.getElementById("selector-fecha");
+
+  const contenedorMisPartidores = document.getElementById("contenedor-mis-partidores");
+  const btnMostrarSelector = document.getElementById("btn-mostrar-selector");
+  const cajaSelector = document.getElementById("caja-selector-partidor");
+  const selectCanal = document.getElementById("select-canal");
+  const selectPartidor = document.getElementById("select-partidor");
+
+  selectorFecha.value = new Date().toISOString().split('T')[0];
+
+  let catalogoPartidores = [];
+  let estadosDelDia = {};
+  let turnosDelPartidor = [];
+  let usuarioActual = null;
+  let esAdmin = localStorage.getItem("admin_6y7") === "true";
+  let verTodosAdmin = false;
+  let seleccionAbierta = null;
+  let miTurnoDocId = null;
+  let unsubscribeEstadoVivo = null;
+  let unsubscribeTurnosVivo = null;
+  let ultimaNotificacionEnviada = "";
+
+  function configurarInputsHora(idHH, idMM, onChangeCallback) {
+    const inpH = document.getElementById(idHH);
+    const inpM = document.getElementById(idMM);
+
+    inpH.addEventListener("input", () => {
+      inpH.value = inpH.value.replace(/\D/g, "").slice(0, 2);
+      if (parseInt(inpH.value, 10) > 23) inpH.value = "23";
+      if (inpH.value.length === 2) inpM.focus();
+      if (onChangeCallback) onChangeCallback();
+    });
+
+    inpM.addEventListener("input", () => {
+      inpM.value = inpM.value.replace(/\D/g, "").slice(0, 2);
+      if (parseInt(inpM.value, 10) > 59) inpM.value = "59";
+      if (onChangeCallback) onChangeCallback();
+    });
+
+    inpH.addEventListener("blur", () => {
+      if (inpH.value.length === 1) inpH.value = inpH.value.padStart(2, "0");
+      if (onChangeCallback) onChangeCallback();
+    });
+
+    inpM.addEventListener("blur", () => {
+      if (inpM.value.length === 1) inpM.value = inpM.value.padStart(2, "0");
+      if (onChangeCallback) onChangeCallback();
+    });
+  }
+
+  function leerHoraDeInputs(idHH, idMM) {
+    const h = document.getElementById(idHH).value.trim();
+    const m = document.getElementById(idMM).value.trim();
+    if (h === "" && m === "") return "";
+    const hh = String(Math.min(23, Math.max(0, parseInt(h || "0", 10)))).padStart(2, "0");
+    const mm = String(Math.min(59, Math.max(0, parseInt(m || "0", 10)))).padStart(2, "0");
+    return `${hh}:${mm}`;
+  }
+
+  function rellenarInputsHora(idHH, idMM, horaStr) {
+    if (!horaStr || !horaStr.includes(":")) {
+      document.getElementById(idHH).value = "";
+      document.getElementById(idMM).value = "";
+      return;
+    }
+    const [hh, mm] = horaStr.split(":");
+    document.getElementById(idHH).value = hh;
+    document.getElementById(idMM).value = mm;
+  }
+
+  function formatearNombreToma(valor) {
+    const limpio = (valor || "").trim();
+    if (!limpio) return "Toma 1";
+    if (/^toma\b/i.test(limpio)) {
+      return limpio.charAt(0).toUpperCase() + limpio.slice(1);
+    }
+    return `Toma ${limpio}`;
+  }
+
+  function sumarMinutosAHora(horaStr, minutosASumar) {
+    if (!horaStr || !horaStr.includes(":")) return null;
+    const base = horaStr.split(" ")[0];
+    const [hh, mm] = base.split(":").map(Number);
+    const desfase = Number(minutosASumar) || 0;
+    const totalMinutos = hh * 60 + mm + desfase;
+    
+    const diasExtra = Math.floor(totalMinutos / 1440);
+    const minDia = ((totalMinutos % 1440) + 1440) % 1440;
+    
+    const hFinal = String(Math.floor(minDia / 60)).padStart(2, "0");
+    const mFinal = String(minDia % 60).padStart(2, "0");
+    
+    return diasExtra > 0 ? `${hFinal}:${mFinal} (+${diasExtra}d)` : `${hFinal}:${mFinal}`;
+  }
+
+  function horaAMinutos(horaStr) {
+    if (!horaStr || !horaStr.includes(":")) return 99999;
+    const base = horaStr.split(" ")[0];
+    const [hh, mm] = base.split(":").map(Number);
+    return hh * 60 + mm;
+  }
+
+  function calcularDesplazamientoRetraso(previsionAdmin, desfasePartidor, listaTurnos) {
+    if (!previsionAdmin || !previsionAdmin.includes(":")) return 0;
+    const minPrevision = horaAMinutos(previsionAdmin);
+
+    if (listaTurnos && listaTurnos.length > 0) {
+      const ordenados = [...listaTurnos].sort((a, b) => horaAMinutos(a.horaMaquinas) - horaAMinutos(b.horaMaquinas));
+      const primerTurno = ordenados[0];
+      const horaTeoricaPrimero = sumarMinutosAHora(primerTurno.horaMaquinas, desfasePartidor);
+      const minTeoricoPrimero = horaAMinutos(horaTeoricaPrimero);
+      return minPrevision - minTeoricoPrimero;
+    }
+    return 0;
+  }
+
+  function calcularTiemposTurno(horaMaquinas, desfasePartidor, desfaseToma, previsionAdmin, listaTurnos) {
+    const dPart = Number(desfasePartidor) || 0;
+    const dToma = Number(desfaseToma) || 0;
+
+    if (!horaMaquinas || !horaMaquinas.includes(":")) {
+      return {
+        horaPartidor: "--:--",
+        horaTomaFinal: "--:--",
+        desplazamientoMin: 0,
+        condicionadoPorAdmin: Boolean(previsionAdmin)
+      };
+    }
+
+    const horaPartidorTeorica = sumarMinutosAHora(horaMaquinas, dPart);
+    let horaPartidorFinal = horaPartidorTeorica;
+    let desplazamiento = 0;
+    let condicionado = false;
+
+    if (previsionAdmin && previsionAdmin.includes(":")) {
+      condicionado = true;
+      if (listaTurnos && listaTurnos.length > 0) {
+        desplazamiento = calcularDesplazamientoRetraso(previsionAdmin, dPart, listaTurnos);
+        horaPartidorFinal = sumarMinutosAHora(horaPartidorTeorica, desplazamiento);
+      } else {
+        horaPartidorFinal = previsionAdmin;
+        desplazamiento = horaAMinutos(previsionAdmin) - horaAMinutos(horaPartidorTeorica);
+      }
+    }
+
+    const horaTomaFinal = sumarMinutosAHora(horaPartidorFinal, dToma);
+
+    return {
+      horaPartidor: horaPartidorFinal,
+      horaTomaFinal: horaTomaFinal,
+      desplazamientoMin: desplazamiento,
+      condicionadoPorAdmin: condicionado
+    };
+  }
+
+  function dispararNotificacionRetraso(nombrePartidor, horaPrevision, minutosRetraso) {
+    const claveUnica = `${nombrePartidor}_${horaPrevision}_${minutosRetraso}`;
+    if (ultimaNotificacionEnviada === claveUnica) return;
+    ultimaNotificacionEnviada = claveUnica;
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      try {
+        new Notification(`⚠️ Retraso en ${nombrePartidor}`, {
+          body: `Previsión de apertura: ${horaPrevision}${minutosRetraso > 0 ? ` (+${minutosRetraso} min de retraso)` : ""}. Se han recalculado los turnos.`,
+          icon: "https://cdn-icons-png.flaticon.com/512/3105/3105807.png"
+        });
+      } catch (e) {}
+    }
+  }
+
+  function normalizarMisTomas(lista) {
+    if (!Array.isArray(lista)) return [];
+    return lista.map((item, idx) => {
+      if (typeof item === "string") {
+        return { uid: `toma_${idx}_${item}`, partidorId: item, toma: "Toma 1", desfaseToma: 0 };
+      }
+      return { ...item, toma: formatearNombreToma(item.toma) };
+    });
+  }
+
+  function verificarSesion() {
+    try {
+      const reganteGuardado = localStorage.getItem("regante_6y7");
+      if (reganteGuardado) {
+        usuarioActual = JSON.parse(reganteGuardado);
+        usuarioActual.misTomas = normalizarMisTomas(usuarioActual.misTomas || usuarioActual.misPartidores);
+        mostrarPanelPrincipal();
+      } else {
+        pantallaRegistro.classList.remove("oculto");
+        pantallaPrincipal.classList.add("oculto");
+        pantallaFicha.classList.add("oculto");
+      }
+    } catch (e) {
+      localStorage.removeItem("regante_6y7");
+      pantallaRegistro.classList.remove("oculto");
+      pantallaPrincipal.classList.add("oculto");
+      pantallaFicha.classList.add("oculto");
+    }
+  }
+
+  async function mostrarPanelPrincipal() {
+    detenerEscuchasEnVivo();
+    document.getElementById("saludo-nombre").textContent = usuarioActual.nombre;
+    document.getElementById("saludo-socio").textContent = usuarioActual.socio;
+    
+    actualizarUIAdmin();
+
+    pantallaRegistro.classList.add("oculto");
+    pantallaFicha.classList.add("oculto");
+    pantallaPrincipal.classList.remove("oculto");
+
+    if (catalogoPartidores.length === 0) {
+      await cargarCatalogoPartidores();
+    }
+    await cargarEstadosPorFecha(selectorFecha.value);
+    pintarListaPartidores();
+  }
+
+  function actualizarUIAdmin() {
+    const btnToggle = document.getElementById("btn-toggle-admin");
+    const bannerAdmin = document.getElementById("banner-admin");
+
+    if (esAdmin) {
+      btnToggle.textContent = "🔓 Admin ON";
+      btnToggle.classList.add("btn-admin-activo");
+      bannerAdmin.classList.remove("oculto");
+    } else {
+      btnToggle.textContent = "🔐 Admin";
+      btnToggle.classList.remove("btn-admin-activo");
+      bannerAdmin.classList.add("oculto");
+      verTodosAdmin = false;
+    }
+  }
+
+  async function cargarCatalogoPartidores() {
+    try {
+      const snapshot = await getDocs(collection(db, "PARTIDORES"));
+      catalogoPartidores = [];
+      snapshot.forEach((docSnap) => {
+        catalogoPartidores.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      catalogoPartidores.sort((a, b) => (a.desfase || 0) - (b.desfase || 0));
+      actualizarDesplegablePartidores();
+    } catch (error) {
+      console.error("Error cargando catálogo:", error);
+    }
+  }
+
+  async function cargarEstadosPorFecha(fecha) {
+    estadosDelDia = {};
+    try {
+      const q = query(collection(db, "riegos_diarios"), where("fecha", "==", fecha));
+      const snapshot = await getDocs(q);
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        if (data.partidorId) estadosDelDia[data.partidorId] = data;
+      });
+    } catch (error) {
+      console.error("Error cargando riegos del día:", error);
+    }
+  }
+
+  function actualizarDesplegablePartidores() {
+    const canalElegido = selectCanal.value;
+    selectPartidor.innerHTML = "";
+
+    const filtrados = catalogoPartidores.filter((p) => {
+      const c = (p.canal || "").toLowerCase().trim();
+      if (canalElegido === "sexta") return c.includes("sexta") || c === "6";
+      return c.includes("septima") || c.includes("séptima") || c === "7";
+    });
+
+    if (filtrados.length === 0) {
+      selectPartidor.innerHTML = `<option value="">Sin partidores en este canal</option>`;
+      return;
+    }
+
+    filtrados.forEach((p) => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.nombre;
+      selectPartidor.appendChild(opt);
+    });
+  }
+
+  function actualizarDesplegableEliminar() {
+    const zonaEliminar = document.getElementById("zona-eliminar-segura");
+    const selectEliminar = document.getElementById("select-eliminar-toma");
+    const misTomas = usuarioActual.misTomas || [];
+
+    if (misTomas.length === 0 || (esAdmin && verTodosAdmin)) {
+      zonaEliminar.classList.add("oculto");
+      return;
+    }
+
+    zonaEliminar.classList.remove("oculto");
+    selectEliminar.innerHTML = "";
+
+    misTomas.forEach((tomaObj) => {
+      const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
+      const nombreP = datosP ? datosP.nombre : "Partidor";
+      const opt = document.createElement("option");
+      opt.value = tomaObj.uid;
+      opt.textContent = `${nombreP} · ${formatearNombreToma(tomaObj.toma)}`;
+      selectEliminar.appendChild(opt);
+    });
+  }
+
+  function pintarListaPartidores() {
+    contenedorMisPartidores.innerHTML = "";
+    const titulo = document.getElementById("titulo-lista-partidores");
+
+    if (esAdmin && verTodosAdmin) {
+      titulo.textContent = "Todos los Partidores (Vista Capataz)";
+      document.getElementById("zona-eliminar-segura").classList.add("oculto");
+
+      catalogoPartidores.forEach((datosP) => {
+        const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+        const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
+
+        let claseColor = "estado-sin-datos";
+        let resumen = `Desfase canal: ${datosP.desfase || 0} min`;
+        if (infoRiego.estado === "verde") {
+          claseColor = "estado-verde";
+          resumen = infoRiego.horaPrevision ? `Abierto · Previsión: ${infoRiego.horaPrevision}` : "Abierto / Regando";
+        } else if (infoRiego.estado === "naranja") {
+          claseColor = "estado-naranja";
+          resumen = infoRiego.horaPrevision ? `⚠️ Retraso / Previsión: ${infoRiego.horaPrevision}` : "⚠️ Retraso / Previsión";
+        } else if (infoRiego.estado === "rojo") {
+          claseColor = "estado-rojo";
+          resumen = "Cerrado / Finalizado";
+        }
+
+        const btn = document.createElement("button");
+        btn.className = `btn-partidor ${claseColor}`;
+        btn.innerHTML = `
+          <div>
+            <span>${datosP.nombre} <span style="font-weight:normal; font-size:0.85rem;">(${canalTexto})</span></span>
+            <small>${resumen}</small>
+          </div>
+          <span>✏️</span>
+        `;
+        btn.addEventListener("click", () => abrirFichaPartidor(datosP, null));
+        contenedorMisPartidores.appendChild(btn);
+      });
+      return;
+    }
+
+    titulo.textContent = "Mis Partidores";
+    const misTomas = usuarioActual.misTomas || [];
+    actualizarDesplegableEliminar();
+
+    if (misTomas.length === 0) {
+      contenedorMisPartidores.innerHTML = `
+        <p style="color:#64748b; font-size:0.95rem; text-align:center; padding: 12px 0;">
+          Aún no tienes ningún partidor registrado.<br>Pulsa el botón inferior para añadir el tuyo.
+        </p>
+      `;
+      return;
+    }
+
+    misTomas.forEach((tomaObj) => {
+      const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
+      if (!datosP) return;
+
+      const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+      const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
+      const etiquetaToma = formatearNombreToma(tomaObj.toma);
+      const desfaseToma = Number(tomaObj.desfaseToma) || 0;
+
+      let claseColor = "estado-sin-datos";
+      let textoEstado = "Pulsa para anotar hora de máquinas y ver turnos";
+
+      if (infoRiego.estado === "verde") {
+        claseColor = "estado-verde";
+        textoEstado = infoRiego.horaPrevision
+          ? `Regando · Previsión partidor: ${infoRiego.horaPrevision}`
+          : "Partidor abierto / Regando";
+      } else if (infoRiego.estado === "naranja") {
+        claseColor = "estado-naranja";
+        textoEstado = infoRiego.horaPrevision
+          ? `⚠️ Retraso · Previsión apertura: ${infoRiego.horaPrevision}`
+          : "⚠️ Retraso / Pendiente de apertura";
+      } else if (infoRiego.estado === "rojo") {
+        claseColor = "estado-rojo";
+        textoEstado = "Partidor cerrado / Finalizado";
+      }
+
+      const btn = document.createElement("button");
+      btn.className = `btn-partidor ${claseColor}`;
+      btn.innerHTML = `
+        <div>
+          <span>${datosP.nombre} · ${etiquetaToma}</span>
+          <small>${canalTexto} · Desfase a tu toma: ${desfaseToma} min</small>
+          <small>${textoEstado}</small>
+        </div>
+        <span>➡️</span>
+      `;
+
+      btn.addEventListener("click", () => abrirFichaPartidor(datosP, tomaObj));
+      contenedorMisPartidores.appendChild(btn);
+    });
+  }
+
+  function actualizarPanelResumenFijo() {
+    if (!seleccionAbierta) return;
+    const { datosP, tomaObj } = seleccionAbierta;
+    const horaMaquinas = leerHoraDeInputs("regante-maq-hh", "regante-maq-mm");
+    const info = estadosDelDia[datosP.id] || {};
+    const desfasePart = Number(datosP.desfase) || 0;
+    const desfaseToma = tomaObj ? (Number(tomaObj.desfaseToma) || 0) : 0;
+
+    const elMaq = document.getElementById("fijo-hora-maquinas");
+    const elDesfCanal = document.getElementById("fijo-desfase-canal");
+    const elPart = document.getElementById("fijo-hora-partidor");
+    const elDetPart = document.getElementById("fijo-detalle-partidor");
+    const elPrevAdmin = document.getElementById("fijo-prevision-admin");
+    const elDetPrev = document.getElementById("fijo-detalle-prevision");
+    const elToma = document.getElementById("fijo-hora-toma");
+    const elDetToma = document.getElementById("fijo-detalle-toma");
+
+    elDesfCanal.textContent = `Desfase canal al partidor: +${desfasePart} min`;
+
+    if (info.horaPrevision && info.horaPrevision.includes(":")) {
+      elPrevAdmin.textContent = info.horaPrevision;
+      elPrevAdmin.style.color = "#b45309";
+    } else {
+      elPrevAdmin.textContent = "Sin especificar";
+      elPrevAdmin.style.color = "#64748b";
+    }
+
+    if (!horaMaquinas) {
+      elMaq.textContent = "--:--";
+      elPart.textContent = "--:--";
+      elDetPart.textContent = "Introduce tu hora de máquinas";
+      elDetPrev.textContent = "Se aplicará automáticamente si el capataz indica previsión";
+      elToma.textContent = "--:--";
+      elDetToma.textContent = `Desfase partidor → tu toma: +${desfaseToma} min`;
+      return;
+    }
+
+    elMaq.textContent = horaMaquinas;
+
+    const calc = calcularTiemposTurno(horaMaquinas, desfasePart, desfaseToma, info.horaPrevision, turnosDelPartidor);
+    elPart.textContent = calc.horaPartidor;
+    elToma.textContent = calc.horaTomaFinal;
+
+    if (calc.condicionadoPorAdmin) {
+      const signo = calc.desplazamientoMin > 0 ? `+${calc.desplazamientoMin} min retraso` : `${calc.desplazamientoMin} min`;
+      elDetPart.textContent = `Recalculado por previsión del Capataz (${signo})`;
+      elDetPrev.textContent = `Previsión activa: ${info.horaPrevision} (modifica la hora teórica)`;
+    } else {
+      elDetPart.textContent = `Calculado por defecto (${horaMaquinas} + ${desfasePart} min)`;
+      elDetPrev.textContent = "Calculado con desfase por defecto desde máquinas";
+    }
+
+    const horasRiego = parseInt(document.getElementById("regante-horas-riego").value, 10) || 0;
+    const minRiego = parseInt(document.getElementById("regante-minutos-riego").value, 10) || 0;
+    const totalDuracion = horasRiego * 60 + minRiego;
+    const horaFin = totalDuracion > 0 ? sumarMinutosAHora(calc.horaTomaFinal, totalDuracion) : null;
+
+    elDetToma.textContent = horaFin
+      ? `Partidor (${calc.horaPartidor}) + ${desfaseToma} min toma · Fin estimado: ${horaFin}`
+      : `Partidor (${calc.horaPartidor}) + ${desfaseToma} min hasta tu toma`;
+  }
+
+  function pintarBannerYEstadoFicha(datosP) {
+    const info = estadosDelDia[datosP.id] || {
+      estado: "sin_datos",
+      horaPrevision: "",
+      observaciones: ""
+    };
+
+    const banner = document.getElementById("ficha-banner-estado");
+    banner.className = "banner-estado";
+    if (info.estado === "verde") {
+      banner.classList.add("estado-verde");
+      banner.textContent = "🟢 PARTIDOR ABIERTO / REGANDO";
+    } else if (info.estado === "naranja") {
+      banner.classList.add("estado-naranja");
+      banner.textContent = "🟠 RETRASO / PREVISIÓN DE APERTURA";
+    } else if (info.estado === "rojo") {
+      banner.classList.add("estado-rojo");
+      banner.textContent = "🔴 PARTIDOR CERRADO / FINALIZADO";
+    } else {
+      banner.classList.add("estado-sin-datos");
+      banner.textContent = "⚪ SIN PROGRAMACIÓN DE ESTADO";
+    }
+
+    const alertaRetraso = document.getElementById("banner-alerta-retraso");
+    const desfasePart = Number(datosP.desfase) || 0;
+    const retrasoMin = calcularDesplazamientoRetraso(info.horaPrevision, desfasePart, turnosDelPartidor);
+
+    if (info.horaPrevision && (info.estado === "naranja" || retrasoMin > 0)) {
+      alertaRetraso.classList.remove("oculto");
+      alertaRetraso.textContent = retrasoMin > 0
+        ? `⚠️ AVISO DE RETRASO: La previsión de apertura del partidor es a las ${info.horaPrevision} (+${retrasoMin} min de retraso). Todos los turnos de la lista se han recalculado automáticamente.`
+        : `⚠️ PREVISIÓN DE APERTURA: El Capataz ha fijado previsión a las ${info.horaPrevision}. Horarios recalculados automáticamente.`;
+      dispararNotificacionRetraso(datosP.nombre, info.horaPrevision, retrasoMin);
+    } else {
+      alertaRetraso.classList.add("oculto");
+    }
+
+    const bloqueObs = document.getElementById("bloque-observaciones");
+    if (info.observaciones && info.observaciones.trim() !== "") {
+      document.getElementById("ficha-observaciones").textContent = info.observaciones;
+      bloqueObs.classList.remove("oculto");
+    } else {
+      bloqueObs.classList.add("oculto");
+    }
+
+    if (esAdmin) {
+      document.getElementById("admin-estado").value = info.estado || "sin_datos";
+      rellenarInputsHora("admin-prev-hh", "admin-prev-mm", info.horaPrevision || "");
+      document.getElementById("admin-observaciones").value = info.observaciones || "";
+    }
+  }
+
+  function pintarListaTurnos() {
+    const contenedor = document.getElementById("contenedor-lista-turnos");
+    contenedor.innerHTML = "";
+
+    if (turnosDelPartidor.length === 0) {
+      contenedor.innerHTML = `
+        <p style="color:#64748b; font-size:0.9rem; text-align:center; padding:12px 0;">
+          Todavía ningún regante ha anotado su turno en este partidor para esta fecha.
+        </p>
+      `;
+      return;
+    }
+
+    const { datosP } = seleccionAbierta;
+    const info = estadosDelDia[datosP.id] || {};
+    const desfasePart = Number(datosP.desfase) || 0;
+
+    turnosDelPartidor.forEach((turno) => {
+      const calc = calcularTiemposTurno(
+        turno.horaMaquinas,
+        desfasePart,
+        turno.desfaseToma,
+        info.horaPrevision,
+        turnosDelPartidor
+      );
+
+      const duracionMin = (Number(turno.horasRiego) || 0) * 60 + (Number(turno.minutosRiego) || 0);
+      const textoDuracion = `${turno.horasRiego || 0}h ${String(turno.minutosRiego || 0).padStart(2, "0")}m`;
+      const horaFinToma = duracionMin > 0 ? sumarMinutosAHora(calc.horaTomaFinal, duracionMin) : null;
+
+      const esMio = usuarioActual && turno.socio === usuarioActual.socio && turno.nombre === usuarioActual.nombre;
+
+      const tarjeta = document.createElement("div");
+      tarjeta.className = `tarjeta-turno ${esMio ? "mi-turno" : ""}`;
+      tarjeta.innerHTML = `
+        <div class="turno-cabecera">
+          <div>
+            <span class="turno-nombre">${turno.nombre}</span>
+            <span class="turno-toma-badge">${formatearNombreToma(turno.toma)}</span>
+          </div>
+          <a href="tel:${turno.telefono}" class="turno-tel">📞 ${turno.telefono || "Sin tel."}</a>
+        </div>
+
+        <div class="turno-tabla-datos">
+          <div class="turno-dato-item">
+            <span class="turno-dato-label">Hora de máquinas</span>
+            <span class="turno-dato-valor">${turno.horaMaquinas}</span>
+          </div>
+          <div class="turno-dato-item">
+            <span class="turno-dato-label">Tiempo de riego</span>
+            <span class="turno-dato-valor">${textoDuracion}</span>
+          </div>
+          <div class="turno-dato-item">
+            <span class="turno-dato-label">Hora de partidor</span>
+            <span class="turno-dato-valor">${calc.horaPartidor}</span>
+          </div>
+          <div class="turno-dato-item">
+            <span class="turno-dato-label">Fin estimado toma</span>
+            <span class="turno-dato-valor">${horaFinToma || "--:--"}</span>
+          </div>
+          <div class="turno-dato-item destacado-lista">
+            <span class="turno-dato-label">💧 Hora estimada de llegada a tu toma</span>
+            <span class="turno-dato-valor">${calc.horaTomaFinal}</span>
+          </div>
+        </div>
+      `;
+
+      if (esMio || esAdmin) {
+        const pie = document.createElement("div");
+        pie.className = "turno-pie";
+        pie.innerHTML = `<span>${esMio ? "Tu turno publicado" : "Gestión Capataz"}</span>`;
+
+        const btnBorrar = document.createElement("button");
+        btnBorrar.className = "btn-borrar-mi-turno";
+        btnBorrar.textContent = esMio ? "🗑️ Borrar mi turno" : "🗑️ Eliminar (Admin)";
+        btnBorrar.addEventListener("click", async () => {
+          if (!confirm(`¿Eliminar el turno de ${turno.nombre} (${turno.horaMaquinas})?`)) return;
+          try {
+            await deleteDoc(doc(db, "turnos_partidor", turno.id));
+            if (esMio) miTurnoDocId = null;
+          } catch (e) {
+            alert("No se pudo borrar el turno.");
+          }
+        });
+        pie.appendChild(btnBorrar);
+        tarjeta.appendChild(pie);
+      }
+
+      contenedor.appendChild(tarjeta);
+    });
+  }
+
+  function detenerEscuchasEnVivo() {
+    if (unsubscribeEstadoVivo) { unsubscribeEstadoVivo(); unsubscribeEstadoVivo = null; }
+    if (unsubscribeTurnosVivo) { unsubscribeTurnosVivo(); unsubscribeTurnosVivo = null; }
+  }
+
+  function abrirFichaPartidor(datosP, tomaObj) {
+    detenerEscuchasEnVivo();
+    seleccionAbierta = { datosP, tomaObj };
+    miTurnoDocId = null;
+
+    const fecha = selectorFecha.value;
+    const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª Elevación" : "Canal 7ª Elevación";
+    const tituloToma = tomaObj ? ` — ${formatearNombreToma(tomaObj.toma)}` : "";
+
+    document.getElementById("ficha-titulo-partidor").textContent = `${datosP.nombre}${tituloToma}`;
+    document.getElementById("ficha-subtitulo").textContent = `${canalTexto} · Fecha: ${fecha.split("-").reverse().join("/")}`;
+
+    const bloqueFormRegante = document.getElementById("bloque-formulario-regante");
+    if (tomaObj) {
+      bloqueFormRegante.classList.remove("oculto");
+      rellenarInputsHora("regante-maq-hh", "regante-maq-mm", "");
+      document.getElementById("regante-horas-riego").value = "";
+      document.getElementById("regante-minutos-riego").value = "0";
+      actualizarPanelResumenFijo();
+    } else {
+      bloqueFormRegante.classList.add("oculto");
+    }
+
+    const panelAdmin = document.getElementById("panel-edicion-admin");
+    if (esAdmin) panelAdmin.classList.remove("oculto");
+    else panelAdmin.classList.add("oculto");
+
+    pintarBannerYEstadoFicha(datosP);
+
+    pantallaPrincipal.classList.add("oculto");
+    pantallaFicha.classList.remove("oculto");
+
+    const docIdRiego = `${fecha}_${datosP.id}`;
+    unsubscribeEstadoVivo = onSnapshot(doc(db, "riegos_diarios", docIdRiego), (docSnap) => {
+      if (docSnap.exists()) estadosDelDia[datosP.id] = docSnap.data();
+      else delete estadosDelDia[datosP.id];
+      pintarBannerYEstadoFicha(datosP);
+      actualizarPanelResumenFijo();
+      pintarListaTurnos();
+    });
+
+    const qTurnos = query(
+      collection(db, "turnos_partidor"),
+      where("partidorId", "==", datosP.id),
+      where("fecha", "==", fecha)
+    );
+
+    let primeraCarga = true;
+    unsubscribeTurnosVivo = onSnapshot(qTurnos, (snapshot) => {
+      turnosDelPartidor = [];
+      snapshot.forEach((docSnap) => {
+        turnosDelPartidor.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      turnosDelPartidor.sort((a, b) => horaAMinutos(a.horaMaquinas) - horaAMinutos(b.horaMaquinas));
+
+      if (tomaObj && usuarioActual) {
+        const miTurno = turnosDelPartidor.find(
+          (t) => t.socio === usuarioActual.socio && t.nombre === usuarioActual.nombre && formatearNombreToma(t.toma) === formatearNombreToma(tomaObj.toma)
+        );
+        if (miTurno) {
+          miTurnoDocId = miTurno.id;
+          if (primeraCarga) {
+            rellenarInputsHora("regante-maq-hh", "regante-maq-mm", miTurno.horaMaquinas);
+            document.getElementById("regante-horas-riego").value = miTurno.horasRiego;
+            document.getElementById("regante-minutos-riego").value = String(miTurno.minutosRiego || 0);
+          }
+        }
+      }
+      primeraCarga = false;
+
+      pintarBannerYEstadoFicha(datosP);
+      actualizarPanelResumenFijo();
+      pintarListaTurnos();
+    });
+  }
+
+  document.getElementById("btn-publicar-turno").addEventListener("click", async () => {
+    if (!seleccionAbierta || !seleccionAbierta.tomaObj) return;
+
+    const hhStr = document.getElementById("regante-maq-hh").value.trim();
+    const mmStr = document.getElementById("regante-maq-mm").value.trim();
+    if (hhStr === "" || mmStr === "") {
+      alert("Por favor, escribe la Hora y los Minutos de máquinas (recibo).");
+      return;
+    }
+
+    const horaMaquinas = leerHoraDeInputs("regante-maq-hh", "regante-maq-mm");
+    rellenarInputsHora("regante-maq-hh", "regante-maq-mm", horaMaquinas);
+
+    const horasVal = document.getElementById("regante-horas-riego").value;
+    const minutosVal = parseInt(document.getElementById("regante-minutos-riego").value, 10) || 0;
+
+    const horasEnteras = parseInt(horasVal, 10);
+    if (isNaN(horasEnteras) || horasEnteras < 0) {
+      alert("Introduce un número entero de horas (por ejemplo 0, 1, 2...).");
+      return;
+    }
+    if (horasEnteras === 0 && minutosVal === 0) {
+      alert("El tiempo de riego debe ser mayor que 0.");
+      return;
+    }
+
+    const btn = document.getElementById("btn-publicar-turno");
+    btn.disabled = true;
+    btn.textContent = "Guardando turno...";
+
+    const { datosP, tomaObj } = seleccionAbierta;
+    const fecha = selectorFecha.value;
+
+    const payloadTurno = {
+      fecha: fecha,
+      partidorId: datosP.id,
+      partidorNombre: datosP.nombre,
+      canal: datosP.canal,
+      socio: usuarioActual.socio,
+      nombre: usuarioActual.nombre,
+      telefono: usuarioActual.telefono || "",
+      toma: formatearNombreToma(tomaObj.toma),
+      desfaseToma: Number(tomaObj.desfaseToma) || 0,
+      horaMaquinas: horaMaquinas,
+      horasRiego: horasEnteras,
+      minutosRiego: minutosVal,
+      actualizadoEn: serverTimestamp()
+    };
+
+    try {
+      if (miTurnoDocId) {
+        await updateDoc(doc(db, "turnos_partidor", miTurnoDocId), payloadTurno);
+      } else {
+        const nuevoRef = await addDoc(collection(db, "turnos_partidor"), {
+          ...payloadTurno,
+          creadoEn: serverTimestamp()
+        });
+        miTurnoDocId = nuevoRef.id;
+      }
+
+      actualizarPanelResumenFijo();
+      alert("✅ Turno guardado. Tus datos quedan visibles arriba y en la lista.");
+    } catch (error) {
+      console.error("Error guardando turno:", error);
+      alert("Error al guardar tu turno en Firebase.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "✔ Guardar / Actualizar mi turno en la lista";
+    }
+  });
+
+  document.getElementById("btn-guardar-estado-riego").addEventListener("click", async () => {
+    if (!seleccionAbierta || !esAdmin) return;
+
+    const { datosP } = seleccionAbierta;
+    const btnGuardar = document.getElementById("btn-guardar-estado-riego");
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = "Guardando y recalculando...";
+
+    const fecha = selectorFecha.value;
+    const docIdRiego = `${fecha}_${datosP.id}`;
+
+    let estadoElegido = document.getElementById("admin-estado").value;
+    const horaPrevision = leerHoraDeInputs("admin-prev-hh", "admin-prev-mm");
+    const observaciones = document.getElementById("admin-observaciones").value.trim();
+
+    const desfasePart = Number(datosP.desfase) || 0;
+    const retrasoMin = calcularDesplazamientoRetraso(horaPrevision, desfasePart, turnosDelPartidor);
+    if (horaPrevision && estadoElegido !== "rojo" && (retrasoMin > 0 || estadoElegido === "sin_datos")) {
+      estadoElegido = "naranja";
+      document.getElementById("admin-estado").value = "naranja";
+    }
+
+    const nuevosDatos = {
+      fecha: fecha,
+      partidorId: datosP.id,
+      partidorNombre: datosP.nombre,
+      canal: datosP.canal,
+      estado: estadoElegido,
+      horaPrevision: horaPrevision,
+      observaciones: observaciones,
+      actualizadoEn: serverTimestamp()
+    };
+
+    try {
+      await setDoc(doc(db, "riegos_diarios", docIdRiego), nuevosDatos);
+      estadosDelDia[datosP.id] = nuevosDatos;
+      alert("✅ Estado actualizado y turnos recalculados automáticamente.");
+    } catch (error) {
+      console.error("Error guardando estado:", error);
+      alert("Error al guardar en Firebase.");
+    } finally {
+      btnGuardar.disabled = false;
+      btnGuardar.textContent = "💾 Guardar estado y recalcular turnos";
+    }
+  });
+
+  configurarInputsHora("regante-maq-hh", "regante-maq-mm", actualizarPanelResumenFijo);
+  configurarInputsHora("admin-prev-hh", "admin-prev-mm", null);
+  document.getElementById("regante-horas-riego").addEventListener("input", actualizarPanelResumenFijo);
+  document.getElementById("regante-minutos-riego").addEventListener("change", actualizarPanelResumenFijo);
+
+  document.getElementById("btn-activar-notifs").addEventListener("click", async () => {
+    if (!("Notification" in window)) {
+      alert("Tu navegador no soporta notificaciones emergentes, pero verás los avisos de retraso en naranja dentro de la app.");
+      return;
+    }
+    const permiso = await Notification.requestPermission();
+    if (permiso === "granted") {
+      alert("🔔 Avisos activados. Recibirás una notificación si el Capataz registra un retraso en tu partidor.");
+    } else {
+      alert("No se han activado las notificaciones del navegador. Puedes habilitarlas en los ajustes del sitio web en tu móvil.");
+    }
+  });
+
+  document.getElementById("btn-volver-panel").addEventListener("click", () => {
+    detenerEscuchasEnVivo();
+    pantallaFicha.classList.add("oculto");
+    pantallaPrincipal.classList.remove("oculto");
+    pintarListaPartidores();
+  });
+
+  selectorFecha.addEventListener("change", async () => {
+    await cargarEstadosPorFecha(selectorFecha.value);
+    pintarListaPartidores();
+  });
+
+  document.getElementById("btn-toggle-admin").addEventListener("click", () => {
+    if (esAdmin) {
+      if (confirm("¿Desactivar modo Capataz/Admin en este dispositivo?")) {
+        esAdmin = false;
+        localStorage.removeItem("admin_6y7");
+        actualizarUIAdmin();
+        pintarListaPartidores();
+      }
+    } else {
+      const clave = prompt("Introduce la clave de Capataz / Guardas:");
+      if (clave === CLAVE_ADMIN) {
+        esAdmin = true;
+        localStorage.setItem("admin_6y7", "true");
+        actualizarUIAdmin();
+        alert("Modo Capataz activado.");
+      } else if (clave !== null) {
+        alert("Clave incorrecta.");
+      }
+    }
+  });
+
+  document.getElementById("btn-acceso-directo-admin").addEventListener("click", () => {
+    const clave = prompt("Introduce la clave de Capataz / Guardas:");
+    if (clave === CLAVE_ADMIN) {
+      esAdmin = true;
+      verTodosAdmin = true;
+      localStorage.setItem("admin_6y7", "true");
+      usuarioActual = { socio: "ADMIN", nombre: "Capataz / Guardas", telefono: "", misTomas: [] };
+      localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+      mostrarPanelPrincipal();
+    } else if (clave !== null) {
+      alert("Clave incorrecta.");
+    }
+  });
+
+  document.getElementById("btn-ver-todos-admin").addEventListener("click", () => {
+    verTodosAdmin = !verTodosAdmin;
+    document.getElementById("btn-ver-todos-admin").textContent = verTodosAdmin ? "Ver mis partidores" : "Ver todos";
+    pintarListaPartidores();
+  });
+
+  async function anadirTomaAUsuario() {
+    const partidorId = selectPartidor.value;
+    if (!partidorId) return;
+
+    const textoToma = formatearNombreToma(document.getElementById("input-toma").value);
+    const desfaseToma = parseInt(document.getElementById("input-desfase-toma").value, 10) || 0;
+
+    const nuevaToma = {
+      uid: `toma_${Date.now()}`,
+      partidorId: partidorId,
+      toma: textoToma,
+      desfaseToma: desfaseToma
+    };
+
+    if (!usuarioActual.misTomas) usuarioActual.misTomas = [];
+    usuarioActual.misTomas.push(nuevaToma);
+    localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+
+    if (usuarioActual.docId) {
+      try {
+        await updateDoc(doc(db, "regantes", usuarioActual.docId), { misTomas: usuarioActual.misTomas });
+      } catch (e) {}
+    }
+
+    document.getElementById("input-toma").value = "";
+    document.getElementById("input-desfase-toma").value = "0";
+    cajaSelector.classList.add("oculto");
+    btnMostrarSelector.classList.remove("oculto");
+    pintarListaPartidores();
+  }
+
+  document.getElementById("btn-confirmar-eliminar").addEventListener("click", async () => {
+    const selectEliminar = document.getElementById("select-eliminar-toma");
+    const uidSeleccionado = selectEliminar.value;
+    if (!uidSeleccionado) return;
+
+    const etiqueta = selectEliminar.options[selectEliminar.selectedIndex].textContent;
+    if (!confirm(`¿Seguro que quieres eliminar "${etiqueta}" de tu lista de partidores?`)) return;
+
+    usuarioActual.misTomas = usuarioActual.misTomas.filter((t) => t.uid !== uidSeleccionado);
+    localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+
+    if (usuarioActual.docId) {
+      try {
+        await updateDoc(doc(db, "regantes", usuarioActual.docId), { misTomas: usuarioActual.misTomas });
+      } catch (e) {}
+    }
+
+    pintarListaPartidores();
+  });
+
+  btnMostrarSelector.addEventListener("click", () => {
+    btnMostrarSelector.classList.add("oculto");
+    cajaSelector.classList.remove("oculto");
+    actualizarDesplegablePartidores();
+  });
+
+  document.getElementById("btn-cancelar-partidor").addEventListener("click", () => {
+    cajaSelector.classList.add("oculto");
+    btnMostrarSelector.classList.remove("oculto");
+  });
+
+  selectCanal.addEventListener("change", actualizarDesplegablePartidores);
+  document.getElementById("btn-confirmar-partidor").addEventListener("click", anadirTomaAUsuario);
+
+  formRegistro.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const socio = document.getElementById("socio").value.trim();
+    const nombre = document.getElementById("nombre").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+    const consentimiento = document.getElementById("consentimiento").checked;
+
+    if (!consentimiento) return;
+
+    btnRegistrar.disabled = true;
+    btnRegistrar.textContent = "Guardando datos...";
+
+    try {
+      const docRef = await addDoc(collection(db, "regantes"), {
+        socio,
+        nombre,
+        telefono,
+        consentimiento: true,
+        misTomas: [],
+        fechaRegistro: serverTimestamp()
+      });
+
+      usuarioActual = { docId: docRef.id, socio, nombre, telefono, misTomas: [] };
+      localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+      mostrarPanelPrincipal();
+    } catch (error) {
+      console.error("Error al registrar:", error);
+      alert("Error al guardar el registro.");
+    } finally {
+      btnRegistrar.disabled = false;
+      btnRegistrar.textContent = "Acceder a los riegos";
+    }
+  });
+
+  document.getElementById("btn-salir").addEventListener("click", () => {
+    detenerEscuchasEnVivo();
+    localStorage.removeItem("regante_6y7");
+    localStorage.removeItem("admin_6y7");
+    usuarioActual = null;
+    esAdmin = false;
+    verTodosAdmin = false;
+    formRegistro.reset();
+    verificarSesion();
+  });
+
+  verificarSesion();
+</script>
+</body>
+</html>
