@@ -76,6 +76,19 @@
       color: #475569;
     }
     .checkbox-group input { margin-top: 3px; transform: scale(1.2); }
+    .checkbox-privacidad {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #475569;
+      cursor: pointer;
+    }
+    .checkbox-privacidad input {
+      transform: scale(1.15);
+      margin: 0;
+    }
     button.btn-primario {
       width: 100%;
       padding: 14px;
@@ -362,6 +375,15 @@
       border-radius: 6px;
       white-space: nowrap;
       border: 1px solid #cbd5e1;
+    }
+    .turno-tel-oculto {
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 0.8rem;
+      padding: 5px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+      border: 1px solid #e2e8f0;
     }
     .turno-tabla-datos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .turno-dato-item {
@@ -665,6 +687,11 @@
       <button type="button" id="btn-publicar-turno" class="btn-primario" style="background:#16a34a;">
         ✔ Guardar / Actualizar mi turno en la lista
       </button>
+
+      <label class="checkbox-privacidad" for="check-ocultar-telefono">
+        <input type="checkbox" id="check-ocultar-telefono">
+        <span>Prefiero que mi teléfono no sea visible</span>
+      </label>
     </div>
 
     <h3>📋 Turnos anotados en este partidor</h3>
@@ -719,7 +746,6 @@
       </button>
     </div>
   </div>
-
 <script>
   function mostrarErrorEnPantalla(texto) {
     var box = document.getElementById("visor-error-emergencia");
@@ -740,8 +766,7 @@
   };
 
   (async function iniciarAplicacion() {
-    // 1. SANEADO DE VERSIÓN PARA EVITAR BLOQUEOS POR DATOS ANTIGUOS
-    const APP_DATA_VERSION = "v4_blindado";
+    const APP_DATA_VERSION = "v5_privacidad_atras";
     try {
       const versionGuardada = localStorage.getItem("app_version_6y7");
       if (versionGuardada !== APP_DATA_VERSION) {
@@ -761,7 +786,6 @@
       } catch (err) {}
     }
 
-    // 2. CARGA SEGURA DE FIREBASE (SI FALLA LA RED NO DEJA PANTALLA EN BLANCO)
     let fbApp, db, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp;
     let firebaseListo = false;
 
@@ -826,6 +850,21 @@
     let unsubscribeEstadoVivo = null;
     let unsubscribeTurnosVivo = null;
     let ultimaNotificacionEnviada = "";
+
+    // GESTIÓN DEL BOTÓN ATRÁS DEL MÓVIL (EVITA SALIR DEL NAVEGADOR AL VOLVER DE UN PARTIDOR)
+    function regresarAPanelDesdeFicha() {
+      detenerEscuchasEnVivo();
+      seleccionAbierta = null;
+      pantallaFicha.classList.add("oculto");
+      pantallaPrincipal.classList.remove("oculto");
+      pintarListaPartidores();
+    }
+
+    window.addEventListener("popstate", () => {
+      if (!pantallaFicha.classList.contains("oculto")) {
+        regresarAPanelDesdeFicha();
+      }
+    });
 
     function configurarInputsHora(idHH, idMM, onChangeCallback) {
       const inpH = document.getElementById(idHH);
@@ -908,7 +947,6 @@
       return hh * 60 + mm;
     }
 
-    // Calcula el desfase (en minutos) entre una hora objetivo (real o previsión) y la hora teórica del primer turno
     function calcularDiferenciaContraTeorico(horaObjetivo, desfasePartidor, listaTurnos) {
       if (!horaObjetivo || !horaObjetivo.includes(":")) return 0;
       const minObjetivo = horaAMinutos(horaObjetivo);
@@ -923,7 +961,6 @@
       return 0;
     }
 
-    // Cálculo completo teniendo en cuenta: 1º Hora Real Apertura (si existe), 2º Previsión Apertura, 3º Teórica
     function calcularTiemposTurno(horaMaquinas, desfasePartidor, desfaseToma, infoRiego, listaTurnos) {
       const dPart = Number(desfasePartidor) || 0;
       const dToma = Number(desfaseToma) || 0;
@@ -935,7 +972,7 @@
           horaPartidor: "--:--",
           horaTomaFinal: "--:--",
           desplazamientoMin: 0,
-          modo: "sin_hora" // "real" | "prevision" | "teorico"
+          modo: "sin_hora"
         };
       }
 
@@ -1235,7 +1272,6 @@
       });
     }
 
-    // Actualizar el panel fijo e inamovible del regante
     function actualizarPanelResumenFijo() {
       if (!seleccionAbierta) return;
       const { datosP, tomaObj } = seleccionAbierta;
@@ -1257,14 +1293,12 @@
 
       elDesfCanal.textContent = `Desfase canal al partidor: +${desfasePart} min`;
 
-      // Reset estilos del recuadro de apertura del partidor
       celdaPart.classList.remove("apertura-verde", "apertura-naranja");
       etiqPart.textContent = "Apertura del partidor";
 
       const tieneHoraReal = Boolean(info.horaRealApertura && info.horaRealApertura.includes(":"));
       const tienePrevision = Boolean(!tieneHoraReal && info.horaPrevision && info.horaPrevision.includes(":"));
 
-      // Cuadro de Previsión: vacío ("Sin especificar") cuando ya se marcó hora real de apertura
       if (tienePrevision) {
         elPrevAdmin.textContent = info.horaPrevision;
         elPrevAdmin.style.color = "#b45309";
@@ -1436,7 +1470,6 @@
           turnosDelPartidor
         );
 
-        
         const duracionMin = (Number(turno.horasRiego) || 0) * 60 + (Number(turno.minutosRiego) || 0);
         const textoDuracion = `${turno.horasRiego || 0}h ${String(turno.minutosRiego || 0).padStart(2, "0")}m`;
         const horaFinToma = duracionMin > 0 ? sumarMinutosAHora(calc.horaTomaFinal, duracionMin) : null;
@@ -1457,6 +1490,17 @@
 
         const esMio = usuarioActual && turno.socio === usuarioActual.socio && turno.nombre === usuarioActual.nombre;
 
+        // Visibilidad del teléfono: por defecto visible; si marcó ocultar, solo lo ve el propio usuario o Admin
+        let bloqueTelefonoHTML = "";
+        if (turno.ocultarTelefono && !esMio && !esAdmin) {
+          bloqueTelefonoHTML = `<span class="turno-tel-oculto">🔒 Teléfono oculto</span>`;
+        } else if (turno.telefono) {
+          const marcaPrivado = turno.ocultarTelefono ? " 🔒" : "";
+          bloqueTelefonoHTML = `<a href="tel:${turno.telefono}" class="turno-tel">📞 ${turno.telefono}${marcaPrivado}</a>`;
+        } else {
+          bloqueTelefonoHTML = `<span class="turno-tel-oculto">Sin tel.</span>`;
+        }
+
         const tarjeta = document.createElement("div");
         tarjeta.className = `tarjeta-turno ${esMio ? "mi-turno" : ""}`;
         tarjeta.innerHTML = `
@@ -1465,7 +1509,7 @@
               <span class="turno-nombre">${turno.nombre}</span>
               <span class="turno-toma-badge">${formatearNombreToma(turno.toma)}</span>
             </div>
-            <a href="tel:${turno.telefono}" class="turno-tel">📞 ${turno.telefono || "Sin tel."}</a>
+            ${bloqueTelefonoHTML}
           </div>
 
           <div class="turno-tabla-datos">
@@ -1527,6 +1571,11 @@
       seleccionAbierta = { datosP, tomaObj };
       miTurnoDocId = null;
 
+      // Registrar estado en el historial del navegador para que el botón "Atrás" del móvil vuelva aquí
+      try {
+        history.pushState({ vista: "ficha", partidorId: datosP.id }, "", "#partidor");
+      } catch (e) {}
+
       const fecha = selectorFecha.value;
       const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª Elevación" : "Canal 7ª Elevación";
       const tituloToma = tomaObj ? ` — ${formatearNombreToma(tomaObj.toma)}` : "";
@@ -1540,6 +1589,7 @@
         rellenarInputsHora("regante-maq-hh", "regante-maq-mm", "");
         document.getElementById("regante-horas-riego").value = "";
         document.getElementById("regante-minutos-riego").value = "0";
+        document.getElementById("check-ocultar-telefono").checked = false;
         actualizarPanelResumenFijo();
       } else {
         bloqueFormRegante.classList.add("oculto");
@@ -1553,6 +1603,7 @@
 
       pantallaPrincipal.classList.add("oculto");
       pantallaFicha.classList.remove("oculto");
+      window.scrollTo(0, 0);
 
       if (!firebaseListo) return;
 
@@ -1589,6 +1640,7 @@
               rellenarInputsHora("regante-maq-hh", "regante-maq-mm", miTurno.horaMaquinas);
               document.getElementById("regante-horas-riego").value = miTurno.horasRiego;
               document.getElementById("regante-minutos-riego").value = String(miTurno.minutosRiego || 0);
+              document.getElementById("check-ocultar-telefono").checked = Boolean(miTurno.ocultarTelefono);
             }
           }
         }
@@ -1619,6 +1671,7 @@
 
       const horasVal = document.getElementById("regante-horas-riego").value;
       const minutosVal = parseInt(document.getElementById("regante-minutos-riego").value, 10) || 0;
+      const ocultarTelefono = document.getElementById("check-ocultar-telefono").checked;
 
       const horasEnteras = parseInt(horasVal, 10);
       if (isNaN(horasEnteras) || horasEnteras < 0) {
@@ -1645,6 +1698,7 @@
         socio: usuarioActual.socio,
         nombre: usuarioActual.nombre,
         telefono: usuarioActual.telefono || "",
+        ocultarTelefono: ocultarTelefono,
         toma: formatearNombreToma(tomaObj.toma),
         desfaseToma: Number(tomaObj.desfaseToma) || 0,
         horaMaquinas: horaMaquinas,
@@ -1765,10 +1819,11 @@
     });
 
     document.getElementById("btn-volver-panel").addEventListener("click", () => {
-      detenerEscuchasEnVivo();
-      pantallaFicha.classList.add("oculto");
-      pantallaPrincipal.classList.remove("oculto");
-      pintarListaPartidores();
+      if (history.state && history.state.vista === "ficha") {
+        history.back();
+      } else {
+        regresarAPanelDesdeFicha();
+      }
     });
 
     selectorFecha.addEventListener("change", async () => {
