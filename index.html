@@ -37,6 +37,31 @@
       margin-bottom: 12px;
       font-size: 1.05rem;
     }
+    .selector-idioma-registro {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-idioma-reg {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 7px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      background: transparent;
+      color: #475569;
+    }
+    .btn-idioma-reg.activo {
+      background: #0f4c81;
+      color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+    }
     .form-group { margin-bottom: 14px; }
     label {
       display: block;
@@ -138,16 +163,16 @@
       margin-bottom: 14px;
       font-size: 0.85rem;
       color: #0369a1;
-      gap: 8px;
+      gap: 6px;
     }
-    .acciones-cabecera { display: flex; gap: 6px; align-items: center; }
+    .acciones-cabecera { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
     .btn-admin-toggle {
       background: #0f4c81;
       color: white;
       border: none;
       border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 0.8rem;
+      padding: 6px 8px;
+      font-size: 0.78rem;
       font-weight: bold;
       cursor: pointer;
       white-space: nowrap;
@@ -158,10 +183,22 @@
       color: white;
       border: none;
       border-radius: 6px;
-      padding: 6px 9px;
-      font-size: 0.8rem;
+      padding: 6px 8px;
+      font-size: 0.78rem;
       font-weight: bold;
       cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-lang-top {
+      background: #ffffff;
+      color: #0f4c81;
+      border: 1px solid #0f4c81;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
     }
     .leyenda {
       display: flex;
@@ -487,15 +524,15 @@
 
   <!-- BANNER DE INSTALACIÓN PWA -->
   <div id="caja-instalar-pwa" class="card oculto" style="background:#eff6ff; border:2px solid #0f4c81; text-align:center; padding:14px;">
-    <p style="margin:0 0 10px 0; font-weight:700; color:#0f4c81; font-size:0.95rem;">
+    <p id="txt-pwa-titulo" style="margin:0 0 10px 0; font-weight:700; color:#0f4c81; font-size:0.95rem;">
       📱 Pon el icono en tu móvil para entrar con un solo toque
     </p>
     <button type="button" id="btn-instalar-pwa" class="btn-primario" style="background:#0f4c81; font-size:1rem;">
       📲 Instalar aplicación en mi móvil
     </button>
     <div id="instrucciones-ios-pwa" class="oculto" style="margin-top:12px; background:white; padding:12px; border-radius:8px; border:1px solid #bfdbfe; text-align:left; font-size:0.88rem; color:#1e293b;">
-      <strong>En iPhone (Safari):</strong>
-      <ol style="margin:6px 0 0 0; padding-left:20px; line-height:1.5;">
+      <strong id="txt-ios-titulo">En iPhone (Safari):</strong>
+      <ol id="txt-ios-pasos" style="margin:6px 0 0 0; padding-left:20px; line-height:1.5;">
         <li>Pulsa el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba ⬆️) abajo en el centro.</li>
         <li>Desliza hacia abajo y toca en <strong>"Añadir a pantalla de inicio"</strong>.</li>
       </ol>
@@ -504,30 +541,35 @@
 
   <!-- PANTALLA 1: REGISTRO DE REGANTE -->
   <div id="pantalla-registro" class="card">
-    <h2>Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
-    <p style="text-align: center; color: #64748b; font-size: 0.9rem;">
+    <div class="selector-idioma-registro">
+      <button type="button" id="btn-lang-reg-es" class="btn-idioma-reg activo">Castellano</button>
+      <button type="button" id="btn-lang-reg-va" class="btn-idioma-reg">Valencià</button>
+    </div>
+
+    <h2 id="txt-reg-titulo">Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
+    <p id="txt-reg-subtitulo" style="text-align: center; color: #64748b; font-size: 0.9rem;">
       Regístrate una única vez para consultar y anotar tus turnos de riego.
     </p>
     
     <form id="form-registro">
       <div class="form-group">
-        <label for="socio">Número de Socio / Comunero</label>
+        <label id="lbl-reg-socio" for="socio">Número de Socio / Comunero</label>
         <input type="text" id="socio" placeholder="Ej: 1045" required>
       </div>
 
       <div class="form-group">
-        <label for="nombre">Nombre y Apellidos</label>
+        <label id="lbl-reg-nombre" for="nombre">Nombre y Apellidos</label>
         <input type="text" id="nombre" placeholder="Ej: Juan Pérez García" required>
       </div>
 
       <div class="form-group">
-        <label for="telefono">Teléfono móvil</label>
+        <label id="lbl-reg-telefono" for="telefono">Teléfono móvil</label>
         <input type="tel" id="telefono" placeholder="Ej: 600123456" required>
       </div>
 
       <div class="checkbox-group">
         <input type="checkbox" id="consentimiento" required>
-        <label for="consentimiento" style="font-weight: normal; margin: 0;">
+        <label id="lbl-reg-consentimiento" for="consentimiento" style="font-weight: normal; margin: 0;">
           Acepto el registro de mis datos para la gestión y consulta de turnos de riego de la Comunidad.
         </label>
       </div>
@@ -545,32 +587,33 @@
     <div class="cabecera-usuario">
       <div>
         👤 <strong id="saludo-nombre"></strong><br>
-        <span style="font-size:0.78rem;">Socio: <strong id="saludo-socio"></strong></span>
+        <span style="font-size:0.78rem;"><span id="lbl-cab-socio">Socio</span>: <strong id="saludo-socio"></strong></span>
       </div>
       <div class="acciones-cabecera">
+        <button type="button" id="btn-cambiar-idioma-top" class="btn-lang-top">🌐 VAL</button>
         <button type="button" id="btn-activar-notifs" class="btn-notif" title="Activar avisos de retraso">🔔 Avisos</button>
         <button type="button" id="btn-toggle-admin" class="btn-admin-toggle">🔐 Admin</button>
       </div>
     </div>
 
     <div id="banner-admin" class="banner-modo-admin oculto">
-      <span>🛠️ <strong>Modo Capataz Activo</strong> (Chema / Luis)</span>
+      <span id="txt-banner-admin">🛠️ <strong>Modo Capataz Activo</strong> (Chema / Luis)</span>
       <button type="button" id="btn-ver-todos-admin" style="background:#b45309; color:white; border:none; border-radius:6px; padding:5px 8px; font-size:0.8rem; font-weight:bold; cursor:pointer;">
         Ver todos
       </button>
     </div>
 
-    <h2>Mis Turnos de Riego</h2>
+    <h2 id="txt-panel-titulo">Mis Turnos de Riego</h2>
 
     <div class="form-group">
-      <label for="selector-fecha">Fecha de consulta:</label>
+      <label id="lbl-selector-fecha" for="selector-fecha">Fecha de consulta:</label>
       <input type="date" id="selector-fecha">
     </div>
 
     <div class="leyenda">
-      <span><i class="punto" style="background:#16a34a;"></i> En hora / Regando</span>
-      <span><i class="punto" style="background:#ea580c;"></i> Retraso / Previsión</span>
-      <span><i class="punto" style="background:#dc2626;"></i> Cerrado</span>
+      <span id="leyenda-verde"><i class="punto" style="background:#16a34a;"></i> En hora / Regando</span>
+      <span id="leyenda-naranja"><i class="punto" style="background:#ea580c;"></i> Retraso / Previsión</span>
+      <span id="leyenda-rojo"><i class="punto" style="background:#dc2626;"></i> Cerrado</span>
     </div>
 
     <h3 id="titulo-lista-partidores">Mis Partidores</h3>
@@ -580,7 +623,7 @@
 
     <div id="caja-selector-partidor" class="caja-selector oculto">
       <div class="form-group">
-        <label for="select-canal">1. Canal:</label>
+        <label id="lbl-sel-canal" for="select-canal">1. Canal:</label>
         <select id="select-canal">
           <option value="sexta">Canal 6ª Elevación</option>
           <option value="septima">Canal 7ª Elevación</option>
@@ -588,21 +631,21 @@
       </div>
 
       <div class="form-group">
-        <label for="select-partidor">2. Partidor:</label>
+        <label id="lbl-sel-partidor" for="select-partidor">2. Partidor:</label>
         <select id="select-partidor">
           <option value="">Cargando lista...</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label for="input-toma">3. Número o nombre de tu Toma:</label>
+        <label id="lbl-sel-toma" for="input-toma">3. Número o nombre de tu Toma:</label>
         <input type="text" id="input-toma" placeholder="Ej: 3 (se mostrará como Toma 3)">
       </div>
 
       <div class="form-group">
-        <label for="input-desfase-toma">4. Desfase desde el Partidor hasta tu Toma (minutos):</label>
+        <label id="lbl-sel-desfase" for="input-desfase-toma">4. Desfase desde el Partidor hasta tu Toma (minutos):</label>
         <input type="number" id="input-desfase-toma" inputmode="numeric" min="0" max="600" value="0" placeholder="Ej: 25">
-        <small style="color:#64748b; display:block; margin-top:4px; font-size:0.8rem;">
+        <small id="txt-sel-desfase-ayuda" style="color:#64748b; display:block; margin-top:4px; font-size:0.8rem;">
           Pon 0 si tu toma está junto al partidor. Quedará guardado de forma permanente.
         </small>
       </div>
@@ -614,14 +657,14 @@
     </div>
 
     <div id="zona-eliminar-segura" class="zona-eliminar oculto">
-      <label for="select-eliminar-toma">¿Quieres quitar alguno de tus partidores guardados?</label>
+      <label id="lbl-zona-eliminar" for="select-eliminar-toma">¿Quieres quitar alguno de tus partidores guardados?</label>
       <div class="fila-eliminar">
         <select id="select-eliminar-toma"></select>
         <button type="button" id="btn-confirmar-eliminar" class="btn-eliminar-seguro">Eliminar</button>
       </div>
     </div>
 
-    <p class="aviso-orientativo">
+    <p id="txt-aviso-orientativo" class="aviso-orientativo">
       * Los horarios mostrados son orientativos y están sujetos a variaciones por caudal o incidencias en la red.
     </p>
 
@@ -642,27 +685,27 @@
     <div id="banner-alerta-retraso" class="alerta-retraso-vivo oculto"></div>
 
     <div id="bloque-observaciones" class="dato-ficha oculto">
-      <span class="etiqueta">Observaciones / Avisos del Capataz</span>
+      <span id="lbl-ficha-obs" class="etiqueta">Observaciones / Avisos del Capataz</span>
       <p id="ficha-observaciones" style="margin:4px 0 0 0; font-size:0.95rem; color:#1e293b;"></p>
     </div>
 
     <div id="bloque-formulario-regante" class="caja-turno-regante">
-      <h4>💧 Mis datos de riego para este día</h4>
+      <h4 id="txt-ficha-mis-datos">💧 Mis datos de riego para este día</h4>
       
       <div class="form-group">
-        <label>Hora de máquinas (recibo):</label>
+        <label id="lbl-ficha-hora-maq">Hora de máquinas (recibo):</label>
         <div class="caja-hora-numerica">
           <input type="text" id="regante-maq-hh" inputmode="numeric" maxlength="2" placeholder="HH">
           <span class="separador-hora">:</span>
           <input type="text" id="regante-maq-mm" inputmode="numeric" maxlength="2" placeholder="MM">
         </div>
-        <small style="color:#475569; font-size:0.78rem; display:block; margin-top:4px;">
+        <small id="txt-ficha-hora-ayuda" style="color:#475569; font-size:0.78rem; display:block; margin-top:4px;">
           Escribe hora (00 a 23) y minutos (00 a 59). Ej: 09 y 30.
         </small>
       </div>
 
       <div class="form-group">
-        <label>Tiempo de riego:</label>
+        <label id="lbl-ficha-tiempo-riego">Tiempo de riego:</label>
         <div class="fila-doble">
           <div>
             <input type="number" id="regante-horas-riego" inputmode="numeric" min="0" max="48" placeholder="Horas (ej: 2)">
@@ -679,10 +722,10 @@
       </div>
 
       <div class="resumen-fijo-regante">
-        <div class="resumen-fijo-titulo">📊 Resumen de tus tiempos calculados</div>
+        <div id="txt-resumen-titulo" class="resumen-fijo-titulo">📊 Resumen de tus tiempos calculados</div>
         <div class="grid-resumen-fijo">
           <div class="celda-fija">
-            <span>Hora máquinas (recibo)</span>
+            <span id="lbl-fijo-maq">Hora máquinas (recibo)</span>
             <strong id="fijo-hora-maquinas">--:--</strong>
             <small id="fijo-desfase-canal">Desfase canal: -- min</small>
           </div>
@@ -692,12 +735,12 @@
             <small id="fijo-detalle-partidor">Según desfase por defecto</small>
           </div>
           <div class="celda-fija prevision-box">
-            <span>Previsión de apertura del partidor</span>
+            <span id="lbl-fijo-prev">Previsión de apertura del partidor</span>
             <strong id="fijo-prevision-admin">Sin especificar</strong>
             <small id="fijo-detalle-prevision">Calculado con desfase por defecto desde máquinas</small>
           </div>
           <div class="celda-fija destacada">
-            <span>💧 Hora estimada de llegada a tu toma</span>
+            <span id="lbl-fijo-toma">💧 Hora estimada de llegada a tu toma</span>
             <strong id="fijo-hora-toma">--:--</strong>
             <small id="fijo-detalle-toma">Desfase partidor → tu toma: -- min</small>
           </div>
@@ -710,11 +753,11 @@
 
       <label class="checkbox-privacidad" for="check-ocultar-telefono">
         <input type="checkbox" id="check-ocultar-telefono">
-        <span>Prefiero que mi teléfono no sea visible</span>
+        <span id="lbl-ocultar-tel">Prefiero que mi teléfono no sea visible</span>
       </label>
     </div>
 
-    <h3>📋 Turnos anotados en este partidor</h3>
+    <h3 id="txt-lista-turnos-titulo">📋 Turnos anotados en este partidor</h3>
     <div id="contenedor-lista-turnos" class="lista-turnos-partidor">
       <p style="color:#64748b; font-size:0.9rem; text-align:center;">Cargando turnos...</p>
     </div>
@@ -786,7 +829,7 @@
   };
 
   (async function iniciarAplicacion() {
-    const APP_DATA_VERSION = "v6_pwa_completa";
+    const APP_DATA_VERSION = "v7_bilingue_es_va";
     try {
       const versionGuardada = localStorage.getItem("app_version_6y7");
       if (versionGuardada !== APP_DATA_VERSION) {
@@ -805,6 +848,273 @@
         localStorage.setItem("app_version_6y7", APP_DATA_VERSION);
       } catch (err) {}
     }
+
+    // DICCIONARIO CASTELLANO / VALENCIANO (MANTENIENDO "TOMA")
+    let idiomaActual = localStorage.getItem("idioma_6y7") || "es";
+
+    const TEXTOS = {
+      es: {
+        pwaTitulo: "📱 Pon el icono en tu móvil para entrar con un solo toque",
+        btnInstalarPwa: "📲 Instalar aplicación en mi móvil",
+        iosTitulo: "En iPhone (Safari):",
+        iosPasos: `<li>Pulsa el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba ⬆️) abajo en el centro.</li><li>Desliza hacia abajo y toca en <strong>"Añadir a pantalla de inicio"</strong>.</li>`,
+        regTitulo: "Comunidad de Regantes<br>6ª y 7ª Elevación",
+        regSubtitulo: "Regístrate una única vez para consultar y anotar tus turnos de riego.",
+        lblSocio: "Número de Socio / Comunero",
+        phSocio: "Ej: 1045",
+        lblNombre: "Nombre y Apellidos",
+        phNombre: "Ej: Juan Pérez García",
+        lblTelefono: "Teléfono móvil",
+        phTelefono: "Ej: 600123456",
+        lblConsentimiento: "Acepto el registro de mis datos para la gestión y consulta de turnos de riego de la Comunidad.",
+        btnRegistrar: "Acceder a los riegos",
+        btnGuardandoDatos: "Guardando datos...",
+        btnAccesoAdmin: "🔐 Acceso Capataz / Guardas",
+        cabSocio: "Socio",
+        btnNotifs: "🔔 Avisos",
+        panelTitulo: "Mis Turnos de Riego",
+        lblFecha: "Fecha de consulta:",
+        leyendaVerde: "En hora / Regando",
+        leyendaNaranja: "Retraso / Previsión",
+        leyendaRojo: "Cerrado",
+        tituloMisPartidores: "Mis Partidores",
+        tituloTodosPartidores: "Todos los Partidores (Vista Capataz)",
+        btnAnadirPartidor: "+ Añadir mi partidor",
+        lblSelCanal: "1. Canal:",
+        optSexta: "Canal 6ª Elevación",
+        optSeptima: "Canal 7ª Elevación",
+        lblSelPartidor: "2. Partidor:",
+        lblSelToma: "3. Número o nombre de tu Toma:",
+        phSelToma: "Ej: 3 (se mostrará como Toma 3)",
+        lblSelDesfase: "4. Desfase desde el Partidor hasta tu Toma (minutos):",
+        txtSelDesfaseAyuda: "Pon 0 si tu toma está junto al partidor. Quedará guardado de forma permanente.",
+        btnGuardarPartidor: "Guardar partidor",
+        btnCancelar: "Cancelar",
+        lblZonaEliminar: "¿Quieres quitar alguno de tus partidores guardados?",
+        btnEliminar: "Eliminar",
+        avisoOrientativo: "* Los horarios mostrados son orientativos y están sujetos a variaciones por caudal o incidencias en la red.",
+        btnSalir: "Cerrar sesión",
+        btnVolverPanel: "⬅ Volver a mis partidores",
+        bannerSinDatos: "⚪ SIN PROGRAMACIÓN DE ESTADO",
+        bannerVerdeGenerico: "🟢 PARTIDOR ABIERTO / REGANDO",
+        bannerAbiertoEnHora: "🟢 ABIERTO EN HORA:",
+        bannerNaranjaGenerico: "🟠 RETRASO / PREVISIÓN DE APERTURA",
+        bannerPrevision: "🟠 PREVISIÓN DE APERTURA:",
+        bannerAbiertoRetraso: "🟠 ABIERTO CON RETRASO:",
+        bannerRojo: "🔴 PARTIDOR CERRADO / FINALIZADO",
+        lblObsCapataz: "Observaciones / Avisos del Capataz",
+        fichaMisDatos: "💧 Mis datos de riego para este día",
+        lblHoraMaq: "Hora de máquinas (recibo):",
+        txtHoraAyuda: "Escribe hora (00 a 23) y minutos (00 a 59). Ej: 09 y 30.",
+        lblTiempoRiego: "Tiempo de riego:",
+        phHorasRiego: "Horas (ej: 2)",
+        txtResumenTitulo: "📊 Resumen de tus tiempos calculados",
+        lblFijoMaq: "Hora máquinas (recibo)",
+        lblFijoPartidor: "Apertura del partidor",
+        lblFijoRealApertura: "Hora real apertura",
+        lblFijoPrev: "Previsión de apertura del partidor",
+        lblFijoToma: "💧 Hora estimada de llegada a tu toma",
+        sinEspecificar: "Sin especificar",
+        btnPublicarTurno: "✔ Guardar / Actualizar mi turno en la lista",
+        btnGuardandoTurno: "Guardando turno...",
+        lblOcultarTel: "Prefiero que mi teléfono no sea visible",
+        tituloListaTurnos: "📋 Turnos anotados en este partidor",
+        sinTurnosAnotados: "Todavía ningún regante ha anotado su turno en este partidor para esta fecha.",
+        sinPartidoresGuardados: "Aún no tienes ningún partidor registrado.<br>Pulsa el botón inferior para añadir el tuyo.",
+        pulsaAnotar: "Pulsa para anotar hora de máquinas y ver turnos",
+        telOculto: "🔒 Teléfono oculto",
+        sinTel: "Sin tel.",
+        lblListaMaq: "Hora de máquinas",
+        lblListaRiego: "Tiempo de riego",
+        lblListaPartidor: "Apertura partidor",
+        lblListaFin: "Fin estimado toma",
+        lblListaLlegada: "💧 Hora estimada de llegada a tu toma",
+        tuTurnoPublicado: "Tu turno publicado",
+        btnBorrarMiTurno: "🗑️ Borrar mi turno",
+        alertTurnoGuardado: "✅ Turno guardado. Tus datos quedan visibles arriba y en la lista.",
+        alertFaltaHora: "Por favor, escribe la Hora y los Minutos de máquinas (recibo).",
+        alertFaltaHorasRiego: "Introduce un número entero de horas (por ejemplo 0, 1, 2...).",
+        alertTiempoMayorCero: "El tiempo de riego debe ser mayor que 0."
+      },
+      va: {
+        pwaTitulo: "📱 Posa la icona al teu mòbil per a entrar amb un sol toc",
+        btnInstalarPwa: "📲 Instal·lar aplicació al meu mòbil",
+        iosTitulo: "En iPhone (Safari):",
+        iosPasos: `<li>Prem el botó <strong>Compartir</strong> (el quadrat amb la fletxa cap amunt ⬆️) baix al centre.</li><li>Llisca cap avall i toca en <strong>"Afegir a la pantalla d'inici"</strong>.</li>`,
+        regTitulo: "Comunitat de Regants<br>6a i 7a Elevació",
+        regSubtitulo: "Registra't una única vegada per a consultar i anotar els teus torns de reg.",
+        lblSocio: "Número de Soci / Comuner",
+        phSocio: "Ex: 1045",
+        lblNombre: "Nom i Cognoms",
+        phNombre: "Ex: Joan Pérez Garcia",
+        lblTelefono: "Telèfon mòbil",
+        phTelefono: "Ex: 600123456",
+        lblConsentimiento: "Accepte el registre de les meues dades per a la gestió i consulta de torns de reg de la Comunitat.",
+        btnRegistrar: "Accedir als regs",
+        btnGuardandoDatos: "Guardant dades...",
+        btnAccesoAdmin: "🔐 Accés Capatàs / Guardes",
+        cabSocio: "Soci",
+        btnNotifs: "🔔 Avisos",
+        panelTitulo: "Els Meus Torns de Reg",
+        lblFecha: "Data de consulta:",
+        leyendaVerde: "En hora / Regant",
+        leyendaNaranja: "Retard / Previsió",
+        leyendaRojo: "Tancat",
+        tituloMisPartidores: "Els Meus Partidors",
+        tituloTodosPartidores: "Tots els Partidors (Vista Capatàs)",
+        btnAnadirPartidor: "+ Afegir el meu partidor",
+        lblSelCanal: "1. Canal:",
+        optSexta: "Canal 6a Elevació",
+        optSeptima: "Canal 7a Elevació",
+        lblSelPartidor: "2. Partidor:",
+        lblSelToma: "3. Número o nom de la teua Toma:",
+        phSelToma: "Ex: 3 (es mostrarà com a Toma 3)",
+        lblSelDesfase: "4. Desfasament des del Partidor fins a la teua Toma (minuts):",
+        txtSelDesfaseAyuda: "Posa 0 si la teua toma està junt al partidor. Quedarà guardat de forma permanent.",
+        btnGuardarPartidor: "Guardar partidor",
+        btnCancelar: "Cancel·lar",
+        lblZonaEliminar: "Vols llevar algun dels teus partidors guardats?",
+        btnEliminar: "Eliminar",
+        avisoOrientativo: "* Els horaris mostrants són orientatius i estan subjectes a variacions per cabal o incidències a la xarxa.",
+        btnSalir: "Tancar sessió",
+        btnVolverPanel: "⬅ Tornar als meus partidors",
+        bannerSinDatos: "⚪ SENSE PROGRAMACIÓ D'ESTAT",
+        bannerVerdeGenerico: "🟢 PARTIDOR OBERT / REGANT",
+        bannerAbiertoEnHora: "🟢 OBERT EN HORA:",
+        bannerNaranjaGenerico: "🟠 RETARD / PREVISIÓ D'OBERTURA",
+        bannerPrevision: "🟠 PREVISIÓ D'OBERTURA:",
+        bannerAbiertoRetraso: "🟠 OBERT AMB RETARD:",
+        bannerRojo: "🔴 PARTIDOR TANCAT / FINALITZAT",
+        lblObsCapataz: "Observacions / Avisos del Capatàs",
+        fichaMisDatos: "💧 Les meues dades de reg per a este dia",
+        lblHoraMaq: "Hora de màquines (rebut):",
+        txtHoraAyuda: "Escriu hora (00 a 23) i minuts (00 a 59). Ex: 09 i 30.",
+        lblTiempoRiego: "Temps de reg:",
+        phHorasRiego: "Hores (ex: 2)",
+        txtResumenTitulo: "📊 Resum dels teus temps calculats",
+        lblFijoMaq: "Hora màquines (rebut)",
+        lblFijoPartidor: "Obertura del partidor",
+        lblFijoRealApertura: "Hora real obertura",
+        lblFijoPrev: "Previsió d'obertura del partidor",
+        lblFijoToma: "💧 Hora estimada d'arribada a la teua toma",
+        sinEspecificar: "Sense especificar",
+        btnPublicarTurno: "✔ Guardar / Actualitzar el meu torn en la llista",
+        btnGuardandoTurno: "Guardant torn...",
+        lblOcultarTel: "Prefereisc que el meu telèfon no siga visible",
+        tituloListaTurnos: "📋 Torns anotats en este partidor",
+        sinTurnosAnotados: "Encara cap regant ha anotat el seu torn en este partidor per a esta data.",
+        sinPartidoresGuardados: "Encara no tens cap partidor registrat.<br>Prem el botó inferior per a afegir el teu.",
+        pulsaAnotar: "Prem per a anotar hora de màquines i veure torns",
+        telOculto: "🔒 Telèfon ocult",
+        sinTel: "Sense tel.",
+        lblListaMaq: "Hora de màquines",
+        lblListaRiego: "Temps de reg",
+        lblListaPartidor: "Obertura partidor",
+        lblListaFin: "Fi estimada toma",
+        lblListaLlegada: "💧 Hora estimada d'arribada a la teua toma",
+        tuTurnoPublicado: "El teu torn publicat",
+        btnBorrarMiTurno: "🗑️ Esborrar el meu torn",
+        alertTurnoGuardado: "✅ Torn guardat. Les teues dades queden visibles dalt i en la llista.",
+        alertFaltaHora: "Per favor, escriu l'Hora i els Minuts de màquines (rebut).",
+        alertFaltaHorasRiego: "Introdueix un número sencer d'hores (per exemple 0, 1, 2...).",
+        alertTiempoMayorCero: "El temps de reg ha de ser major que 0."
+      }
+    };
+
+    function t(clave) {
+      return (TEXTOS[idiomaActual] && TEXTOS[idiomaActual][clave]) || TEXTOS.es[clave] || clave;
+    }
+
+    function aplicarIdioma(nuevoIdioma) {
+      idiomaActual = nuevoIdioma === "va" ? "va" : "es";
+      localStorage.setItem("idioma_6y7", idiomaActual);
+
+      // Botones selector registro y botón superior
+      document.getElementById("btn-lang-reg-es").classList.toggle("activo", idiomaActual === "es");
+      document.getElementById("btn-lang-reg-va").classList.toggle("activo", idiomaActual === "va");
+      document.getElementById("btn-cambiar-idioma-top").textContent = idiomaActual === "es" ? "🌐 VAL" : "🌐 CAS";
+
+      // PWA
+      document.getElementById("txt-pwa-titulo").textContent = t("pwaTitulo");
+      document.getElementById("btn-instalar-pwa").textContent = t("btnInstalarPwa");
+      document.getElementById("txt-ios-titulo").textContent = t("iosTitulo");
+      document.getElementById("txt-ios-pasos").innerHTML = t("iosPasos");
+
+      // Registro
+      document.getElementById("txt-reg-titulo").innerHTML = t("regTitulo");
+      document.getElementById("txt-reg-subtitulo").textContent = t("regSubtitulo");
+      document.getElementById("lbl-reg-socio").textContent = t("lblSocio");
+      document.getElementById("socio").placeholder = t("phSocio");
+      document.getElementById("lbl-reg-nombre").textContent = t("lblNombre");
+      document.getElementById("nombre").placeholder = t("phNombre");
+      document.getElementById("lbl-reg-telefono").textContent = t("lblTelefono");
+      document.getElementById("telefono").placeholder = t("phTelefono");
+      document.getElementById("lbl-reg-consentimiento").textContent = t("lblConsentimiento");
+      document.getElementById("btn-registrar").textContent = t("btnRegistrar");
+      document.getElementById("btn-acceso-directo-admin").textContent = t("btnAccesoAdmin");
+
+      // Panel Principal
+      document.getElementById("lbl-cab-socio").textContent = t("cabSocio");
+      document.getElementById("btn-activar-notifs").textContent = t("btnNotifs");
+      document.getElementById("txt-panel-titulo").textContent = t("panelTitulo");
+      document.getElementById("lbl-selector-fecha").textContent = t("lblFecha");
+      document.getElementById("leyenda-verde").innerHTML = `<i class="punto" style="background:#16a34a;"></i> ${t("leyendaVerde")}`;
+      document.getElementById("leyenda-naranja").innerHTML = `<i class="punto" style="background:#ea580c;"></i> ${t("leyendaNaranja")}`;
+      document.getElementById("leyenda-rojo").innerHTML = `<i class="punto" style="background:#dc2626;"></i> ${t("leyendaRojo")}`;
+      document.getElementById("btn-mostrar-selector").textContent = t("btnAnadirPartidor");
+      document.getElementById("lbl-sel-canal").textContent = t("lblSelCanal");
+      document.getElementById("select-canal").options[0].textContent = t("optSexta");
+      document.getElementById("select-canal").options[1].textContent = t("optSeptima");
+      document.getElementById("lbl-sel-partidor").textContent = t("lblSelPartidor");
+      document.getElementById("lbl-sel-toma").textContent = t("lblSelToma");
+      document.getElementById("input-toma").placeholder = t("phSelToma");
+      document.getElementById("lbl-sel-desfase").textContent = t("lblSelDesfase");
+      document.getElementById("txt-sel-desfase-ayuda").textContent = t("txtSelDesfaseAyuda");
+      document.getElementById("btn-confirmar-partidor").textContent = t("btnGuardarPartidor");
+      document.getElementById("btn-cancelar-partidor").textContent = t("btnCancelar");
+      document.getElementById("lbl-zona-eliminar").textContent = t("lblZonaEliminar");
+      document.getElementById("btn-confirmar-eliminar").textContent = t("btnEliminar");
+      document.getElementById("txt-aviso-orientativo").textContent = t("avisoOrientativo");
+      document.getElementById("btn-salir").textContent = t("btnSalir");
+
+      // Ficha Partidor
+      document.getElementById("btn-volver-panel").textContent = t("btnVolverPanel");
+      document.getElementById("lbl-ficha-obs").textContent = t("lblObsCapataz");
+      document.getElementById("txt-ficha-mis-datos").textContent = t("fichaMisDatos");
+      document.getElementById("lbl-ficha-hora-maq").textContent = t("lblHoraMaq");
+      document.getElementById("txt-ficha-hora-ayuda").textContent = t("txtHoraAyuda");
+      document.getElementById("lbl-ficha-tiempo-riego").textContent = t("lblTiempoRiego");
+      document.getElementById("regante-horas-riego").placeholder = t("phHorasRiego");
+      document.getElementById("txt-resumen-titulo").textContent = t("txtResumenTitulo");
+      document.getElementById("lbl-fijo-maq").textContent = t("lblFijoMaq");
+      document.getElementById("lbl-fijo-prev").textContent = t("lblFijoPrev");
+      document.getElementById("lbl-fijo-toma").textContent = t("lblFijoToma");
+      document.getElementById("btn-publicar-turno").textContent = t("btnPublicarTurno");
+      document.getElementById("lbl-ocultar-tel").textContent = t("lblOcultarTel");
+      document.getElementById("txt-lista-turnos-titulo").textContent = t("tituloListaTurnos");
+
+      // Re-pintar vistas dinámicas si están cargadas
+      if (usuarioActual) {
+        pintarListaPartidores();
+      }
+      if (seleccionAbierta) {
+        const { datosP, tomaObj } = seleccionAbierta;
+        const fecha = selectorFecha.value;
+        const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? t("optSexta") : t("optSeptima");
+        const tituloToma = tomaObj ? ` — ${formatearNombreToma(tomaObj.toma)}` : "";
+        document.getElementById("ficha-titulo-partidor").textContent = `${datosP.nombre}${tituloToma}`;
+        document.getElementById("ficha-subtitulo").textContent = `${canalTexto} · ${fecha.split("-").reverse().join("/")}`;
+        pintarBannerYEstadoFicha(datosP);
+        actualizarPanelResumenFijo();
+        pintarListaTurnos();
+      }
+    }
+
+    document.getElementById("btn-lang-reg-es").addEventListener("click", () => aplicarIdioma("es"));
+    document.getElementById("btn-lang-reg-va").addEventListener("click", () => aplicarIdioma("va"));
+    document.getElementById("btn-cambiar-idioma-top").addEventListener("click", () => {
+      aplicarIdioma(idiomaActual === "es" ? "va" : "es");
+    });
 
     let fbApp, db, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp;
     let firebaseListo = false;
@@ -1037,12 +1347,12 @@
 
       if ("Notification" in window && Notification.permission === "granted") {
         try {
-          const titulo = esAperturaReal
-            ? `🟠 Partidor ${nombrePartidor} abierto con retraso`
-            : `⚠️ Previsión de retraso en ${nombrePartidor}`;
-          const cuerpo = esAperturaReal
-            ? `Abierto a las ${horaRef} (${minutosRetraso} min de retraso). Horarios definitivos actualizados.`
-            : `Previsión de apertura: ${horaRef} (+${minutosRetraso} min). Se han recalculado los turnos.`;
+          const titulo = idiomaActual === "va"
+            ? (esAperturaReal ? `🟠 Partidor ${nombrePartidor} obert amb retard` : `⚠️ Previsió de retard en ${nombrePartidor}`)
+            : (esAperturaReal ? `🟠 Partidor ${nombrePartidor} abierto con retraso` : `⚠️ Previsión de retraso en ${nombrePartidor}`);
+          const cuerpo = idiomaActual === "va"
+            ? (esAperturaReal ? `Obert a les ${horaRef} (${minutosRetraso} min de retard). Horaris definitius actualitzats.` : `Previsió d'obertura: ${horaRef} (+${minutosRetraso} min). S'han recalculat els torns.`)
+            : (esAperturaReal ? `Abierto a las ${horaRef} (${minutosRetraso} min de retraso). Horarios definitivos actualizados.` : `Previsión de apertura: ${horaRef} (+${minutosRetraso} min). Se han recalculado los turnos.`);
 
           new Notification(titulo, {
             body: cuerpo,
@@ -1159,7 +1469,7 @@
       });
 
       if (filtrados.length === 0) {
-        selectPartidor.innerHTML = `<option value="">Sin partidores en este canal</option>`;
+        selectPartidor.innerHTML = `<option value="">--</option>`;
         return;
       }
 
@@ -1200,24 +1510,32 @@
 
       if (infoRiego.estado === "verde") {
         claseColor = "estado-verde";
-        textoEstado = infoRiego.horaRealApertura
-          ? `Abierto en hora: ${infoRiego.horaRealApertura}`
-          : "Partidor abierto / En hora";
+        if (idiomaActual === "va") {
+          textoEstado = infoRiego.horaRealApertura ? `Obert en hora: ${infoRiego.horaRealApertura}` : "Partidor obert / En hora";
+        } else {
+          textoEstado = infoRiego.horaRealApertura ? `Abierto en hora: ${infoRiego.horaRealApertura}` : "Partidor abierto / En hora";
+        }
       } else if (infoRiego.estado === "naranja") {
         claseColor = "estado-naranja";
         if (infoRiego.horaRealApertura) {
           const r = Number(infoRiego.retrasoMinutos) || 0;
-          textoEstado = r > 0
-            ? `Abierto: ${infoRiego.horaRealApertura} (con ${r} min de retraso)`
-            : `Abierto con retraso: ${infoRiego.horaRealApertura}`;
+          if (idiomaActual === "va") {
+            textoEstado = r > 0 ? `Obert: ${infoRiego.horaRealApertura} (amb ${r} min de retard)` : `Obert amb retard: ${infoRiego.horaRealApertura}`;
+          } else {
+            textoEstado = r > 0 ? `Abierto: ${infoRiego.horaRealApertura} (con ${r} min de retraso)` : `Abierto con retraso: ${infoRiego.horaRealApertura}`;
+          }
         } else if (infoRiego.horaPrevision) {
-          textoEstado = `⚠️ Previsión apertura: ${infoRiego.horaPrevision}`;
+          textoEstado = idiomaActual === "va"
+            ? `⚠️ Previsió obertura: ${infoRiego.horaPrevision}`
+            : `⚠️ Previsión apertura: ${infoRiego.horaPrevision}`;
         } else {
-          textoEstado = "⚠️ Retraso / Pendiente de apertura";
+          textoEstado = idiomaActual === "va"
+            ? "⚠️ Retard / Pendent d'obertura"
+            : "⚠️ Retraso / Pendiente de apertura";
         }
       } else if (infoRiego.estado === "rojo") {
         claseColor = "estado-rojo";
-        textoEstado = "Partidor cerrado / Finalizado";
+        textoEstado = idiomaActual === "va" ? "Partidor tancat / Finalitzat" : "Partidor cerrado / Finalizado";
       }
 
       return { claseColor, textoEstado };
@@ -1228,13 +1546,16 @@
       const titulo = document.getElementById("titulo-lista-partidores");
 
       if (esAdmin && verTodosAdmin) {
-        titulo.textContent = "Todos los Partidores (Vista Capataz)";
+        titulo.textContent = t("tituloTodosPartidores");
         document.getElementById("zona-eliminar-segura").classList.add("oculto");
 
         catalogoPartidores.forEach((datosP) => {
-          const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+          const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta")
+            ? (idiomaActual === "va" ? "Canal 6a" : "Canal 6ª")
+            : (idiomaActual === "va" ? "Canal 7a" : "Canal 7ª");
           const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
-          const { claseColor, textoEstado } = describirEstadoBoton(infoRiego, `Desfase canal: ${datosP.desfase || 0} min`);
+          const baseDesf = idiomaActual === "va" ? `Desfasament canal: ${datosP.desfase || 0} min` : `Desfase canal: ${datosP.desfase || 0} min`;
+          const { claseColor, textoEstado } = describirEstadoBoton(infoRiego, baseDesf);
 
           const btn = document.createElement("button");
           btn.className = `btn-partidor ${claseColor}`;
@@ -1251,14 +1572,14 @@
         return;
       }
 
-      titulo.textContent = "Mis Partidores";
+      titulo.textContent = t("tituloMisPartidores");
       const misTomas = usuarioActual.misTomas || [];
       actualizarDesplegableEliminar();
 
       if (misTomas.length === 0) {
         contenedorMisPartidores.innerHTML = `
           <p style="color:#64748b; font-size:0.95rem; text-align:center; padding: 12px 0;">
-            Aún no tienes ningún partidor registrado.<br>Pulsa el botón inferior para añadir el tuyo.
+            ${t("sinPartidoresGuardados")}
           </p>
         `;
         return;
@@ -1268,19 +1589,24 @@
         const datosP = catalogoPartidores.find((p) => p.id === tomaObj.partidorId);
         if (!datosP) return;
 
-        const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª" : "Canal 7ª";
+        const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta")
+          ? (idiomaActual === "va" ? "Canal 6a" : "Canal 6ª")
+          : (idiomaActual === "va" ? "Canal 7a" : "Canal 7ª");
         const infoRiego = estadosDelDia[datosP.id] || { estado: "sin_datos" };
         const etiquetaToma = formatearNombreToma(tomaObj.toma);
         const desfaseToma = Number(tomaObj.desfaseToma) || 0;
 
-        const { claseColor, textoEstado } = describirEstadoBoton(infoRiego, "Pulsa para anotar hora de máquinas y ver turnos");
+        const { claseColor, textoEstado } = describirEstadoBoton(infoRiego, t("pulsaAnotar"));
+        const txtDesfaseLinea = idiomaActual === "va"
+          ? `${canalTexto} · Desfasament a la teua toma: ${desfaseToma} min`
+          : `${canalTexto} · Desfase a tu toma: ${desfaseToma} min`;
 
         const btn = document.createElement("button");
         btn.className = `btn-partidor ${claseColor}`;
         btn.innerHTML = `
           <div>
             <span>${datosP.nombre} · ${etiquetaToma}</span>
-            <small>${canalTexto} · Desfase a tu toma: ${desfaseToma} min</small>
+            <small>${txtDesfaseLinea}</small>
             <small>${textoEstado}</small>
           </div>
           <span>➡️</span>
@@ -1310,10 +1636,12 @@
       const elToma = document.getElementById("fijo-hora-toma");
       const elDetToma = document.getElementById("fijo-detalle-toma");
 
-      elDesfCanal.textContent = `Desfase canal al partidor: +${desfasePart} min`;
+      elDesfCanal.textContent = idiomaActual === "va"
+        ? `Desfasament canal al partidor: +${desfasePart} min`
+        : `Desfase canal al partidor: +${desfasePart} min`;
 
       celdaPart.classList.remove("apertura-verde", "apertura-naranja");
-      etiqPart.textContent = "Apertura del partidor";
+      etiqPart.textContent = t("lblFijoPartidor");
 
       const tieneHoraReal = Boolean(info.horaRealApertura && info.horaRealApertura.includes(":"));
       const tienePrevision = Boolean(!tieneHoraReal && info.horaPrevision && info.horaPrevision.includes(":"));
@@ -1321,35 +1649,41 @@
       if (tienePrevision) {
         elPrevAdmin.textContent = info.horaPrevision;
         elPrevAdmin.style.color = "#b45309";
-        elDetPrev.textContent = "Previsión provisional antes de abrir (modifica horarios)";
+        elDetPrev.textContent = idiomaActual === "va"
+          ? "Previsió provisional abans d'obrir (modifica horaris)"
+          : "Previsión provisional antes de abrir (modifica horarios)";
       } else {
-        elPrevAdmin.textContent = "Sin especificar";
+        elPrevAdmin.textContent = t("sinEspecificar");
         elPrevAdmin.style.color = "#64748b";
         elDetPrev.textContent = tieneHoraReal
-          ? "Previsión cerrada al confirmarse la hora real de apertura"
-          : "Calculado con desfase por defecto desde máquinas";
+          ? (idiomaActual === "va" ? "Previsió tancada en confirmar-se l'hora real d'obertura" : "Previsión cerrada al confirmarse la hora real de apertura")
+          : (idiomaActual === "va" ? "Calculat amb desfasament per defecte des de màquines" : "Calculado con desfase por defecto desde máquinas");
       }
 
       if (!horaMaquinas) {
         elMaq.textContent = "--:--";
         if (tieneHoraReal) {
           const retraso = Number(info.retrasoMinutos) || 0;
-          etiqPart.textContent = "Hora real apertura";
+          etiqPart.textContent = t("lblFijoRealApertura");
           if (retraso > 0) {
             celdaPart.classList.add("apertura-naranja");
-            elPart.textContent = `${info.horaRealApertura} (${retraso} min retraso)`;
-            elDetPart.textContent = "Partidor abierto con retraso";
+            elPart.textContent = idiomaActual === "va"
+              ? `${info.horaRealApertura} (${retraso} min retard)`
+              : `${info.horaRealApertura} (${retraso} min retraso)`;
+            elDetPart.textContent = idiomaActual === "va" ? "Partidor obert amb retard" : "Partidor abierto con retraso";
           } else {
             celdaPart.classList.add("apertura-verde");
             elPart.textContent = info.horaRealApertura;
-            elDetPart.textContent = "Partidor abierto en hora";
+            elDetPart.textContent = idiomaActual === "va" ? "Partidor obert en hora" : "Partidor abierto en hora";
           }
         } else {
           elPart.textContent = "--:--";
-          elDetPart.textContent = "Introduce tu hora de máquinas";
+          elDetPart.textContent = idiomaActual === "va" ? "Introdueix la teua hora de màquines" : "Introduce tu hora de máquinas";
         }
         elToma.textContent = "--:--";
-        elDetToma.textContent = `Desfase partidor → tu toma: +${desfaseToma} min`;
+        elDetToma.textContent = idiomaActual === "va"
+          ? `Desfasament partidor → la teua toma: +${desfaseToma} min`
+          : `Desfase partidor → tu toma: +${desfaseToma} min`;
         return;
       }
 
@@ -1360,24 +1694,32 @@
 
       if (calc.modo === "real") {
         const retraso = calc.desplazamientoMin > 0 ? calc.desplazamientoMin : (Number(info.retrasoMinutos) || 0);
-        etiqPart.textContent = "Hora real apertura";
+        etiqPart.textContent = t("lblFijoRealApertura");
         if (retraso > 0) {
           celdaPart.classList.add("apertura-naranja");
-          elPart.textContent = `${calc.horaPartidor} (${retraso} min retraso)`;
-          elDetPart.textContent = "Apertura real confirmada con retraso";
+          elPart.textContent = idiomaActual === "va"
+            ? `${calc.horaPartidor} (${retraso} min retard)`
+            : `${calc.horaPartidor} (${retraso} min retraso)`;
+          elDetPart.textContent = idiomaActual === "va" ? "Obertura real confirmada amb retard" : "Apertura real confirmada con retraso";
         } else {
           celdaPart.classList.add("apertura-verde");
           elPart.textContent = calc.horaPartidor;
-          elDetPart.textContent = "Apertura real confirmada en hora";
+          elDetPart.textContent = idiomaActual === "va" ? "Obertura real confirmada en hora" : "Apertura real confirmada en hora";
         }
       } else if (calc.modo === "prevision") {
         celdaPart.classList.add("apertura-naranja");
         elPart.textContent = calc.horaPartidor;
-        const signo = calc.desplazamientoMin > 0 ? `+${calc.desplazamientoMin} min retraso` : `${calc.desplazamientoMin} min`;
-        elDetPart.textContent = `Según previsión del Capataz (${signo})`;
+        const signo = calc.desplazamientoMin > 0
+          ? (idiomaActual === "va" ? `+${calc.desplazamientoMin} min retard` : `+${calc.desplazamientoMin} min retraso`)
+          : `${calc.desplazamientoMin} min`;
+        elDetPart.textContent = idiomaActual === "va"
+          ? `Segons previsió del Capatàs (${signo})`
+          : `Según previsión del Capataz (${signo})`;
       } else {
         elPart.textContent = calc.horaPartidor;
-        elDetPart.textContent = `Calculado por defecto (${horaMaquinas} + ${desfasePart} min)`;
+        elDetPart.textContent = idiomaActual === "va"
+          ? `Calculat per defecte (${horaMaquinas} + ${desfasePart} min)`
+          : `Calculado por defecto (${horaMaquinas} + ${desfasePart} min)`;
       }
 
       const horasRiego = parseInt(document.getElementById("regante-horas-riego").value, 10) || 0;
@@ -1385,9 +1727,15 @@
       const totalDuracion = horasRiego * 60 + minRiego;
       const horaFin = totalDuracion > 0 ? sumarMinutosAHora(calc.horaTomaFinal, totalDuracion) : null;
 
-      elDetToma.textContent = horaFin
-        ? `Partidor (${calc.horaPartidor}) + ${desfaseToma} min toma · Fin estimado: ${horaFin}`
-        : `Partidor (${calc.horaPartidor}) + ${desfaseToma} min hasta tu toma`;
+      if (idiomaActual === "va") {
+        elDetToma.textContent = horaFin
+          ? `Partidor (${calc.horaPartidor}) + ${desfaseToma} min toma · Fi estimada: ${horaFin}`
+          : `Partidor (${calc.horaPartidor}) + ${desfaseToma} min fins a la teua toma`;
+      } else {
+        elDetToma.textContent = horaFin
+          ? `Partidor (${calc.horaPartidor}) + ${desfaseToma} min toma · Fin estimado: ${horaFin}`
+          : `Partidor (${calc.horaPartidor}) + ${desfaseToma} min hasta tu toma`;
+      }
     }
 
     function pintarBannerYEstadoFicha(datosP) {
@@ -1404,26 +1752,28 @@
       if (info.estado === "verde") {
         banner.classList.add("estado-verde");
         banner.textContent = info.horaRealApertura
-          ? `🟢 ABIERTO EN HORA: ${info.horaRealApertura}`
-          : "🟢 PARTIDOR ABIERTO / REGANDO";
+          ? `${t("bannerAbiertoEnHora")} ${info.horaRealApertura}`
+          : t("bannerVerdeGenerico");
       } else if (info.estado === "naranja") {
         banner.classList.add("estado-naranja");
         if (info.horaRealApertura) {
           const r = Number(info.retrasoMinutos) || 0;
-          banner.textContent = r > 0
-            ? `🟠 ABIERTO: ${info.horaRealApertura} (con ${r} min de retraso)`
-            : `🟠 ABIERTO CON RETRASO: ${info.horaRealApertura}`;
+          if (idiomaActual === "va") {
+            banner.textContent = r > 0 ? `🟠 OBERT: ${info.horaRealApertura} (amb ${r} min de retard)` : `${t("bannerAbiertoRetraso")} ${info.horaRealApertura}`;
+          } else {
+            banner.textContent = r > 0 ? `🟠 ABIERTO: ${info.horaRealApertura} (con ${r} min de retraso)` : `${t("bannerAbiertoRetraso")} ${info.horaRealApertura}`;
+          }
         } else {
           banner.textContent = info.horaPrevision
-            ? `🟠 PREVISIÓN DE APERTURA: ${info.horaPrevision}`
-            : "🟠 RETRASO / PREVISIÓN DE APERTURA";
+            ? `${t("bannerPrevision")} ${info.horaPrevision}`
+            : t("bannerNaranjaGenerico");
         }
       } else if (info.estado === "rojo") {
         banner.classList.add("estado-rojo");
-        banner.textContent = "🔴 PARTIDOR CERRADO / FINALIZADO";
+        banner.textContent = t("bannerRojo");
       } else {
         banner.classList.add("estado-sin-datos");
-        banner.textContent = "⚪ SIN PROGRAMACIÓN DE ESTADO";
+        banner.textContent = t("bannerSinDatos");
       }
 
       const alertaRetraso = document.getElementById("banner-alerta-retraso");
@@ -1432,16 +1782,28 @@
       if (info.horaRealApertura && (Number(info.retrasoMinutos) > 0 || info.estado === "naranja")) {
         const r = Number(info.retrasoMinutos) || calcularDiferenciaContraTeorico(info.horaRealApertura, desfasePart, turnosDelPartidor);
         alertaRetraso.classList.remove("oculto");
-        alertaRetraso.textContent = r > 0
-          ? `🟠 PARTIDOR ABIERTO A LAS ${info.horaRealApertura} (con ${r} min de retraso). Todos los horarios de llegada a toma están actualizados.`
-          : `🟠 PARTIDOR ABIERTO A LAS ${info.horaRealApertura} con retraso. Horarios definitivos actualizados.`;
+        if (idiomaActual === "va") {
+          alertaRetraso.textContent = r > 0
+            ? `🟠 PARTIDOR OBERT A LES ${info.horaRealApertura} (amb ${r} min de retard). Tots els horaris d'arribada a toma estan actualitzats.`
+            : `🟠 PARTIDOR OBERT A LES ${info.horaRealApertura} amb retard. Horaris definitius actualitzats.`;
+        } else {
+          alertaRetraso.textContent = r > 0
+            ? `🟠 PARTIDOR ABIERTO A LAS ${info.horaRealApertura} (con ${r} min de retraso). Todos los horarios de llegada a toma están actualizados.`
+            : `🟠 PARTIDOR ABIERTO A LAS ${info.horaRealApertura} con retraso. Horarios definitivos actualizados.`;
+        }
         dispararNotificacionRetraso(datosP.nombre, info.horaRealApertura, r, true);
       } else if (!info.horaRealApertura && info.horaPrevision && (info.estado === "naranja" || calcularDiferenciaContraTeorico(info.horaPrevision, desfasePart, turnosDelPartidor) > 0)) {
         const rPrev = calcularDiferenciaContraTeorico(info.horaPrevision, desfasePart, turnosDelPartidor);
         alertaRetraso.classList.remove("oculto");
-        alertaRetraso.textContent = rPrev > 0
-          ? `⚠️ AVISO DE RETRASO: Previsión de apertura a las ${info.horaPrevision} (+${rPrev} min de retraso). Turnos recalculados automáticamente.`
-          : `⚠️ PREVISIÓN DE APERTURA: El Capataz ha fijado previsión a las ${info.horaPrevision}. Horarios recalculados.`;
+        if (idiomaActual === "va") {
+          alertaRetraso.textContent = rPrev > 0
+            ? `⚠️ AVÍS DE RETARD: Previsió d'obertura a les ${info.horaPrevision} (+${rPrev} min de retard). Torns recalculats automàticament.`
+            : `⚠️ PREVISIÓ D'OBERTURA: El Capatàs ha fixat previsió a les ${info.horaPrevision}. Horaris recalculats.`;
+        } else {
+          alertaRetraso.textContent = rPrev > 0
+            ? `⚠️ AVISO DE RETRASO: Previsión de apertura a las ${info.horaPrevision} (+${rPrev} min de retraso). Turnos recalculados automáticamente.`
+            : `⚠️ PREVISIÓN DE APERTURA: El Capataz ha fijado previsión a las ${info.horaPrevision}. Horarios recalculados.`;
+        }
         dispararNotificacionRetraso(datosP.nombre, info.horaPrevision, rPrev, false);
       } else {
         alertaRetraso.classList.add("oculto");
@@ -1470,7 +1832,7 @@
       if (turnosDelPartidor.length === 0) {
         contenedor.innerHTML = `
           <p style="color:#64748b; font-size:0.9rem; text-align:center; padding:12px 0;">
-            Todavía ningún regante ha anotado su turno en este partidor para esta fecha.
+            ${t("sinTurnosAnotados")}
           </p>
         `;
         return;
@@ -1511,12 +1873,12 @@
 
         let bloqueTelefonoHTML = "";
         if (turno.ocultarTelefono && !esMio && !esAdmin) {
-          bloqueTelefonoHTML = `<span class="turno-tel-oculto">🔒 Teléfono oculto</span>`;
+          bloqueTelefonoHTML = `<span class="turno-tel-oculto">${t("telOculto")}</span>`;
         } else if (turno.telefono) {
           const marcaPrivado = turno.ocultarTelefono ? " 🔒" : "";
           bloqueTelefonoHTML = `<a href="tel:${turno.telefono}" class="turno-tel">📞 ${turno.telefono}${marcaPrivado}</a>`;
         } else {
-          bloqueTelefonoHTML = `<span class="turno-tel-oculto">Sin tel.</span>`;
+          bloqueTelefonoHTML = `<span class="turno-tel-oculto">${t("sinTel")}</span>`;
         }
 
         const tarjeta = document.createElement("div");
@@ -1532,23 +1894,23 @@
 
           <div class="turno-tabla-datos">
             <div class="turno-dato-item">
-              <span class="turno-dato-label">Hora de máquinas</span>
+              <span class="turno-dato-label">${t("lblListaMaq")}</span>
               <span class="turno-dato-valor">${turno.horaMaquinas}</span>
             </div>
             <div class="turno-dato-item">
-              <span class="turno-dato-label">Tiempo de riego</span>
+              <span class="turno-dato-label">${t("lblListaRiego")}</span>
               <span class="turno-dato-valor">${textoDuracion}</span>
             </div>
             <div class="turno-dato-item ${claseCeldaPartidor}">
-              <span class="turno-dato-label">Apertura partidor</span>
+              <span class="turno-dato-label">${t("lblListaPartidor")}</span>
               <span class="turno-dato-valor">${textoPartidorLista}</span>
             </div>
             <div class="turno-dato-item">
-              <span class="turno-dato-label">Fin estimado toma</span>
+              <span class="turno-dato-label">${t("lblListaFin")}</span>
               <span class="turno-dato-valor">${horaFinToma || "--:--"}</span>
             </div>
             <div class="turno-dato-item destacado-lista">
-              <span class="turno-dato-label">💧 Hora estimada de llegada a tu toma</span>
+              <span class="turno-dato-label">${t("lblListaLlegada")}</span>
               <span class="turno-dato-valor">${calc.horaTomaFinal}</span>
             </div>
           </div>
@@ -1557,25 +1919,28 @@
         if (esMio || esAdmin) {
           const pie = document.createElement("div");
           pie.className = "turno-pie";
-          pie.innerHTML = `<span>${esMio ? "Tu turno publicado" : "Gestión Capataz"}</span>`;
+          pie.innerHTML = `<span>${esMio ? t("tuTurnoPublicado") : "Gestión Capataz"}</span>`;
 
           const btnBorrar = document.createElement("button");
           btnBorrar.className = "btn-borrar-mi-turno";
-          btnBorrar.textContent = esMio ? "🗑️ Borrar mi turno" : "🗑️ Eliminar (Admin)";
+          btnBorrar.textContent = esMio ? t("btnBorrarMiTurno") : "🗑️ Eliminar (Admin)";
           btnBorrar.addEventListener("click", async () => {
-            if (!confirm(`¿Eliminar el turno de ${turno.nombre} (${turno.horaMaquinas})?`)) return;
+            const msgConf = idiomaActual === "va"
+              ? `Vols esborrar el torn de ${turno.nombre} (${turno.horaMaquinas})?`
+              : `¿Eliminar el turno de ${turno.nombre} (${turno.horaMaquinas})?`;
+            if (!confirm(msgConf)) return;
             try {
               await deleteDoc(doc(db, "turnos_partidor", turno.id));
               if (esMio) miTurnoDocId = null;
             } catch (e) {
-              alert("No se pudo borrar el turno.");
+              alert("Error.");
             }
           });
           pie.appendChild(btnBorrar);
           tarjeta.appendChild(pie);
         }
 
-          contenedor.appendChild(tarjeta);
+        contenedor.appendChild(tarjeta);
       });
     }
 
@@ -1594,11 +1959,11 @@
       } catch (e) {}
 
       const fecha = selectorFecha.value;
-      const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? "Canal 6ª Elevación" : "Canal 7ª Elevación";
+      const canalTexto = (datosP.canal || "").toLowerCase().includes("sexta") ? t("optSexta") : t("optSeptima");
       const tituloToma = tomaObj ? ` — ${formatearNombreToma(tomaObj.toma)}` : "";
 
       document.getElementById("ficha-titulo-partidor").textContent = `${datosP.nombre}${tituloToma}`;
-      document.getElementById("ficha-subtitulo").textContent = `${canalTexto} · Fecha: ${fecha.split("-").reverse().join("/")}`;
+      document.getElementById("ficha-subtitulo").textContent = `${canalTexto} · ${fecha.split("-").reverse().join("/")}`;
 
       const bloqueFormRegante = document.getElementById("bloque-formulario-regante");
       if (tomaObj) {
@@ -1679,7 +2044,7 @@
       const hhStr = document.getElementById("regante-maq-hh").value.trim();
       const mmStr = document.getElementById("regante-maq-mm").value.trim();
       if (hhStr === "" || mmStr === "") {
-        alert("Por favor, escribe la Hora y los Minutos de máquinas (recibo).");
+        alert(t("alertFaltaHora"));
         return;
       }
 
@@ -1692,17 +2057,17 @@
 
       const horasEnteras = parseInt(horasVal, 10);
       if (isNaN(horasEnteras) || horasEnteras < 0) {
-        alert("Introduce un número entero de horas (por ejemplo 0, 1, 2...).");
+        alert(t("alertFaltaHorasRiego"));
         return;
       }
       if (horasEnteras === 0 && minutosVal === 0) {
-        alert("El tiempo de riego debe ser mayor que 0.");
+        alert(t("alertTiempoMayorCero"));
         return;
       }
 
       const btn = document.getElementById("btn-publicar-turno");
       btn.disabled = true;
-      btn.textContent = "Guardando turno...";
+      btn.textContent = t("btnGuardandoTurno");
 
       const { datosP, tomaObj } = seleccionAbierta;
       const fecha = selectorFecha.value;
@@ -1736,12 +2101,12 @@
         }
 
         actualizarPanelResumenFijo();
-        alert("✅ Turno guardado. Tus datos quedan visibles arriba y en la lista.");
+        alert(t("alertTurnoGuardado"));
       } catch (error) {
         alert("Error al guardar tu turno en Firebase.");
       } finally {
         btn.disabled = false;
-        btn.textContent = "✔ Guardar / Actualizar mi turno en la lista";
+        btn.textContent = t("btnPublicarTurno");
       }
     });
 
@@ -1824,14 +2189,20 @@
 
     document.getElementById("btn-activar-notifs").addEventListener("click", async () => {
       if (!("Notification" in window)) {
-        alert("Tu navegador no soporta notificaciones emergentes, pero verás los avisos de retraso en naranja dentro de la app.");
+        alert(idiomaActual === "va"
+          ? "El teu navegador no suporta notificacions emergents, però veuràs els avisos de retard en taronja dins de l'app."
+          : "Tu navegador no soporta notificaciones emergentes, pero verás los avisos de retraso en naranja dentro de la app.");
         return;
       }
       const permiso = await Notification.requestPermission();
       if (permiso === "granted") {
-        alert("🔔 Avisos activados. Recibirás una notificación si el Capataz registra un retraso o apertura tardía en tu partidor.");
+        alert(idiomaActual === "va"
+          ? "🔔 Avisos activats. Rebràs una notificació si el Capatàs registra un retard al teu partidor."
+          : "🔔 Avisos activados. Recibirás una notificación si el Capataz registra un retraso o apertura tardía en tu partidor.");
       } else {
-        alert("No se han activado las notificaciones del navegador. Puedes habilitarlas en los ajustes del sitio web en tu móvil.");
+        alert(idiomaActual === "va"
+          ? "No s'han activat les notificacions del navegador."
+          : "No se han activado las notificaciones del navegador. Puedes habilitarlas en los ajustes del sitio web en tu móvil.");
       }
     });
 
@@ -1926,7 +2297,10 @@
       if (!uidSeleccionado) return;
 
       const etiqueta = selectEliminar.options[selectEliminar.selectedIndex].textContent;
-      if (!confirm(`¿Seguro que quieres eliminar "${etiqueta}" de tu lista de partidores?`)) return;
+      const msgConf = idiomaActual === "va"
+        ? `Segur que vols eliminar "${etiqueta}" de la teua llista de partidors?`
+        : `¿Seguro que quieres eliminar "${etiqueta}" de tu lista de partidores?`;
+      if (!confirm(msgConf)) return;
 
       usuarioActual.misTomas = usuarioActual.misTomas.filter((t) => t.uid !== uidSeleccionado);
       localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
@@ -1964,7 +2338,7 @@
       if (!consentimiento) return;
 
       btnRegistrar.disabled = true;
-      btnRegistrar.textContent = "Guardando datos...";
+      btnRegistrar.textContent = t("btnGuardandoDatos");
 
       try {
         let docId = null;
@@ -1987,7 +2361,7 @@
         alert("Error al guardar el registro.");
       } finally {
         btnRegistrar.disabled = false;
-        btnRegistrar.textContent = "Acceder a los riegos";
+        btnRegistrar.textContent = t("btnRegistrar");
       }
     });
 
@@ -2037,7 +2411,9 @@
         } else if (esIOS) {
           instruccionesIOS.classList.toggle("oculto");
         } else {
-          alert("Pulsa los tres puntos arriba a la derecha de tu navegador y toca en 'Instalar aplicación' o 'Añadir a pantalla de inicio'.");
+          alert(idiomaActual === "va"
+            ? "Prem els tres punts dalt a la dreta del teu navegador i toca en 'Instal·lar aplicació' o 'Afegir a la pantalla d'inici'."
+            : "Pulsa los tres puntos arriba a la derecha de tu navegador y toca en 'Instalar aplicación' o 'Añadir a pantalla de inicio'.");
         }
       });
 
@@ -2046,6 +2422,7 @@
       });
     }
 
+    aplicarIdioma(idiomaActual);
     verificarSesion();
   })();
 </script>
