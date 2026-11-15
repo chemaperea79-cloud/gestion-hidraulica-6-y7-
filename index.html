@@ -62,6 +62,42 @@
       color: white;
       box-shadow: 0 2px 4px rgba(0,0,0,0.12);
     }
+    .caja-perfil-recordado {
+      background: #f0fdf4;
+      border: 2px solid #16a34a;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .caja-perfil-recordado p {
+      margin: 0 0 10px 0;
+      font-size: 0.9rem;
+      color: #166534;
+    }
+    .btn-continuar-perfil {
+      width: 100%;
+      padding: 13px;
+      background-color: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+    .btn-olvidar-perfil {
+      width: 100%;
+      padding: 8px;
+      background-color: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
     .form-group { margin-bottom: 14px; }
     label {
       display: block;
@@ -385,6 +421,7 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.04);
     }
     .tarjeta-turno.mi-turno { background: #f8fafc; border-left-color: #16a34a; border-color: #86efac; }
+    .tarjeta-turno.turno-admin-manual { background: #fffbeb; border-left: 5px solid #d97706; border-color: #fcd34d; }
     .turno-cabecera {
       display: flex;
       justify-content: space-between;
@@ -404,6 +441,17 @@
       padding: 2px 7px;
       border-radius: 5px;
       margin-left: 4px;
+    }
+    .badge-capataz-turno {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 5px;
+      margin-top: 4px;
     }
     .turno-tel {
       background: #f1f5f9;
@@ -547,6 +595,18 @@
     </div>
 
     <h2 id="txt-reg-titulo">Comunidad de Regantes<br>6ª y 7ª Elevación</h2>
+
+    <!-- PERFIL RECORDADO EN ESTE DISPOSITIVO (SI CERRÓ SESIÓN) -->
+    <div id="bloque-perfil-recordado" class="caja-perfil-recordado oculto">
+      <p id="txt-perfil-recordado-info">Tienes tus datos guardados en este móvil:</p>
+      <button type="button" id="btn-continuar-perfil-guardado" class="btn-continuar-perfil">
+        👤 Continuar con mi usuario
+      </button>
+      <button type="button" id="btn-olvidar-perfil-guardado" class="btn-olvidar-perfil">
+        🗑️ Borrar datos guardados para registrar otro usuario
+      </button>
+    </div>
+
     <p id="txt-reg-subtitulo" style="text-align: center; color: #64748b; font-size: 0.9rem;">
       Regístrate una única vez para consultar y anotar tus turnos de riego.
     </p>
@@ -558,7 +618,7 @@
       </div>
 
       <div class="form-group">
-        <label id="lbl-reg-nombre" for="nombre">Nombre y Apellidos</label>
+        <label id="lbl-reg-nombre" for="nombre">Nombre y apellidos de la persona que tiene registrada el agua</label>
         <input type="text" id="nombre" placeholder="Ej: Juan Pérez García" required>
       </div>
 
@@ -807,6 +867,55 @@
       <button type="button" id="btn-guardar-estado-riego" class="btn-primario" style="background:#b45309;">
         💾 Guardar y actualizar horarios
       </button>
+
+      <!-- AÑADIR TURNO MANUALMENTE POR CAPATAZ / ADMIN -->
+      <div class="caja-admin-bloque" style="margin-top:16px; border:2px solid #0284c7; background:#f0f9ff;">
+        <h4 style="color:#0369a1; margin-top:0; margin-bottom:8px;">➕ Añadir turno de regante manualmente</h4>
+        <p style="font-size:0.8rem; color:#334155; margin-top:0; margin-bottom:10px;">
+          Para regantes sin móvil o que no se hayan apuntado, para que el resto vea el orden real del partidor.
+        </p>
+
+        <div class="form-group">
+          <label>Hora de máquinas (obligatorio):</label>
+          <div class="caja-hora-numerica">
+            <input type="text" id="admin-manual-maq-hh" inputmode="numeric" maxlength="2" placeholder="HH">
+            <span class="separador-hora">:</span>
+            <input type="text" id="admin-manual-maq-mm" inputmode="numeric" maxlength="2" placeholder="MM">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Tiempo de riego (obligatorio):</label>
+          <div class="fila-doble">
+            <div>
+              <input type="number" id="admin-manual-horas" inputmode="numeric" min="0" max="48" placeholder="Horas (ej: 2)">
+            </div>
+            <div>
+              <select id="admin-manual-minutos">
+                <option value="0">0 min</option>
+                <option value="15">15 min</option>
+                <option value="30">30 min</option>
+                <option value="45">45 min</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="fila-doble" style="margin-bottom:12px;">
+          <div>
+            <label style="font-size:0.82rem;">Nombre (opcional):</label>
+            <input type="text" id="admin-manual-nombre" placeholder="Ej: Regante sin app">
+          </div>
+          <div>
+            <label style="font-size:0.82rem;">Toma (opcional):</label>
+            <input type="text" id="admin-manual-toma" placeholder="Ej: 4">
+          </div>
+        </div>
+
+        <button type="button" id="btn-admin-anadir-turno" class="btn-primario" style="background:#0284c7;">
+          ➕ Añadir turno a la lista
+        </button>
+      </div>
     </div>
   </div>
 <script>
@@ -832,7 +941,7 @@
   };
 
   (async function iniciarAplicacion() {
-    const APP_DATA_VERSION = "v9_pwa_sin_aviso";
+    const APP_DATA_VERSION = "v10_admin_manual_sesion";
     try {
       const versionGuardada = localStorage.getItem("app_version_6y7");
       if (versionGuardada !== APP_DATA_VERSION) {
@@ -864,9 +973,13 @@
         iosPasos: `<li>Pulsa el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba ⬆️) abajo en el centro.</li><li>Desliza hacia abajo y toca en <strong>"Añadir a pantalla de inicio"</strong>.</li>`,
         regTitulo: "Comunidad de Regantes<br>6ª y 7ª Elevación",
         regSubtitulo: "Regístrate una única vez para consultar y anotar tus turnos de riego.",
+        perfilRecordadoInfo: "Tienes tus datos guardados en este móvil:",
+        btnContinuarPerfil: "👤 Continuar como",
+        btnOlvidarPerfil: "🗑️ Borrar datos guardados para registrar otro usuario",
+        confirmOlvidarPerfil: "¿Seguro que quieres borrar tus datos guardados en este teléfono para registrar a otra persona?",
         lblSocio: "Número de Socio / Comunero",
         phSocio: "Ej: 1045",
-        lblNombre: "Nombre y Apellidos",
+        lblNombre: "Nombre y apellidos de la persona que tiene registrada el agua",
         phNombre: "Ej: Juan Pérez García",
         lblTelefono: "Teléfono móvil",
         phTelefono: "Ej: 600123456",
@@ -898,6 +1011,7 @@
         btnEliminar: "Eliminar",
         avisoOrientativo: "* Los horarios mostrados son orientativos y están sujetos a variaciones por caudal o incidencias en la red.",
         btnSalir: "Cerrar sesión",
+        confirmCerrarSesion: "¿Estás seguro de que quieres cerrar sesión? Tus datos quedarán guardados en el móvil para volver a entrar fácil.",
         btnVolverPanel: "⬅ Volver a mis partidores",
         bannerSinDatos: "⚪ SIN PROGRAMACIÓN DE ESTADO",
         bannerVerdeGenerico: "🟢 PARTIDOR ABIERTO / REGANDO",
@@ -928,6 +1042,8 @@
         pulsaAnotar: "Pulsa para anotar hora de máquinas y ver turnos",
         telOculto: "🔒 Teléfono oculto",
         sinTel: "Sin tel.",
+        badgeCapataz: "🛠️ Añadido por Capataz",
+        nombreReganteManual: "Regante (anotado por Capataz)",
         lblListaMaq: "Hora de máquinas",
         lblListaRiego: "Tiempo de riego",
         lblListaPartidor: "Apertura partidor",
@@ -949,9 +1065,13 @@
         iosPasos: `<li>Prem el botó <strong>Compartir</strong> (el quadrat amb la fletxa cap amunt ⬆️) baix al centre.</li><li>Llisca cap avall i toca en <strong>"Afegir a la pantalla d'inici"</strong>.</li>`,
         regTitulo: "Comunitat de Regants<br>6a i 7a Elevació",
         regSubtitulo: "Registra't una única vegada per a consultar i anotar els teus torns de reg.",
+        perfilRecordadoInfo: "Tens les teues dades guardades en este mòbil:",
+        btnContinuarPerfil: "👤 Continuar com a",
+        btnOlvidarPerfil: "🗑️ Esborrar dades guardades per a registrar un altre usuari",
+        confirmOlvidarPerfil: "Segur que vols esborrar les teues dades guardades en este telèfon per a registrar a una altra persona?",
         lblSocio: "Número de Soci / Comuner",
         phSocio: "Ex: 1045",
-        lblNombre: "Nom i Cognoms",
+        lblNombre: "Nom i cognoms de la persona que té registrada l'aigua",
         phNombre: "Ex: Joan Pérez Garcia",
         lblTelefono: "Telèfon mòbil",
         phTelefono: "Ex: 600123456",
@@ -983,6 +1103,7 @@
         btnEliminar: "Eliminar",
         avisoOrientativo: "* Els horaris mostrants són orientatius i estan subjectes a variacions per cabal o incidències a la xarxa.",
         btnSalir: "Tancar sessió",
+        confirmCerrarSesion: "Estàs segur que vols tancar sessió? Les teues dades quedaran guardades al mòbil per a tornar a entrar fàcil.",
         btnVolverPanel: "⬅ Tornar als meus partidors",
         bannerSinDatos: "⚪ SENSE PROGRAMACIÓ D'ESTAT",
         bannerVerdeGenerico: "🟢 PARTIDOR OBERT / REGANT",
@@ -1013,6 +1134,8 @@
         pulsaAnotar: "Prem per a anotar hora de màquines i veure torns",
         telOculto: "🔒 Telèfon ocult",
         sinTel: "Sense tel.",
+        badgeCapataz: "🛠️ Afegit per Capatàs",
+        nombreReganteManual: "Regant (anotat per Capatàs)",
         lblListaMaq: "Hora de màquines",
         lblListaRiego: "Temps de reg",
         lblListaPartidor: "Obertura partidor",
@@ -1051,6 +1174,24 @@
       }
     }
 
+    function actualizarBloquePerfilRecordado() {
+      const bloque = document.getElementById("bloque-perfil-recordado");
+      try {
+        const guardado = localStorage.getItem("regante_guardado_6y7");
+        if (guardado) {
+          const datos = JSON.parse(guardado);
+          if (datos && datos.nombre && datos.socio !== "ADMIN") {
+            bloque.classList.remove("oculto");
+            document.getElementById("txt-perfil-recordado-info").textContent = t("perfilRecordadoInfo");
+            document.getElementById("btn-continuar-perfil-guardado").textContent = `${t("btnContinuarPerfil")} ${datos.nombre} (${datos.socio})`;
+            document.getElementById("btn-olvidar-perfil-guardado").textContent = t("btnOlvidarPerfil");
+            return;
+          }
+        }
+      } catch (e) {}
+      bloque.classList.add("oculto");
+    }
+
     function aplicarIdioma(nuevoIdioma) {
       idiomaActual = nuevoIdioma === "va" ? "va" : "es";
       localStorage.setItem("idioma_6y7", idiomaActual);
@@ -1065,9 +1206,10 @@
       document.getElementById("txt-ios-titulo").textContent = t("iosTitulo");
       document.getElementById("txt-ios-pasos").innerHTML = t("iosPasos");
 
-      // Registro
+      // Registro y perfil recordado
       document.getElementById("txt-reg-titulo").innerHTML = t("regTitulo");
       document.getElementById("txt-reg-subtitulo").textContent = t("regSubtitulo");
+      actualizarBloquePerfilRecordado();
       document.getElementById("lbl-reg-socio").textContent = t("lblSocio");
       document.getElementById("socio").placeholder = t("phSocio");
       document.getElementById("lbl-reg-nombre").textContent = t("lblNombre");
@@ -1204,6 +1346,14 @@
     let unsubscribeEstadoVivo = null;
     let unsubscribeTurnosVivo = null;
     let ultimaNotificacionEnviada = "";
+
+    function guardarSesionEnLocal(usuario) {
+      if (!usuario) return;
+      localStorage.setItem("regante_6y7", JSON.stringify(usuario));
+      if (usuario.socio !== "ADMIN") {
+        localStorage.setItem("regante_guardado_6y7", JSON.stringify(usuario));
+      }
+    }
 
     function regresarAPanelDesdeFicha() {
       detenerEscuchasEnVivo();
@@ -1404,17 +1554,39 @@
           usuarioActual.misTomas = normalizarMisTomas(usuarioActual.misTomas || usuarioActual.misPartidores);
           mostrarPanelPrincipal();
         } else {
+          actualizarBloquePerfilRecordado();
           pantallaRegistro.classList.remove("oculto");
           pantallaPrincipal.classList.add("oculto");
           pantallaFicha.classList.add("oculto");
         }
       } catch (e) {
         localStorage.removeItem("regante_6y7");
+        actualizarBloquePerfilRecordado();
         pantallaRegistro.classList.remove("oculto");
         pantallaPrincipal.classList.add("oculto");
         pantallaFicha.classList.add("oculto");
       }
     }
+
+    document.getElementById("btn-continuar-perfil-guardado").addEventListener("click", () => {
+      try {
+        const guardado = localStorage.getItem("regante_guardado_6y7");
+        if (guardado) {
+          usuarioActual = JSON.parse(guardado);
+          usuarioActual.misTomas = normalizarMisTomas(usuarioActual.misTomas || usuarioActual.misPartidores);
+          guardarSesionEnLocal(usuarioActual);
+          mostrarPanelPrincipal();
+        }
+      } catch (e) {}
+    });
+
+    document.getElementById("btn-olvidar-perfil-guardado").addEventListener("click", () => {
+      if (!confirm(t("confirmOlvidarPerfil"))) return;
+      localStorage.removeItem("regante_guardado_6y7");
+      localStorage.removeItem("regante_6y7");
+      formRegistro.reset();
+      actualizarBloquePerfilRecordado();
+    });
 
     async function mostrarPanelPrincipal() {
       detenerEscuchasEnVivo();
@@ -1893,10 +2065,13 @@
           claseCeldaPartidor = "item-naranja";
         }
 
-        const esMio = usuarioActual && turno.socio === usuarioActual.socio && turno.nombre === usuarioActual.nombre;
+        const esManualAdmin = Boolean(turno.creadoPorAdmin);
+        const esMio = !esManualAdmin && usuarioActual && turno.socio === usuarioActual.socio && turno.nombre === usuarioActual.nombre;
 
         let bloqueTelefonoHTML = "";
-        if (turno.ocultarTelefono && !esMio && !esAdmin) {
+        if (esManualAdmin) {
+          bloqueTelefonoHTML = `<span class="turno-tel-oculto">${t("sinTel")}</span>`;
+        } else if (turno.ocultarTelefono && !esMio && !esAdmin) {
           bloqueTelefonoHTML = `<span class="turno-tel-oculto">${t("telOculto")}</span>`;
         } else if (turno.telefono) {
           const marcaPrivado = turno.ocultarTelefono ? " 🔒" : "";
@@ -1905,13 +2080,28 @@
           bloqueTelefonoHTML = `<span class="turno-tel-oculto">${t("sinTel")}</span>`;
         }
 
+        const nombreMostrar = esManualAdmin
+          ? (turno.nombre && turno.nombre.trim() !== "" ? turno.nombre : t("nombreReganteManual"))
+          : turno.nombre;
+        const badgeTomaHTML = turno.toma
+          ? `<span class="turno-toma-badge">${formatearNombreToma(turno.toma)}</span>`
+          : "";
+        const badgeAdminHTML = esManualAdmin
+          ? `<div><span class="badge-capataz-turno">${t("badgeCapataz")}</span></div>`
+          : "";
+
+        let claseTarjeta = "tarjeta-turno";
+        if (esManualAdmin) claseTarjeta += " turno-admin-manual";
+        else if (esMio) claseTarjeta += " mi-turno";
+
         const tarjeta = document.createElement("div");
-        tarjeta.className = `tarjeta-turno ${esMio ? "mi-turno" : ""}`;
+        tarjeta.className = claseTarjeta;
         tarjeta.innerHTML = `
           <div class="turno-cabecera">
             <div>
-              <span class="turno-nombre">${turno.nombre}</span>
-              <span class="turno-toma-badge">${formatearNombreToma(turno.toma)}</span>
+              <span class="turno-nombre">${nombreMostrar}</span>
+              ${badgeTomaHTML}
+              ${badgeAdminHTML}
             </div>
             ${bloqueTelefonoHTML}
           </div>
@@ -1950,8 +2140,8 @@
           btnBorrar.textContent = esMio ? t("btnBorrarMiTurno") : "🗑️ Eliminar (Admin)";
           btnBorrar.addEventListener("click", async () => {
             const msgConf = idiomaActual === "va"
-              ? `Vols esborrar el torn de ${turno.nombre} (${turno.horaMaquinas})?`
-              : `¿Eliminar el turno de ${turno.nombre} (${turno.horaMaquinas})?`;
+              ? `Vols esborrar el torn de ${nombreMostrar} (${turno.horaMaquinas})?`
+              : `¿Eliminar el turno de ${nombreMostrar} (${turno.horaMaquinas})?`;
             if (!confirm(msgConf)) return;
             try {
               await deleteDoc(doc(db, "turnos_partidor", turno.id));
@@ -2038,7 +2228,7 @@
 
         if (tomaObj && usuarioActual) {
           const miTurno = turnosDelPartidor.find(
-            (t) => t.socio === usuarioActual.socio && t.nombre === usuarioActual.nombre && formatearNombreToma(t.toma) === formatearNombreToma(tomaObj.toma)
+            (t) => !t.creadoPorAdmin && t.socio === usuarioActual.socio && t.nombre === usuarioActual.nombre && formatearNombreToma(t.toma) === formatearNombreToma(tomaObj.toma)
           );
           if (miTurno) {
             miTurnoDocId = miTurno.id;
@@ -2105,6 +2295,7 @@
         nombre: usuarioActual.nombre,
         telefono: usuarioActual.telefono || "",
         ocultarTelefono: ocultarTelefono,
+        creadoPorAdmin: false,
         toma: formatearNombreToma(tomaObj.toma),
         desfaseToma: Number(tomaObj.desfaseToma) || 0,
         horaMaquinas: horaMaquinas,
@@ -2131,6 +2322,80 @@
       } finally {
         btn.disabled = false;
         btn.textContent = t("btnPublicarTurno");
+      }
+    });
+
+    // AÑADIR TURNO MANUALMENTE POR EL CAPATAZ / ADMIN
+    document.getElementById("btn-admin-anadir-turno").addEventListener("click", async () => {
+      if (!seleccionAbierta || !esAdmin) return;
+      if (!firebaseListo) {
+        alert("Sin conexión con la base de datos.");
+        return;
+      }
+
+      const hhStr = document.getElementById("admin-manual-maq-hh").value.trim();
+      const mmStr = document.getElementById("admin-manual-maq-mm").value.trim();
+      if (hhStr === "" || mmStr === "") {
+        alert("Introduce la Hora y Minutos de máquinas para añadir el turno.");
+        return;
+      }
+
+      const horaMaquinas = leerHoraDeInputs("admin-manual-maq-hh", "admin-manual-maq-mm");
+      const horasVal = document.getElementById("admin-manual-horas").value;
+      const minutosVal = parseInt(document.getElementById("admin-manual-minutos").value, 10) || 0;
+      const horasEnteras = parseInt(horasVal, 10);
+
+      if (isNaN(horasEnteras) || horasEnteras < 0) {
+        alert("Introduce un número entero de horas (por ejemplo 0, 1, 2...).");
+        return;
+      }
+      if (horasEnteras === 0 && minutosVal === 0) {
+        alert("El tiempo de riego debe ser mayor que 0.");
+        return;
+      }
+
+      const nombreManual = document.getElementById("admin-manual-nombre").value.trim();
+      const tomaRaw = document.getElementById("admin-manual-toma").value.trim();
+      const tomaManual = tomaRaw ? formatearNombreToma(tomaRaw) : "";
+
+      const btn = document.getElementById("btn-admin-anadir-turno");
+      btn.disabled = true;
+      btn.textContent = "Añadiendo turno...";
+
+      const { datosP } = seleccionAbierta;
+      const fecha = selectorFecha.value;
+
+      try {
+        await addDoc(collection(db, "turnos_partidor"), {
+          fecha: fecha,
+          partidorId: datosP.id,
+          partidorNombre: datosP.nombre,
+          canal: datosP.canal,
+          socio: "CAPATAZ",
+          nombre: nombreManual,
+          telefono: "",
+          ocultarTelefono: true,
+          creadoPorAdmin: true,
+          toma: tomaManual,
+          desfaseToma: 0,
+          horaMaquinas: horaMaquinas,
+          horasRiego: horasEnteras,
+          minutosRiego: minutosVal,
+          creadoEn: serverTimestamp(),
+          actualizadoEn: serverTimestamp()
+        });
+
+        rellenarInputsHora("admin-manual-maq-hh", "admin-manual-maq-mm", "");
+        document.getElementById("admin-manual-horas").value = "";
+        document.getElementById("admin-manual-minutos").value = "0";
+        document.getElementById("admin-manual-nombre").value = "";
+        document.getElementById("admin-manual-toma").value = "";
+        alert("✅ Turno añadido a la lista como anotado por Capataz.");
+      } catch (e) {
+        alert("Error al añadir el turno manual.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "➕ Añadir turno a la lista";
       }
     });
 
@@ -2208,6 +2473,7 @@
     configurarInputsHora("regante-maq-hh", "regante-maq-mm", actualizarPanelResumenFijo);
     configurarInputsHora("admin-prev-hh", "admin-prev-mm", null);
     configurarInputsHora("admin-real-hh", "admin-real-mm", null);
+    configurarInputsHora("admin-manual-maq-hh", "admin-manual-maq-mm", null);
     document.getElementById("regante-horas-riego").addEventListener("input", actualizarPanelResumenFijo);
     document.getElementById("regante-minutos-riego").addEventListener("change", actualizarPanelResumenFijo);
 
@@ -2300,7 +2566,7 @@
 
       if (!usuarioActual.misTomas) usuarioActual.misTomas = [];
       usuarioActual.misTomas.push(nuevaToma);
-      localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+      guardarSesionEnLocal(usuarioActual);
 
       if (firebaseListo && usuarioActual.docId) {
         try {
@@ -2327,7 +2593,7 @@
       if (!confirm(msgConf)) return;
 
       usuarioActual.misTomas = usuarioActual.misTomas.filter((t) => t.uid !== uidSeleccionado);
-      localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+      guardarSesionEnLocal(usuarioActual);
 
       if (firebaseListo && usuarioActual.docId) {
         try {
@@ -2379,7 +2645,7 @@
         }
 
         usuarioActual = { docId, socio, nombre, telefono, misTomas: [] };
-        localStorage.setItem("regante_6y7", JSON.stringify(usuarioActual));
+        guardarSesionEnLocal(usuarioActual);
         mostrarPanelPrincipal();
       } catch (error) {
         alert("Error al guardar el registro.");
@@ -2389,8 +2655,13 @@
       }
     });
 
+    // CERRAR SESIÓN CON CONFIRMACIÓN Y CONSERVANDO DATOS EN EL DISPOSITIVO
     document.getElementById("btn-salir").addEventListener("click", () => {
+      if (!confirm(t("confirmCerrarSesion"))) return;
       detenerEscuchasEnVivo();
+      if (usuarioActual && usuarioActual.socio !== "ADMIN") {
+        localStorage.setItem("regante_guardado_6y7", JSON.stringify(usuarioActual));
+      }
       localStorage.removeItem("regante_6y7");
       localStorage.removeItem("admin_6y7");
       usuarioActual = null;
