@@ -449,7 +449,7 @@
       border-radius: 10px;
       padding: 12px;
       margin-top: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .resumen-fijo-titulo {
       font-size: 0.8rem;
@@ -467,7 +467,20 @@
       border-radius: 8px;
       padding: 9px 10px;
     }
-    .celda-fija.destacada { background: #eff6ff; border: 1px solid #93c5fd; grid-column: span 2; }
+    /* DOBLE RECUADRO EN AZUL OSCURO ELÉCTRICO (#0f4c81) PARA HORA ESTIMADA DE LLEGADA A TU TOMA */
+    .celda-fija.destacada {
+      background: #eff6ff;
+      border: 3px double #0f4c81;
+      outline: 2px solid #0f4c81;
+      outline-offset: 2px;
+      grid-column: span 2;
+      margin: 4px 2px;
+      box-shadow: 0 3px 10px rgba(15, 76, 129, 0.16);
+    }
+    .celda-fija.destacada span {
+      color: #0f4c81;
+      font-weight: 800;
+    }
     .celda-fija.prevision-box { background: #fffbeb; border: 1px solid #fcd34d; grid-column: span 2; }
     .celda-fija.apertura-verde { background: #dcfce7; border: 2px solid #16a34a; }
     .celda-fija.apertura-verde span { color: #166534; }
@@ -484,7 +497,7 @@
       margin-bottom: 2px;
     }
     .celda-fija strong { font-size: 1.25rem; color: #0f172a; }
-    .celda-fija.destacada strong { font-size: 1.5rem; color: #0f4c81; }
+    .celda-fija.destacada strong { font-size: 1.65rem; color: #0f4c81; }
     .celda-fija small { display: block; font-size: 0.78rem; color: #475569; margin-top: 2px; }
     .lista-turnos-partidor { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
     .tarjeta-turno {
@@ -560,7 +573,7 @@
     .turno-dato-item.destacado-lista {
       grid-column: span 2;
       background: #eff6ff;
-      border-color: #bfdbfe;
+      border: 2px solid #0f4c81;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -573,7 +586,7 @@
       text-transform: uppercase;
     }
     .turno-dato-valor { font-size: 1.02rem; font-weight: 800; color: #0f172a; }
-    .turno-dato-item.destacado-lista .turno-dato-valor { font-size: 1.15rem; color: #0f4c81; }
+    .turno-dato-item.destacado-lista .turno-dato-valor { font-size: 1.18rem; color: #0f4c81; }
     .turno-pie {
       display: flex;
       justify-content: space-between;
@@ -626,6 +639,13 @@
       color: #64748b;
       text-align: center;
       margin-top: 20px;
+      font-style: italic;
+    }
+    .aviso-orientativo-ficha {
+      font-size: 0.78rem;
+      color: #475569;
+      text-align: center;
+      margin: 6px 0 12px 0;
       font-style: italic;
     }
     #visor-error-emergencia {
@@ -850,7 +870,7 @@
           <input type="text" id="regante-maq-mm" inputmode="numeric" maxlength="2" placeholder="MM">
         </div>
         <small id="txt-ficha-hora-ayuda" style="color:#475569; font-size:0.78rem; display:block; margin-top:4px;">
-          Escribe hora (00 a 23) y minutos (00 a 59). Ej: 09 y 30.
+          Puedes poner 1 o 2 cifras en la hora (ej: 6 o 06) y luego los minutos (ej: 30).
         </small>
       </div>
 
@@ -896,6 +916,10 @@
           </div>
         </div>
       </div>
+
+      <p id="txt-aviso-orientativo-ficha" class="aviso-orientativo-ficha">
+        * Los horarios mostrados son orientativos y están sujetos a variaciones por caudal o incidencias en la red.
+      </p>
 
       <button type="button" id="btn-publicar-turno" class="btn-primario" style="background:#16a34a;">
         ✔ Guardar / Actualizar mi turno en la lista
@@ -1031,7 +1055,7 @@
   };
 
   (async function iniciarAplicacion() {
-    const APP_DATA_VERSION = "v11_orden_numerico_incidencia_global";
+    const APP_DATA_VERSION = "v12_hora_1digito_doble_marco";
     try {
       const versionGuardada = localStorage.getItem("app_version_6y7");
       if (versionGuardada !== APP_DATA_VERSION) {
@@ -1115,13 +1139,13 @@
         lblObsCapataz: "📢 AVISO IMPORTANTE DEL CAPATAZ",
         fichaMisDatos: "💧 Mis datos de riego para este día",
         lblHoraMaq: "Hora de máquinas (recibo):",
-        txtHoraAyuda: "Escribe hora (00 a 23) y minutos (00 a 59). Ej: 09 y 30.",
+        txtHoraAyuda: "Puedes poner 1 o 2 cifras en la hora (ej: 6 o 06) y luego los minutos (ej: 30).",
         lblTiempoRiego: "Tiempo de riego:",
         phHorasRiego: "Horas (ej: 2)",
         txtResumenTitulo: "📊 Resumen de tus tiempos calculados",
         lblFijoMaq: "Hora máquinas (recibo)",
         lblFijoPartidor: "Apertura del partidor",
-        lblFijoRealApertura: "Hora real apertura",
+        lblFijoRealApertura: "Hora real de apertura del partidor",
         lblFijoPrev: "Previsión de apertura del partidor",
         lblFijoToma: "💧 Hora estimada de llegada a tu toma",
         sinEspecificar: "Sin especificar",
@@ -1209,13 +1233,13 @@
         lblObsCapataz: "📢 AVÍS IMPORTANT DEL CAPATÀS",
         fichaMisDatos: "💧 Les meues dades de reg per a este dia",
         lblHoraMaq: "Hora de màquines (rebut):",
-        txtHoraAyuda: "Escriu hora (00 a 23) i minuts (00 a 59). Ex: 09 i 30.",
+        txtHoraAyuda: "Pots posar 1 o 2 xifres en l'hora (ex: 6 o 06) i després els minuts (ex: 30).",
         lblTiempoRiego: "Temps de reg:",
         phHorasRiego: "Hores (ex: 2)",
         txtResumenTitulo: "📊 Resum dels teus temps calculats",
         lblFijoMaq: "Hora màquines (rebut)",
         lblFijoPartidor: "Obertura del partidor",
-        lblFijoRealApertura: "Hora real obertura",
+        lblFijoRealApertura: "Hora real d'obertura del partidor",
         lblFijoPrev: "Previsió d'obertura del partidor",
         lblFijoToma: "💧 Hora estimada d'arribada a la teua toma",
         sinEspecificar: "Sense especificar",
@@ -1248,7 +1272,6 @@
       return (TEXTOS[idiomaActual] && TEXTOS[idiomaActual][clave]) || TEXTOS.es[clave] || clave;
     }
 
-    // COMPARACIÓN NUMÉRICA NATURAL PARA PARTIDORES (1, 2, 3... 10, 15, 20...)
     function compararPartidoresNumerico(a, b) {
       const canalA = (a.canal || "").toLowerCase().includes("sexta") ? 1 : 2;
       const canalB = (b.canal || "").toLowerCase().includes("sexta") ? 1 : 2;
@@ -1509,6 +1532,7 @@
       document.getElementById("lbl-fijo-maq").textContent = t("lblFijoMaq");
       document.getElementById("lbl-fijo-prev").textContent = t("lblFijoPrev");
       document.getElementById("lbl-fijo-toma").textContent = t("lblFijoToma");
+      document.getElementById("txt-aviso-orientativo-ficha").textContent = t("avisoOrientativo");
       document.getElementById("btn-publicar-turno").textContent = t("btnPublicarTurno");
       document.getElementById("lbl-ocultar-tel").textContent = t("lblOcultarTel");
       document.getElementById("txt-lista-turnos-titulo").textContent = t("tituloListaTurnos");
@@ -1559,31 +1583,49 @@
       }
     });
 
+    // ENTRADA DE HORA Y MINUTOS AMIGABLE PARA MAYORES:
+    // Permite escribir 1 solo dígito (ej: "6") sin cambiarlo a 23 ni borrarlo; al salir o calcular se interpreta como 06.
     function configurarInputsHora(idHH, idMM, onChangeCallback) {
       const inpH = document.getElementById(idHH);
       const inpM = document.getElementById(idMM);
       if (!inpH || !inpM) return;
 
       inpH.addEventListener("input", () => {
-        inpH.value = inpH.value.replace(/\D/g, "").slice(0, 2);
-        if (parseInt(inpH.value, 10) > 23) inpH.value = "23";
-        if (inpH.value.length === 2) inpM.focus();
+        const soloDigitos = inpH.value.replace(/\D/g, "").slice(0, 2);
+        inpH.value = soloDigitos;
+        if (soloDigitos.length === 2) {
+          if (parseInt(soloDigitos, 10) > 23) inpH.value = "23";
+          inpM.focus();
+        }
         if (onChangeCallback) onChangeCallback();
       });
 
       inpM.addEventListener("input", () => {
-        inpM.value = inpM.value.replace(/\D/g, "").slice(0, 2);
-        if (parseInt(inpM.value, 10) > 59) inpM.value = "59";
+        const soloDigitos = inpM.value.replace(/\D/g, "").slice(0, 2);
+        inpM.value = soloDigitos;
+        if (soloDigitos.length === 2 && parseInt(soloDigitos, 10) > 59) {
+          inpM.value = "59";
+        }
         if (onChangeCallback) onChangeCallback();
       });
 
       inpH.addEventListener("blur", () => {
-        if (inpH.value.length === 1) inpH.value = inpH.value.padStart(2, "0");
+        const val = inpH.value.trim();
+        if (val.length === 1) {
+          inpH.value = val.padStart(2, "0");
+        } else if (val.length === 2 && parseInt(val, 10) > 23) {
+          inpH.value = "23";
+        }
         if (onChangeCallback) onChangeCallback();
       });
 
       inpM.addEventListener("blur", () => {
-        if (inpM.value.length === 1) inpM.value = inpM.value.padStart(2, "0");
+        const val = inpM.value.trim();
+        if (val.length === 1) {
+          inpM.value = val.padStart(2, "0");
+        } else if (val.length === 2 && parseInt(val, 10) > 59) {
+          inpM.value = "59";
+        }
         if (onChangeCallback) onChangeCallback();
       });
     }
@@ -1592,8 +1634,11 @@
       const h = document.getElementById(idHH).value.trim();
       const m = document.getElementById(idMM).value.trim();
       if (h === "" && m === "") return "";
-      const hh = String(Math.min(23, Math.max(0, parseInt(h || "0", 10)))).padStart(2, "0");
-      const mm = String(Math.min(59, Math.max(0, parseInt(m || "0", 10)))).padStart(2, "0");
+      const numH = parseInt(h || "0", 10);
+      const numM = parseInt(m || "0", 10);
+      if (isNaN(numH) || isNaN(numM)) return "";
+      const hh = String(Math.min(23, Math.max(0, numH))).padStart(2, "0");
+      const mm = String(Math.min(59, Math.max(0, numM))).padStart(2, "0");
       return `${hh}:${mm}`;
     }
 
