@@ -1032,6 +1032,7 @@
       </div>
     </div>
   </div>
+
 <script>
   function mostrarErrorEnPantalla(texto) {
     var box = document.getElementById("visor-error-emergencia");
@@ -1055,7 +1056,7 @@
   };
 
   (async function iniciarAplicacion() {
-    const APP_DATA_VERSION = "v12_hora_1digito_doble_marco";
+    const APP_DATA_VERSION = "v13_sync_censo_maestro";
     try {
       const versionGuardada = localStorage.getItem("app_version_6y7");
       if (versionGuardada !== APP_DATA_VERSION) {
@@ -2806,6 +2807,33 @@
       pintarListaPartidores();
     });
 
+    // SINCRONIZACIÓN PERMANENTE CON EL CENSO MAESTRO (censo_comuneros)
+    async function sincronizarConCensoMaestro(usuario) {
+      if (!firebaseListo || !usuario || !usuario.socio || usuario.socio === "ADMIN") return;
+      try {
+        const docIdMaestro = `socio_${String(usuario.socio).trim().replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+        const suministros = (usuario.misTomas || []).map((t) => {
+          const datosP = catalogoPartidores.find((p) => p.id === t.partidorId);
+          return {
+            partidorId: t.partidorId,
+            partidorNombre: datosP ? datosP.nombre : "Partidor",
+            toma: formatearNombreToma(t.toma)
+          };
+        });
+
+        await setDoc(doc(db, "censo_comuneros", docIdMaestro), {
+          socio: String(usuario.socio).trim(),
+          titularAgua: (usuario.nombre || "").trim(),
+          telefono: (usuario.telefono || "").trim(),
+          suministros: suministros,
+          origen: "App Regante",
+          ultimaActualizacion: new Date().toISOString()
+        }, { merge: true });
+      } catch (e) {
+        console.error("Error sincronizando censo maestro:", e);
+      }
+    }
+
     async function anadirTomaAUsuario() {
       const partidorId = selectPartidor.value;
       if (!partidorId) return;
@@ -2823,6 +2851,7 @@
       if (!usuarioActual.misTomas) usuarioActual.misTomas = [];
       usuarioActual.misTomas.push(nuevaToma);
       guardarSesionEnLocal(usuarioActual);
+      await sincronizarConCensoMaestro(usuarioActual);
 
       if (firebaseListo && usuarioActual.docId) {
         try {
@@ -2902,6 +2931,7 @@
 
         usuarioActual = { docId, socio, nombre, telefono, misTomas: [] };
         guardarSesionEnLocal(usuarioActual);
+        await sincronizarConCensoMaestro(usuarioActual);
         mostrarPanelPrincipal();
       } catch (error) {
         alert("Error al guardar el registro.");
