@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Censo de Comuneros · 6ª y 7ª Elevación</title>
+  <link rel="manifest" href="manifest-gestion.json">
+  <meta name="theme-color" content="#0f4c81">
+  <link rel="apple-touch-icon" href="./icono-app.jpg">
+  <style>
+    :root {
+      --primary: #0f4c81;
+      --primary-hover: #1e3a8a;
+      --accent: #0d9488;
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #cbd5e1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 16px;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .oculto { display: none !important; }
+
+    /* PANTALLA LOGIN */
+    .login-box {
+      max-width: 420px;
+      margin: 60px auto;
+      background: var(--card-bg);
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(15, 76, 129, 0.12);
+      text-align: center;
+      border-top: 6px solid var(--primary);
+    }
+    .login-box h2 { margin-top: 0; color: var(--primary); }
+    .login-box input {
+      width: 100%;
+      padding: 13px;
+      font-size: 1.15rem;
+      text-align: center;
+      letter-spacing: 3px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+
+    /* BANNER INSTALACIÓN ICONO MÓVIL */
+    .banner-pwa {
+      background: #eff6ff;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .banner-pwa span { font-weight: 700; color: var(--primary); font-size: 0.92rem; }
+
+    /* CABECERA */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      background: var(--card-bg);
+      padding: 18px 22px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-left: 6px solid var(--primary);
+    }
+    header h1 { margin: 0; color: var(--primary); font-size: 1.45rem; }
+    header p { margin: 4px 0 0 0; color: var(--text-light); font-size: 0.85rem; }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn:hover { background-color: var(--primary-hover); }
+    .btn-accent { background-color: var(--accent); }
+    .btn-accent:hover { background-color: #0f766e; }
+    .btn-outline {
+      background: #f8fafc;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-outline:hover { background: #e0f2fe; }
+    .btn-danger { background-color: var(--danger); }
+    .btn-danger:hover { background-color: var(--danger-hover); }
+    .btn-sm { padding: 7px 12px; font-size: 0.82rem; }
+
+    /* BUSCADOR Y FILTROS */
+    .controls {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 640px) {
+      .controls { grid-template-columns: 1fr; }
+    }
+    input[type="text"], input[type="tel"], input[type="password"], select {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.98rem;
+      width: 100%;
+      background: white;
+      color: var(--text);
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.15);
+    }
+
+    .barra-estado {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    /* TARJETAS DE COMUNEROS */
+    .commune-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .commune-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px;
+      border-left: 5px solid var(--accent);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .commune-info { flex: 1; min-width: 240px; }
+    .commune-header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .commune-header-row h3 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.15rem;
+    }
+    .badge-socio {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+    .badge-origen {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.74rem;
+      padding: 2px 7px;
+      border-radius: 5px;
+      border: 1px solid #e2e8f0;
+    }
+    .tel-link {
+      display: inline-block;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #86efac;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 5px 11px;
+      border-radius: 7px;
+      margin-bottom: 12px;
+    }
+    .supplies-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      border-radius: 8px;
+    }
+    .supplies-title {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .supply-tag {
+      display: inline-block;
+      background: #ccfbf1;
+      color: #115e59;
+      border: 1px solid #99f6e4;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      margin: 3px 6px 3px 0;
+      font-weight: 700;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      align-self: flex-start;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 22px;
+      border-radius: 14px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+    .modal-content h2 { margin-top: 0; color: var(--primary); font-size: 1.25rem; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 700; font-size: 0.88rem; }
+    .supply-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr auto;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PANTALLA DE ACCESO CON CLAVE -->
+  <div id="pantalla-login" class="login-box">
+    <h2>🔐 Censo de Comuneros</h2>
+    <p style="color:#64748b; font-size:0.9rem;">Base de datos maestra · 6ª y 7ª Elevación</p>
+    <input type="password" id="input-clave-admin" inputmode="numeric" placeholder="Clave" maxlength="10">
+    <button type="button" id="btn-entrar-admin" class="btn" style="width:100%; padding:13px; font-size:1rem;">Acceder a la base de datos</button>
+  </div>
+
+  <!-- PANEL PRINCIPAL -->
+  <div id="panel-gestion" class="container oculto">
+
+    <!-- BANNER ICONO MÓVIL -->
+    <div id="banner-pwa-gestion" class="banner-pwa oculto">
+      <span>📲 Pon el icono del Censo en tu pantalla de inicio</span>
+      <button type="button" id="btn-instalar-gestion" class="btn btn-sm">Instalar icono</button>
+    </div>
+
+    <header>
+      <div>
+        <h1>📋 Censo Maestro de Comuneros</h1>
+        <p>Base permanente independiente · 6ª y 7ª Elevación</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="btn-importar-existentes" class="btn btn-outline btn-sm" title="Volcar regantes ya dados de alta en la app">📥 Importar de App</button>
+        <button type="button" class="btn btn-accent" onclick="abrirModal()">+ Nuevo Comunero</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <input type="text" id="buscador" placeholder="🔍 Buscar por n.º comunero, nombre, teléfono o partidor...">
+      <select id="filtro-partidor">
+        <option value="">Todos los Partidores</option>
+      </select>
+    </div>
+
+    <div class="barra-estado">
+      <span id="contador-resultados">Cargando registros...</span>
+      <button type="button" id="btn-cerrar-admin" style="background:none; border:none; color:#64748b; text-decoration:underline; cursor:pointer; font-size:0.82rem;">Bloquear panel</button>
+    </div>
+
+    <div id="lista-comuneros" class="commune-grid"></div>
+  </div>
+
+  <!-- MODAL ALTA / EDICIÓN -->
+  <div id="modal-comunero" class="modal">
+    <div class="modal-content">
+      <h2 id="modal-titulo">Gestionar Comunero</h2>
+      <form id="form-comunero">
+        <input type="hidden" id="form-id">
+        <div class="form-group">
+          <label for="form-socio">Número de Comunero / Socio *</label>
+          <input type="text" id="form-socio" placeholder="Ej: 1045" required>
+        </div>
+        <div class="form-group">
+          <label for="form-titular">Nombre del titular al que va registrada el agua *</label>
+          <input type="text" id="form-titular" placeholder="Ej: Juan Pérez García" required>
+        </div>
+        <div class="form-group">
+          <label for="form-telefono">Teléfono móvil *</label>
+          <input type="tel" id="form-telefono" placeholder="Ej: 600123456" required>
+        </div>
+
+        <label style="font-weight:700; font-size:0.9rem; display:block; margin-bottom:8px; color:var(--primary);">
+          Partidores y Tomas registradas:
+        </label>
+        <div id="contenedor-suministros"></div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="agregarFilaSuministro()">+ Añadir Partidor y Toma</button>
+
+        <div style="margin-top: 22px; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn" style="background:var(--text-light);" onclick="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn">💾 Guardar Ficha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, setDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const CLAVE_ADMIN = "6767";
+
+    // CONTROL DE ACCESO
+    const pantallaLogin = document.getElementById("pantalla-login");
+    const panelGestion = document.getElementById("panel-gestion");
+    const inputClave = document.getElementById("input-clave-admin");
+
+    function desbloquearPanel() {
+      pantallaLogin.classList.add("oculto");
+      panelGestion.classList.remove("oculto");
+    }
+
+    if (localStorage.getItem("censo_admin_ok") === "true") {
+      desbloquearPanel();
+    }
+
+    document.getElementById("btn-entrar-admin").addEventListener("click", () => {
+      if (inputClave.value.trim() === CLAVE_ADMIN) {
+        localStorage.setItem("censo_admin_ok", "true");
+        desbloquearPanel();
+      } else {
+        alert("Clave incorrecta.");
+        inputClave.value = "";
+      }
+    });
+
+    inputClave.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("btn-entrar-admin").click();
+    });
+
+    document.getElementById("btn-cerrar-admin").addEventListener("click", () => {
+      localStorage.removeItem("censo_admin_ok");
+      panelGestion.classList.add("oculto");
+      pantallaLogin.classList.remove("oculto");
+      inputClave.value = "";
+    });
+
+    // FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6TpGl8pnm6ZFgvkEGetYPLWmXQp8JBTM",
+      authDomain: "sexta-y-septima-riego.firebaseapp.com",
+      projectId: "sexta-y-septima-riego",
+      storageBucket: "sexta-y-septima-riego.firebasestorage.app",
+      messagingSenderId: "1031850424918",
+      appId: "1:1031850424918:web:89508ea107686feaf4d9f7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let comuneros = [];
+    let partidoresGlobales = [];
+
+    function compararPartidoresNumerico(a, b) {
+      const canalA = (a.canal || "").toLowerCase().includes("sexta") ? 1 : 2;
+      const canalB = (b.canal || "").toLowerCase().includes("sexta") ? 1 : 2;
+      if (canalA !== canalB) return canalA - canalB;
+      return (a.nombre || "").localeCompare(b.nombre || "", "es", { numeric: true, sensitivity: "base" });
+    }
+
+    function formatearNombreToma(valor) {
+      const limpio = (valor || "").trim();
+      if (!limpio) return "Toma 1";
+      if (/^toma\b/i.test(limpio)) return limpio.charAt(0).toUpperCase() + limpio.slice(1);
+      return `Toma ${limpio}`;
+    }
+
+    // CARGAR PARTIDORES ORDENADOS NUMÉRICAMENTE
+    onSnapshot(collection(db, "PARTIDORES"), (snapshot) => {
+      partidoresGlobales = [];
+      snapshot.forEach(docSnap => {
+        partidoresGlobales.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      partidoresGlobales.sort(compararPartidoresNumerico);
+
+      const selectFiltro = document.getElementById("filtro-partidor");
+      const valorPrevio = selectFiltro.value;
+      selectFiltro.innerHTML = '<option value="">Todos los Partidores</option>';
+
+      partidoresGlobales.forEach(p => {
+        const canalTag = (p.canal || "").toLowerCase().includes("sexta") ? "6ª" : "7ª";
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = `${p.nombre} (${canalTag})`;
+        selectFiltro.appendChild(opt);
+      });
+      selectFiltro.value = valorPrevio;
+      render();
+    });
+
+    // CARGAR CENSO MAESTRO EN TIEMPO REAL
+    onSnapshot(collection(db, "censo_comuneros"), (snapshot) => {
+      comuneros = [];
+      snapshot.forEach(docSnap => {
+        comuneros.push({ docId: docSnap.id, ...docSnap.data() });
+      });
+      comuneros.sort((a, b) => (a.socio || "").localeCompare(b.socio || "", "es", { numeric: true }));
+      render();
+    });
+
+    window.render = function() {
+      const lista = document.getElementById("lista-comuneros");
+      const busqueda = document.getElementById("buscador").value.toLowerCase().trim();
+      const filtroP = document.getElementById("filtro-partidor").value;
+
+      lista.innerHTML = "";
+
+      const filtrados = comuneros.filter(c => {
+        const socio = (c.socio || "").toLowerCase();
+        const titular = (c.titularAgua || "").toLowerCase();
+        const tel = (c.telefono || "").toLowerCase();
+        const suministros = c.suministros || [];
+
+        const matchPartidorSelect = filtroP === "" || suministros.some(s => s.partidorId === filtroP);
+        if (!matchPartidorSelect) return false;
+
+        if (!busqueda) return true;
+
+        const matchTexto = socio.includes(busqueda) ||
+                           titular.includes(busqueda) ||
+                           tel.includes(busqueda) ||
+                           suministros.some(s =>
+                             (s.partidorNombre || "").toLowerCase().includes(busqueda) ||
+                             (s.toma || "").toLowerCase().includes(busqueda)
+                           );
+        return matchTexto;
+      });
+
+      document.getElementById("contador-resultados").textContent =
+        `Mostrando ${filtrados.length} de ${comuneros.length} comuneros registrados`;
+
+      if (filtrados.length === 0) {
+        lista.innerHTML = `<p style="text-align:center; color:#64748b; padding:24px 0;">No se encontraron comuneros con ese criterio.</p>`;
+        return;
+      }
+
+      filtrados.forEach(c => {
+        const suministros = c.suministros || [];
+        const card = document.createElement("div");
+        card.className = "commune-card";
+
+        const tagsHtml = suministros.length > 0
+          ? suministros.map(s => `<span class="supply-tag">📍 ${s.partidorNombre || "Partidor"} → ${formatearNombreToma(s.toma)}</span>`).join("")
+          : `<span style="color:#64748b; font-size:0.86rem;">Sin partidor ni toma asignada todavía</span>`;
+
+        const telHtml = c.telefono
+          ? `<a href="tel:${c.telefono}" class="tel-link">📞 ${c.telefono}</a>`
+          : `<span style="color:#64748b; font-size:0.85rem;">Sin teléfono</span>`;
+
+        card.innerHTML = `
+          <div class="commune-info">
+            <div class="commune-header-row">
+              <span class="badge-socio">Comunero ${c.socio || "S/N"}</span>
+              <h3>${c.titularAgua || "Sin nombre"}</h3>
+              ${c.origen ? `<span class="badge-origen">${c.origen}</span>` : ""}
+            </div>
+            <div>${telHtml}</div>
+            <div class="supplies-box">
+              <span class="supplies-title">Partidor y Toma registrada:</span>
+              ${tagsHtml}
+            </div>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-sm" onclick="editarComunero('${c.docId}')">✏️ Editar</button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarComunero('${c.docId}', '${(c.titularAgua || "").replace(/'/g, "")}')">🗑️ Borrar</button>
+          </div>
+        `;
+        lista.appendChild(card);
+      });
+    };
+
+    document.getElementById("buscador").addEventListener("input", render);
+    document.getElementById("filtro-partidor").addEventListener("change", render);
+
+    // MODAL ALTA / EDICIÓN
+    window.abrirModal = function() {
+      document.getElementById("modal-titulo").textContent = "➕ Nuevo Comunero";
+      document.getElementById("form-id").value = "";
+      document.getElementById("form-comunero").reset();
+      document.getElementById("contenedor-suministros").innerHTML = "";
+      agregarFilaSuministro();
+      document.getElementById("modal-comunero").style.display = "flex";
+    };
+
+    window.cerrarModal = function() {
+      document.getElementById("modal-comunero").style.display = "none";
+    };
+
+    window.agregarFilaSuministro = function(partidorId = "", toma = "") {
+      const contenedor = document.getElementById("contenedor-suministros");
+      const div = document.createElement("div");
+      div.className = "supply-row";
+
+      const options = partidoresGlobales.map(p => {
+        const canalTag = (p.canal || "").toLowerCase().includes("sexta") ? "6ª" : "7ª";
+        return `<option value="${p.id}" ${p.id === partidorId ? "selected" : ""}>${p.nombre} (${canalTag})</option>`;
+      }).join("");
+
+      div.innerHTML = `
+        <select class="supply-partidor" required>${options}</select>
+        <input type="text" class="supply-toma" placeholder="Ej: 3 o Toma 3" value="${toma}" required>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✕</button>
+      `;
+      contenedor.appendChild(div);
+    };
+
+    window.editarComunero = function(docId) {
+      const c = comuneros.find(item => item.docId === docId);
+      if (!c) return;
+
+      document.getElementById("modal-titulo").textContent = `✏️ Editar Comunero ${c.socio || ""}`;
+      document.getElementById("form-id").value = c.docId;
+      document.getElementById("form-socio").value = c.socio || "";
+      document.getElementById("form-titular").value = c.titularAgua || "";
+      document.getElementById("form-telefono").value = c.telefono || "";
+
+      const cont = document.getElementById("contenedor-suministros");
+      cont.innerHTML = "";
+      const listaSum = c.suministros || [];
+      if (listaSum.length === 0) {
+        agregarFilaSuministro();
+      } else {
+        listaSum.forEach(s => agregarFilaSuministro(s.partidorId, s.toma));
+      }
+
+      document.getElementById("modal-comunero").style.display = "flex";
+    };
+
+    document.getElementById("form-comunero").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const socio = document.getElementById("form-socio").value.trim();
+      const docId = document.getElementById("form-id").value || `socio_${socio.replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+      const titularAgua = document.getElementById("form-titular").value.trim();
+      const telefono = document.getElementById("form-telefono").value.trim();
+
+      const suministros = [];
+      document.querySelectorAll(".supply-row").forEach(row => {
+        const sel = row.querySelector(".supply-partidor");
+        const pId = sel.value;
+        const pObj = partidoresGlobales.find(p => p.id === pId);
+        const pName = pObj ? pObj.nombre : sel.options[sel.selectedIndex].text;
+        const t = formatearNombreToma(row.querySelector(".supply-toma").value);
+        suministros.push({ partidorId: pId, partidorNombre: pName, toma: t });
+      });
+
+      try {
+        await setDoc(doc(db, "censo_comuneros", docId), {
+          socio,
+          titularAgua,
+          telefono,
+          suministros,
+          origen: "Editado / Manual Capataz",
+          ultimaActualizacion: new Date().toISOString()
+        }, { merge: true });
+        cerrarModal();
+      } catch (err) {
+        alert("Error al guardar: " + err.message);
+      }
+    });
+
+    // BORRADO CON DOBLE CONFIRMACIÓN
+    window.eliminarComunero = async function(docId, nombre) {
+      if (!confirm(`⚠️ ¿Seguro que quieres eliminar la ficha de "${nombre}" de la base de datos?`)) return;
+      if (!confirm(`CONFIRMACIÓN FINAL: Se borrará definitivamente a "${nombre}" y no se podrá recuperar. ¿Continuar?`)) return;
+
+      try {
+        await deleteDoc(doc(db, "censo_comuneros", docId));
+      } catch (err) {
+        alert("Error al borrar: " + err.message);
+      }
+    };
+
+    // IMPORTAR REGANTES YA EXISTENTES EN LA APP PRINCIPAL ("regantes")
+    document.getElementById("btn-importar-existentes").addEventListener("click", async () => {
+      if (!confirm("¿Quieres importar a esta base maestra todos los regantes que ya se hayan registrado en la app principal?")) return;
+      try {
+        const snap = await getDocs(collection(db, "regantes"));
+        let importados = 0;
+
+        for (const docSnap of snap.docs) {
+          const r = docSnap.data();
+          if (!r.socio || r.socio === "ADMIN") continue;
+
+          const docIdMaestro = `socio_${String(r.socio).trim().replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+          const suministros = (r.misTomas || []).map(t => {
+            const pObj = partidoresGlobales.find(p => p.id === t.partidorId);
+            return {
+              partidorId: t.partidorId,
+              partidorNombre: pObj ? pObj.nombre : "Partidor",
+              toma: formatearNombreToma(t.toma)
+            };
+          });
+
+          await setDoc(doc(db, "censo_comuneros", docIdMaestro), {
+            socio: String(r.socio).trim(),
+            titularAgua: (r.nombre || "").trim(),
+            telefono: (r.telefono || "").trim(),
+            suministros,
+            origen: "App Regante (Importado)",
+            ultimaActualizacion: new Date().toISOString()
+          }, { merge: true });
+          importados++;
+        }
+
+        alert(`✅ Sincronización completada: ${importados} registros volcados al Censo Maestro.`);
+      } catch (e) {
+        alert("Error al importar registros: " + e.message);
+      }
+    });
+
+    // INSTALACIÓN COMO ICONO EN MÓVIL (PWA)
+    let promptInstalacion = null;
+    const bannerPwa = document.getElementById("banner-pwa-gestion");
+    const btnInstalar = document.getElementById("btn-instalar-gestion");
+    const yaInstalada = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+    if (!yaInstalada) {
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        promptInstalacion = e;
+        bannerPwa.classList.remove("oculto");
+      });
+
+      btnInstalar.addEventListener("click", async () => {
+        if (promptInstalacion) {
+          await promptInstalacion.prompt();
+          promptInstalacion = null;
+          bannerPwa.classList.add("oculto");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
